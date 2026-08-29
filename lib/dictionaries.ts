@@ -13,6 +13,8 @@ export type Dictionary = {
     joinUs: string;
     policies: string;
     placeholder: string;
+    logoLabel: string;
+    downloadApp: string;
   };
 };
 
