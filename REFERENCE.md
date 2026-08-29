@@ -271,117 +271,107 @@ Placeholder example:
 Use this as the target structure from the start:
 
 ```txt
-src/
-├── app/
-│   ├── [locale]/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── about/
-│   │   │   └── page.tsx
-│   │   ├── contact/
-│   │   │   └── page.tsx
-│   │   ├── join-us/
-│   │   │   └── page.tsx
-│   │   ├── policies/
-│   │   │   └── page.tsx
-│   │   └── [...slug]/
-│   │       └── page.tsx
-│   │
-│   ├── dashboard/
-│   │   ├── layout.tsx
-│   │   ├── page.tsx
-│   │   ├── pages/
-│   │   │   ├── page.tsx
-│   │   │   └── [id]/
-│   │   │       └── page.tsx
-│   │   ├── media/
-│   │   │   └── page.tsx
-│   │   ├── messages/
-│   │   │   └── page.tsx
-│   │   └── settings/
-│   │       └── page.tsx
-│   │
-│   ├── api/
-│   │   ├── upload/
-│   │   │   └── route.ts
-│   │   ├── contact/
-│   │   │   └── route.ts
-│   │   └── auth/
-│   │       └── route.ts
-│   │
+app/
+├── [locale]/
 │   ├── layout.tsx
 │   ├── page.tsx
-│   └── globals.css
-│
-├── components/
-│   ├── public/
-│   │   ├── site-header.tsx
-│   │   ├── site-footer.tsx
-│   │   ├── language-switcher.tsx
-│   │   └── sections/
-│   │       ├── hero-section.tsx
-│   │       ├── content-section.tsx
-│   │       ├── cta-section.tsx
-│   │       └── page-title-section.tsx
-│   │
-│   ├── dashboard/
-│   │   ├── dashboard-sidebar.tsx
-│   │   ├── dashboard-header.tsx
-│   │   ├── page-editor-placeholder.tsx
-│   │   └── media-library-placeholder.tsx
-│   │
-│   └── ui/
-│       └── shadcn components
-│
-├── features/
+│   ├── about/
+│   │   └── page.tsx
+│   ├── contact/
+│   │   └── page.tsx
+│   ├── join-us/
+│   │   └── page.tsx
+│   ├── policies/
+│   │   └── page.tsx
+│   └── [...slug]/
+│       └── page.tsx
+├── dashboard/
+│   ├── layout.tsx
+│   ├── page.tsx
 │   ├── pages/
-│   │   ├── actions.ts
-│   │   ├── queries.ts
-│   │   ├── schema.ts
-│   │   └── components/
-│   │
+│   │   ├── page.tsx
+│   │   └── [id]/
+│   │       └── page.tsx
 │   ├── media/
-│   │   ├── actions.ts
-│   │   ├── queries.ts
-│   │   └── schema.ts
-│   │
-│   ├── settings/
-│   │   ├── actions.ts
-│   │   ├── queries.ts
-│   │   └── schema.ts
-│   │
-│   ├── auth/
-│   │   ├── actions.ts
-│   │   ├── session.ts
-│   │   └── schema.ts
-│   │
-│   └── contact/
-│       ├── actions.ts
-│       ├── queries.ts
-│       └── schema.ts
-│
-├── db/
-│   ├── index.ts
+│   │   └── page.tsx
+│   ├── messages/
+│   │   └── page.tsx
+│   └── settings/
+│       └── page.tsx
+├── api/
+│   ├── upload/
+│   │   └── route.ts
+│   ├── contact/
+│   │   └── route.ts
+│   └── auth/
+│       └── route.ts
+├── layout.tsx
+├── page.tsx
+└── globals.css
+
+components/
+├── public/
+│   ├── site-header.tsx
+│   ├── site-footer.tsx
+│   ├── language-switcher.tsx
+│   └── sections/
+│       ├── hero-section.tsx
+│       ├── content-section.tsx
+│       ├── cta-section.tsx
+│       └── page-title-section.tsx
+├── dashboard/
+│   ├── dashboard-sidebar.tsx
+│   ├── dashboard-header.tsx
+│   ├── page-editor-placeholder.tsx
+│   └── media-library-placeholder.tsx
+└── ui/
+    └── shadcn components
+
+features/
+├── pages/
+│   ├── actions.ts
+│   ├── queries.ts
 │   ├── schema.ts
-│   └── migrations/
-│
-├── dictionaries/
-│   ├── ar.json
-│   └── en.json
-│
-├── lib/
-│   ├── locales.ts
-│   ├── navigation.ts
-│   ├── auth.ts
-│   ├── upload.ts
-│   ├── slug.ts
-│   ├── seo.ts
-│   └── utils.ts
-│
-├── styles/
-│   └── dashboard.css
-│
-└── middleware.ts
+│   └── components/
+├── media/
+│   ├── actions.ts
+│   ├── queries.ts
+│   └── schema.ts
+├── settings/
+│   ├── actions.ts
+│   ├── queries.ts
+│   └── schema.ts
+├── auth/
+│   ├── actions.ts
+│   ├── session.ts
+│   └── schema.ts
+└── contact/
+    ├── actions.ts
+    ├── queries.ts
+    └── schema.ts
+
+db/
+├── index.ts
+├── schema.ts
+└── migrations/
+
+dictionaries/
+├── ar.json
+└── en.json
+
+lib/
+├── locales.ts
+├── navigation.ts
+├── auth.ts
+├── upload.ts
+├── slug.ts
+├── seo.ts
+└── utils.ts
+
+styles/
+└── dashboard.css
+
+middleware.ts
 
 public/
 ├── images/
@@ -393,17 +383,17 @@ public/
 
 ## 10. Important Folder Notes
 
-### `src/app/[locale]`
+### `app/[locale]`
 
 Contains public multilingual routes.
 
-### `src/app/dashboard`
+### `app/dashboard`
 
 Contains future admin CMS interface.
 
 For now, these pages should only show placeholder titles.
 
-### `src/app/api`
+### `app/api`
 
 Contains future route handlers.
 
@@ -527,7 +517,7 @@ created_at
 Upload handler location:
 
 ```txt
-src/app/api/upload/route.ts
+app/api/upload/route.ts
 ```
 
 File storage location:
@@ -540,7 +530,7 @@ or another writable Hostinger folder if needed.
 
 Rules:
 
-- Do not store uploads inside `src/app`.
+- Do not store uploads inside `app`.
 - Do not store images as binary data in MySQL.
 - Store only image path in MySQL.
 
@@ -617,7 +607,7 @@ The final CMS must support unlimited pages.
 Public dynamic route:
 
 ```txt
-src/app/[locale]/[...slug]/page.tsx
+app/[locale]/[...slug]/page.tsx
 ```
 
 Example future URLs:
@@ -655,7 +645,7 @@ Recommended choices:
 TypeScript: Yes
 ESLint: Yes
 Tailwind CSS: Yes
-src directory: Yes
+src directory: No
 App Router: Yes
 Turbopack: optional
 Import alias: Yes
@@ -720,8 +710,8 @@ Create placeholder pages only:
 Create files but do not connect yet:
 
 ```txt
-src/db/index.ts
-src/db/schema.ts
+db/index.ts
+db/schema.ts
 ```
 
 Each should contain comments only for now.
@@ -731,9 +721,9 @@ Each should contain comments only for now.
 Create:
 
 ```txt
-src/app/api/upload/route.ts
-src/app/api/contact/route.ts
-src/app/api/auth/route.ts
+app/api/upload/route.ts
+app/api/contact/route.ts
+app/api/auth/route.ts
 ```
 
 Use placeholder responses only if needed.
