@@ -1,0 +1,10 @@
+{
+  "pages": {
+    "home": "Home",
+    "about": "About",
+    "contact": "Contact",
+    "joinUs": "Join us",
+    "policies": "Policies",
+    "placeholder": "Placeholder page"
+  }
+}
