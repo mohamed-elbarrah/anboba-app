@@ -7,7 +7,15 @@
     "policies": "السياسات",
     "placeholder": "صفحة مؤقتة",
     "logoLabel": "الصفحة الرئيسية لـ ANBOBA",
-    "downloadApp": "تحميل التطبيق"
+    "downloadApp": "حمل التطبيق"
+  },
+  "hero": {
+    "headingStart": "اطلب ",
+    "headingHighlightGas": "اسطوانة الغاز",
+    "headingMiddle": " بسهولة وسنقوم بتوصيلها وتركيبها حتى باب ",
+    "headingHighlightHome": "منزلك",
+    "description": "تتبع مباشر، فني موثق، وفحص سلامة قبل إغلاق الطلب",
+    "cta": "حمل التطبيق"
   },
   "footer": {
     "brandDescription": "المنصة الرائدة في خدمات توزيع الطاقة والغاز للمنازل",

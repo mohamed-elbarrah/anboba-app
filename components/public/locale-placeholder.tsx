@@ -10,8 +10,7 @@ export async function LocalePlaceholder({ locale, page }: { locale: string; page
   const dictionary = await getDictionary(locale);
 
   return (
-    // The home placeholder reserves the approved future app-download destination.
-    <main id={page === "home" ? "download-app" : undefined}>
+    <main>
       <h1>{dictionary.pages[page]}</h1>
     </main>
   );

@@ -9,8 +9,8 @@
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: #f37d2f;
+  --primary-foreground: #ffffff;
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -64,8 +64,8 @@
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
   --tracking-normal: 0em;
   --spacing: 0.25rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --background: #eae6e4;
+  --foreground: #171514;
 }
 
 .dark {
@@ -197,4 +197,10 @@
   html {
     @apply font-sans;
   }
+}
+
+.public-hero-surface {
+  background:
+    radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--primary) 7%, transparent), transparent 48%),
+    var(--background);
 }

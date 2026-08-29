@@ -1,6 +1,17 @@
 import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/locales";
 
+/**
+ * Future contract: the download section will own this anchor on each locale home page.
+ * Do not add this id to the hero or a placeholder before that section exists.
+ */
+export const DOWNLOAD_APP_ANCHOR_ID = "download-app";
+export const DOWNLOAD_APP_TARGET = `#${DOWNLOAD_APP_ANCHOR_ID}`;
+
+export function getDownloadAppHref(locale: Locale) {
+  return `/${locale}${DOWNLOAD_APP_TARGET}`;
+}
+
 export type NavigationItem = {
   key: "home" | "about" | "contact" | "joinUs";
   label: string;
@@ -39,7 +50,7 @@ export function getNavigation(locale: Locale, dictionary: Dictionary): LocaleNav
     ],
     cta: {
       label: dictionary.pages.downloadApp,
-      href: `/${locale}#download-app`,
+      href: getDownloadAppHref(locale),
     },
   };
 }

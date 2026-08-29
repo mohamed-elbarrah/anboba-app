@@ -16,6 +16,14 @@ export type Dictionary = {
     logoLabel: string;
     downloadApp: string;
   };
+  hero: {
+    headingStart: string;
+    headingHighlightGas: string;
+    headingMiddle: string;
+    headingHighlightHome: string;
+    description: string;
+    cta: string;
+  };
   footer: {
     brandDescription: string;
     quickLinks: string;

@@ -31,7 +31,7 @@ export function LanguageSwitcher({
     <Select value={locale} onValueChange={switchLocale}>
       <SelectTrigger
         aria-label={locale === "ar" ? "اختيار اللغة" : "Select language"}
-        className="h-9 rounded-full border-0 px-3 text-sm font-medium text-slate-500 shadow-none hover:bg-slate-50 hover:text-orange-600"
+        className="h-9 rounded-full border-0 px-3 text-sm font-medium text-muted-foreground shadow-none hover:bg-muted hover:text-primary"
       >
         <SelectValue />
       </SelectTrigger>

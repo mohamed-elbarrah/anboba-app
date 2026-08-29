@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import "../globals.css";
-import SiteHeader from "@/components/public/site-header";
-import SiteFooter from "@/components/public/site-footer";
 
 export const metadata: Metadata = {
   title: "ANBOBA",
@@ -13,11 +11,7 @@ export default function ArabicRootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body className="flex min-h-screen flex-col">
-        <SiteHeader locale="ar" />
-        <div className="flex flex-1 flex-col">{children}</div>
-        <SiteFooter locale="ar" />
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

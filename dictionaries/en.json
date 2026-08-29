@@ -9,6 +9,14 @@
     "logoLabel": "ANBOBA home",
     "downloadApp": "Download app"
   },
+  "hero": {
+    "headingStart": "Order ",
+    "headingHighlightGas": "your gas cylinder",
+    "headingMiddle": " easily and we will deliver and install it right to your ",
+    "headingHighlightHome": "doorstep",
+    "description": "Live tracking, a verified technician, and a safety check before closing the order",
+    "cta": "Download the app"
+  },
   "footer": {
     "brandDescription": "The leading platform for home energy and gas delivery services",
     "quickLinks": "Quick links",
