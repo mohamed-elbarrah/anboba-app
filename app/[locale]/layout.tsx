@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { getLocaleDirection, isLocale, locales } from "@/lib/locales";
 
 export const metadata: Metadata = {
-  title: "Onbouba",
-  description: "Onbouba public website",
+  title: "ANBOBA",
+  description: "ANBOBA public website",
 };
 
 export function generateStaticParams() {
