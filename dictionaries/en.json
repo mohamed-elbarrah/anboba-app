@@ -8,5 +8,23 @@
     "placeholder": "Placeholder page",
     "logoLabel": "ANBOBA home",
     "downloadApp": "Download app"
+  },
+  "footer": {
+    "brandDescription": "The leading platform for home energy and gas delivery services",
+    "quickLinks": "Quick links",
+    "contact": "Contact us",
+    "terms": "Terms and conditions",
+    "privacy": "Privacy policy",
+    "phoneLabel": "Phone",
+    "phone": "966 4404 3044",
+    "emailLabel": "Email",
+    "email": "info@anabib.com",
+    "locationLabel": "Location",
+    "location": "Dammam - Al Noor district",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "comingSoon": "Coming soon",
+    "languageLabel": "Language",
+    "copyright": "All rights reserved to Anboba app"
   }
 }

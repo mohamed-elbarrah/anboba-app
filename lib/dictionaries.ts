@@ -16,6 +16,24 @@ export type Dictionary = {
     logoLabel: string;
     downloadApp: string;
   };
+  footer: {
+    brandDescription: string;
+    quickLinks: string;
+    contact: string;
+    terms: string;
+    privacy: string;
+    phoneLabel: string;
+    phone: string;
+    emailLabel: string;
+    email: string;
+    locationLabel: string;
+    location: string;
+    googlePlay: string;
+    appStore: string;
+    comingSoon: string;
+    languageLabel: string;
+    copyright: string;
+  };
 };
 
 export function getDictionary(locale: Locale): Promise<Dictionary> {

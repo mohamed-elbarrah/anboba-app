@@ -8,5 +8,23 @@
     "placeholder": "صفحة مؤقتة",
     "logoLabel": "الصفحة الرئيسية لـ ANBOBA",
     "downloadApp": "تحميل التطبيق"
+  },
+  "footer": {
+    "brandDescription": "المنصة الرائدة في خدمات توزيع الطاقة والغاز للمنازل",
+    "quickLinks": "روابط سريعة",
+    "contact": "تواصل معنا",
+    "terms": "الشروط والأحكام",
+    "privacy": "سياسة الخصوصية",
+    "phoneLabel": "رقم الجوال",
+    "phone": "966 4404 3044",
+    "emailLabel": "البريد الإلكتروني",
+    "email": "info@anabib.com",
+    "locationLabel": "الموقع",
+    "location": "الدمام - حي النور",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
+    "comingSoon": "متاح قريبًا",
+    "languageLabel": "اللغة",
+    "copyright": "جميع الحقوق محفوظة لدى تطبيق أنبوبة"
   }
 }
