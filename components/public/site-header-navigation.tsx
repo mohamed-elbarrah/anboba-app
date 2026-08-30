@@ -18,13 +18,13 @@ export function SiteHeaderNavigation({ locale, navigation }: { locale: Locale; n
         {navigation.items.map((item) => {
           const active = isNavigationItemActive(pathname, item);
           return (
-            <Link key={item.key} href={item.href} aria-current={active ? "page" : undefined} className={cn("rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary", active && "bg-primary/10 font-semibold text-primary")}>
+            <Link key={item.key} href={item.href} aria-current={active ? "page" : undefined} className={cn("rounded-full px-5 py-2.5 text-base font-medium text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary", active && "bg-primary/10 font-semibold text-primary")}>
               {item.label}
             </Link>
           );
         })}
       </nav>
-      <div className="hidden items-center gap-2 md:flex">
+      <div className="hidden items-center gap-3 md:flex">
         <LanguageSwitcher locale={locale} pathname={pathname} />
         <PublicCtaLink href={navigation.cta.href}>{navigation.cta.label}</PublicCtaLink>
       </div>

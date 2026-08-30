@@ -26,10 +26,10 @@ export function AboutVisionMissionSection({
               className="ml-auto size-11"
               strokeWidth={2}
             />
-            <h3 className="mt-5 text-2xl font-extrabold sm:text-3xl">
+            <h3 className="mt-5 text-2xl font-extrabold sm:text-3xl lg:text-[2rem]">
               {content.vision.heading}
             </h3>
-            <p className="mt-5 text-base leading-8 sm:text-lg sm:leading-9">
+            <p className="mt-5 text-base leading-8 sm:text-lg sm:leading-9 lg:text-[1.15rem] lg:leading-relaxed">
               {content.vision.description}
             </p>
           </article>
@@ -40,10 +40,10 @@ export function AboutVisionMissionSection({
               className="ml-auto size-11 text-primary"
               strokeWidth={2}
             />
-            <h3 className="mt-5 text-2xl font-extrabold text-foreground sm:text-3xl">
+            <h3 className="mt-5 text-2xl font-extrabold text-foreground sm:text-3xl lg:text-[2rem]">
               {content.mission.heading}
             </h3>
-            <p className="mt-5 text-base leading-8 sm:text-lg sm:leading-9">
+            <p className="mt-5 text-base leading-8 sm:text-lg sm:leading-9 lg:text-[1.15rem] lg:leading-relaxed">
               {content.mission.description}
             </p>
           </article>

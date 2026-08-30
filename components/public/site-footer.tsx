@@ -16,7 +16,7 @@ function ContactItem({ contact }: { contact: FooterContact }) {
   const Icon = contactIcons[contact.kind];
   const content = (
     <>
-      <Icon aria-hidden="true" className="size-4 shrink-0 text-primary" />
+      <Icon aria-hidden="true" className="size-5 shrink-0 text-primary" />
       <span className="sr-only">{contact.label}: </span>
       <span dir="auto" className="min-w-0 break-words [overflow-wrap:anywhere]">
         {contact.value}
@@ -27,12 +27,12 @@ function ContactItem({ contact }: { contact: FooterContact }) {
   return contact.href ? (
     <Link
       href={contact.href}
-      className="flex w-full min-w-0 items-center gap-2 rounded-md text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+      className="flex w-full min-w-0 items-center gap-3 rounded-md text-base text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
     >
       {content}
     </Link>
   ) : (
-    <span className="flex w-full min-w-0 items-center gap-2 text-sm text-muted-foreground">
+    <span className="flex w-full min-w-0 items-center gap-3 text-base text-muted-foreground">
       {content}
     </span>
   );
@@ -44,7 +44,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
 
   return (
     <footer
-      className="mt-auto bg-muted px-5 py-10 text-foreground sm:px-8 sm:py-12"
+      className="mt-auto bg-muted px-5 py-12 text-foreground sm:px-8 sm:py-16 lg:py-20"
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <div className="mx-auto max-w-[1440px]">
@@ -63,7 +63,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
               height={46}
               className="h-12 w-auto object-contain"
             />
-            <p className="max-w-xs text-sm leading-7 text-muted-foreground">
+            <p className="max-w-sm text-base leading-8 text-muted-foreground lg:text-lg">
               {dictionary.footer.brandDescription}
             </p>
             <div
@@ -75,9 +75,9 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
                   key={store.name}
                   aria-disabled="true"
                   title={dictionary.footer.comingSoon}
-                  className="flex min-h-12 min-w-0 cursor-not-allowed items-center justify-center rounded-xl border border-border bg-background/70 px-3 text-center opacity-65"
+                  className="flex min-h-14 min-w-0 cursor-not-allowed items-center justify-center rounded-2xl border border-border bg-background/70 px-4 text-center opacity-65"
                 >
-                  <span className="text-xs font-semibold leading-tight text-muted-foreground">
+                  <span className="text-sm font-semibold leading-tight text-muted-foreground">
                     {store.label}
                     <span className="block text-[10px] font-normal text-muted-foreground/70">
                       {dictionary.footer.comingSoon}
@@ -89,15 +89,15 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
           </section>
 
           <nav aria-labelledby="footer-links-heading" className="min-w-0">
-            <h2 id="footer-links-heading" className="mb-4 text-base font-bold">
+            <h2 id="footer-links-heading" className="mb-5 text-lg font-bold">
               {dictionary.footer.quickLinks}
             </h2>
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {footer.links.map((link) => (
                 <li key={link.key}>
                   <Link
                     href={link.href}
-                    className="rounded-md text-sm text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    className="rounded-md text-base text-muted-foreground transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                   >
                     {link.label}
                   </Link>
@@ -109,11 +109,11 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
           <section aria-labelledby="footer-contact-heading" className="min-w-0">
             <h2
               id="footer-contact-heading"
-              className="mb-4 text-base font-bold"
+              className="mb-5 text-lg font-bold"
             >
               {dictionary.footer.contact}
             </h2>
-            <ul className="space-y-4">
+            <ul className="space-y-5">
               {footer.contacts.map((contact) => (
                 <li key={contact.kind}>
                   <ContactItem contact={contact} />

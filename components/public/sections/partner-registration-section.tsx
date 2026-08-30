@@ -56,12 +56,12 @@ export function PartnerRegistrationSection({ content }: Props) {
           </p>
           <h1
             id="partner-registration-heading"
-            className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl"
+            className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl"
           >
             {content.headingStart}{" "}
             <span className="text-primary">{content.headingHighlight}</span>
           </h1>
-          <p className="mt-4 text-sm leading-8 text-muted-foreground sm:text-base">
+          <p className="mt-4 text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.2rem] lg:leading-relaxed">
             {content.description}
           </p>
         </header>
@@ -138,7 +138,7 @@ function FieldLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="block text-sm font-bold text-foreground"
+      className="block text-base font-bold text-foreground"
     >
       {children}
     </label>

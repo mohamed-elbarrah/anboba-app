@@ -51,11 +51,11 @@ export function ContactSection({
         <p className="mx-auto inline-flex rounded-full border border-primary/10 bg-primary/10 px-6 py-2 text-sm font-bold text-primary shadow-sm">
           {content.eyebrow}
         </p>
-        <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
           {content.headingStart}{" "}
           <span className="text-primary">{content.headingHighlight}</span>
         </h1>
-        <p className="mx-auto mt-4 max-w-[780px] text-sm leading-8 text-muted-foreground sm:text-base">
+        <p className="mx-auto mt-4 max-w-[780px] text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.2rem] lg:leading-relaxed">
           {content.description}
         </p>
       </header>
@@ -74,7 +74,7 @@ export function ContactSection({
                 </span>
                 <span
                   dir="auto"
-                  className="min-w-0 break-words text-base font-bold text-foreground sm:text-[17px]"
+                  className="min-w-0 break-words text-lg font-bold text-foreground sm:text-[19px]"
                 >
                   {detail.value}
                 </span>
@@ -219,7 +219,7 @@ function FieldLabel({
     <label
       id={id}
       htmlFor={htmlFor}
-      className="block text-sm font-bold text-foreground"
+      className="block text-base font-bold text-foreground"
     >
       {children}
     </label>

@@ -180,18 +180,18 @@ export function JoinApplicationSection({
         <aside className="order-1 [direction:rtl] rounded-[2rem] bg-brand-navy px-7 py-9 text-right text-white shadow-xl sm:px-9 lg:order-2 lg:flex lg:flex-col lg:justify-center">
           <h2
             id="join-application-heading"
-            className="text-3xl font-extrabold tracking-tight"
+            className="text-3xl font-extrabold tracking-tight lg:text-[2.5rem]"
           >
             {content.heading}
           </h2>
-          <p className="mt-4 text-sm leading-8 text-white/85">
+          <p className="mt-4 text-base leading-8 text-white/85 lg:text-[1.15rem] lg:leading-relaxed">
             {content.description}
           </p>
           <ul className="mt-8 space-y-5">
             {content.benefits.map((benefit) => (
               <li
                 key={benefit}
-                className="flex items-center gap-3 text-sm font-bold"
+                className="flex items-center gap-3 text-base font-bold"
               >
                 <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                   <Check

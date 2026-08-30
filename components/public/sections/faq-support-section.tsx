@@ -27,7 +27,7 @@ export function FaqSupportSection({
       <h2 id="faq-support-heading" className="sr-only">
         {content.faq.heading}
       </h2>
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-6">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-8">
         <article className="relative isolate flex min-h-[300px] min-w-0 flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card px-7 py-8 text-right shadow-sm sm:px-10 sm:py-10 lg:col-start-2 lg:row-start-1">
           <span
             aria-hidden="true"
@@ -37,10 +37,10 @@ export function FaqSupportSection({
           </span>
           <div className="relative z-10 flex h-full flex-col items-start [direction:rtl]">
             <p className="text-sm font-extrabold text-primary">FAQ</p>
-            <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl">
+            <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-[2rem]">
               {content.faq.heading}
             </h3>
-            <p className="mt-4 max-w-xl text-sm leading-8 text-muted-foreground sm:text-base">
+            <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.15rem] lg:leading-relaxed">
               {content.faq.description}
             </p>
             <PublicCtaLink href={faqHref} className="mt-auto pt-3">
@@ -56,10 +56,10 @@ export function FaqSupportSection({
               strokeWidth={1.8}
               aria-hidden="true"
             />
-            <h3 className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl">
+            <h3 className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-[2rem]">
               {content.support.heading}
             </h3>
-            <p className="mt-4 text-sm leading-8 text-primary-foreground/85 sm:text-base">
+            <p className="mt-4 text-base leading-8 text-primary-foreground/85 sm:text-lg lg:text-[1.15rem] lg:leading-relaxed">
               {content.support.description}
             </p>
             <Link

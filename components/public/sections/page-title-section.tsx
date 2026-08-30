@@ -26,11 +26,11 @@ export function PageTitleSection({ content, locale }: PageTitleSectionProps) {
         </p>
         <h1
           id="public-page-title"
-          className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl"
+          className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl lg:text-5xl"
         >
           {content.heading}
         </h1>
-        <p className="mx-auto mt-3 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg">
+        <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.25rem] lg:leading-relaxed">
           {content.description}
         </p>
       </section>
