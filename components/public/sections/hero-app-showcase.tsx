@@ -1,14 +1,36 @@
 import { GuaranteeCard } from "@/components/public/sections/guarantee-card";
 import { PhoneMockup } from "@/components/public/sections/phone-mockup";
 
+type ShowcaseSide = "left" | "right";
+
+export type HeroSideProps = {
+  side: ShowcaseSide;
+  phoneVariant: "left" | "right";
+  cards: readonly [string, string];
+  label: string;
+};
+
 type ShowcaseContent = {
   heading: string;
   guaranteeLabel: string;
   guarantees: readonly string[];
 };
 
+export function HeroSide({ side, phoneVariant, cards, label }: HeroSideProps) {
+  return (
+    <div className={`hero-side hero-side-${side}`}>
+      <div className="hero-side-cards">
+        {cards.map((title, index) => (
+          <GuaranteeCard key={`${side}-${index}`} label={label} title={title} side={side} />
+        ))}
+      </div>
+      <PhoneMockup variant={phoneVariant} />
+    </div>
+  );
+}
+
 export function HeroAppShowcase({ content }: { content: ShowcaseContent }) {
-  const [first, second, third, fourth]: [string, string, string, string] = [
+  const cards: [string, string, string, string] = [
     content.guarantees[0] ?? "",
     content.guarantees[1] ?? "",
     content.guarantees[2] ?? "",
@@ -23,38 +45,18 @@ export function HeroAppShowcase({ content }: { content: ShowcaseContent }) {
       <h2 id="hero-showcase-heading" className="sr-only">
         {content.heading}
       </h2>
-      <div className="showcase-card showcase-card-top-left">
-        <GuaranteeCard
-          label={content.guaranteeLabel}
-          title={first}
-          side="left"
-        />
-      </div>
-      <div className="showcase-card showcase-card-bottom-left">
-        <GuaranteeCard
-          label={content.guaranteeLabel}
-          title={second}
-          side="left"
-        />
-      </div>
-      <div className="showcase-card showcase-card-top-right">
-        <GuaranteeCard
-          label={content.guaranteeLabel}
-          title={third}
-          side="right"
-        />
-      </div>
-      <div className="showcase-card showcase-card-bottom-right">
-        <GuaranteeCard
-          label={content.guaranteeLabel}
-          title={fourth}
-          side="right"
-        />
-      </div>
-      <div className="showcase-phones flex items-start justify-center">
-        <PhoneMockup variant="left" />
-        <PhoneMockup variant="right" />
-      </div>
+      <HeroSide
+        side="left"
+        phoneVariant="left"
+        cards={[cards[0], cards[1]]}
+        label={content.guaranteeLabel}
+      />
+      <HeroSide
+        side="right"
+        phoneVariant="right"
+        cards={[cards[2], cards[3]]}
+        label={content.guaranteeLabel}
+      />
     </section>
   );
 }
