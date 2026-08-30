@@ -22,21 +22,19 @@ export function WhyChooseUsSection({
   return (
     <section
       aria-labelledby="why-choose-us-heading"
-      className={`bg-background px-5 sm:px-8 ${
+      className={`bg-background px-4 sm:px-8 ${
         isAbout ? "py-20 sm:py-20 lg:py-24" : "py-20 sm:py-24 lg:py-32"
       }`}
       dir="rtl"
     >
-      <div
-        className="mx-auto max-w-[1440px]"
-      >
+      <div className="mx-auto max-w-[1440px]">
         <header className="mx-auto max-w-2xl text-center">
           <p className="inline-flex items-center rounded-full bg-primary/10 px-5 py-2 text-sm font-extrabold text-primary shadow-sm sm:text-base">
             {content.eyebrow}
           </p>
           <Heading
             id="why-choose-us-heading"
-            className={`mt-3 text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl ${
+            className={`mt-3 text-2xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl ${
               isAbout ? "lg:text-4xl" : "lg:text-5xl"
             }`}
           >
@@ -56,12 +54,12 @@ export function WhyChooseUsSection({
               width={ANBOBA_IMAGE_DIMENSIONS.width}
               height={ANBOBA_IMAGE_DIMENSIONS.height}
               sizes="(max-width: 639px) 260px, (max-width: 1023px) 340px, 430px"
-              className="h-auto w-[min(72vw,320px)] object-contain sm:w-[min(52vw,360px)] lg:w-full lg:max-w-[620px]"
+              className="h-auto w-[min(84vw,360px)] object-contain sm:w-[min(52vw,360px)] lg:w-full lg:max-w-[620px]"
             />
           </div>
 
           <div dir="rtl" className="flex flex-col gap-6 text-right">
-            <article className="rounded-[2rem] border border-white/90 bg-white/50 px-6 py-7 shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-9 sm:py-9 lg:rounded-[2.25rem] lg:px-12 lg:py-9">
+            <article className="rounded-[1.75rem] border border-white/90 bg-white/50 px-5 py-6 shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:rounded-[2rem] sm:px-9 sm:py-9 lg:rounded-[2.25rem] lg:px-12 lg:py-9">
               <h3 className="text-xl font-extrabold text-foreground sm:text-2xl lg:text-[2rem]">
                 {content.cardHeading}
               </h3>
@@ -76,21 +74,18 @@ export function WhyChooseUsSection({
               </h3>
               <ul
                 aria-labelledby="why-choose-us-features-heading"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:gap-8"
+                className="grid grid-cols-2 gap-2 sm:gap-4 lg:gap-8"
               >
                 {content.features.map((feature) => (
                   <li
                     key={feature}
-                    className="flex min-h-12 items-center gap-3 rounded-xl border border-white/90 bg-white/50 px-4 py-3 text-sm font-bold text-foreground shadow-[0_5px_8px_rgb(111_78_58_/_8%)] sm:min-h-[74px] sm:px-6 sm:py-4 lg:text-[1.2rem]"
+                    className="flex min-h-14 min-w-0 items-center gap-2 rounded-xl border border-white/90 bg-white/50 px-2 py-3 text-xs font-bold text-foreground shadow-[0_5px_8px_rgb(111_78_58_/_8%)] sm:min-h-[74px] sm:gap-3 sm:px-6 sm:py-4 sm:text-sm lg:text-[1.2rem]"
                   >
                     <span
                       aria-hidden="true"
-                      className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-transparent text-primary"
+                      className="flex size-5 lg:size-6 shrink-0 items-center justify-center rounded-full border-2 border-primary bg-transparent text-primary"
                     >
-                      <Check
-                        className="size-4"
-                        strokeWidth={2.5}
-                      />
+                      <Check className="size-4" strokeWidth={2.5} />
                     </span>
                     <span>{feature}</span>
                   </li>
