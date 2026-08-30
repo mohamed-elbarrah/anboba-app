@@ -20,10 +20,10 @@ export function AboutVisionMissionSection({
         </h2>
 
         <div className="grid gap-5 lg:grid-cols-2 lg:gap-7">
-          <article className="rounded-[2rem] bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[228px]">
+          <article className="rounded-[2rem] bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Eye
               aria-hidden="true"
-              className="ml-auto size-11"
+              className="ml-auto size-14"
               strokeWidth={2}
             />
             <h3 className="mt-5 text-2xl font-extrabold sm:text-3xl lg:text-[2rem]">
@@ -34,10 +34,10 @@ export function AboutVisionMissionSection({
             </p>
           </article>
 
-          <article className="rounded-[2rem] border border-border/70 bg-card px-7 py-8 text-right text-card-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[228px]">
+          <article className="rounded-[2rem] border border-border/70 bg-card px-7 py-8 text-right text-card-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Rocket
               aria-hidden="true"
-              className="ml-auto size-11 text-primary"
+              className="ml-auto size-14 text-primary"
               strokeWidth={2}
             />
             <h3 className="mt-5 text-2xl font-extrabold text-foreground sm:text-3xl lg:text-[2rem]">

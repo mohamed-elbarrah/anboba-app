@@ -28,7 +28,7 @@ export function FaqSupportSection({
         {content.faq.heading}
       </h2>
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-8">
-        <article className="relative isolate flex min-h-[300px] min-w-0 flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card px-7 py-8 text-right shadow-sm sm:px-10 sm:py-10 lg:col-start-2 lg:row-start-1">
+        <article className="relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card px-7 py-8 text-right shadow-sm sm:px-10 sm:py-10 lg:col-start-2 lg:row-start-1">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute bottom-5 left-8 size-20 rotate-12 rounded-2xl border-2 border-primary/10 bg-primary/[0.025] text-center text-6xl font-black leading-[4.5rem] text-primary/10 shadow-[0_8px_18px_color-mix(in_srgb,var(--primary)_4%,transparent)]"
@@ -49,7 +49,7 @@ export function FaqSupportSection({
           </div>
         </article>
 
-        <article className="flex min-h-[300px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:col-start-1 lg:row-start-1">
+        <article className="flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:col-start-1 lg:row-start-1">
           <div className="flex h-full flex-col items-start [direction:rtl]">
             <Headphones
               className="size-7 text-white"
@@ -64,7 +64,7 @@ export function FaqSupportSection({
             </p>
             <Link
               href={supportHref}
-              className="mt-auto inline-flex min-h-11 items-center justify-center rounded-full bg-white/90 px-5 py-2.5 text-sm font-bold text-primary shadow-sm transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="mt-auto inline-flex min-h-12 items-center justify-center rounded-full bg-white/90 px-6 py-3 text-base font-bold text-primary shadow-sm transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               {content.support.cta}
             </Link>

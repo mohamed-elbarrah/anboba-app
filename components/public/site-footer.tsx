@@ -125,7 +125,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
 
         <div
           dir="ltr"
-          className="mt-10 flex flex-col-reverse items-start gap-4 border-t border-border pt-5 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+          className="mt-12 flex flex-col-reverse items-start gap-4 border-t border-border pt-6 text-base text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
         >
           <p dir={locale === "ar" ? "rtl" : "ltr"}>
             © 2026 {dictionary.footer.copyright}
