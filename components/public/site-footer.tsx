@@ -44,7 +44,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
 
   return (
     <footer
-      className="mt-auto bg-muted px-5 py-12 text-foreground sm:px-8 sm:py-16 lg:py-20"
+      className="mt-auto bg-muted px-5 pb-5 pt-12 text-foreground sm:px-8 sm:pt-16 lg:pt-20"
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <div className="mx-auto max-w-[1440px]">
@@ -67,7 +67,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
               {dictionary.footer.brandDescription}
             </p>
             <div
-              className="grid grid-cols-2 gap-2"
+              className="grid grid-cols-2 gap-2 lg:w-full lg:max-w-[360px]"
               aria-label={dictionary.pages.downloadApp}
             >
               {footer.appStores.map((store) => (
@@ -124,8 +124,8 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
         </div>
 
         <div
-          dir="ltr"
-          className="mt-12 flex flex-col-reverse items-start gap-4 border-t border-border pt-6 text-base text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+          dir={locale === "ar" ? "rtl" : "ltr"}
+          className="mt-10 flex flex-row items-center justify-between gap-4 border-t border-border pt-5 text-sm text-muted-foreground"
         >
           <p dir={locale === "ar" ? "rtl" : "ltr"}>
             © 2026 {dictionary.footer.copyright}

@@ -27,6 +27,7 @@ import {
   type JoinApplicationContent,
   type JoinApplicationFormValues,
 } from "@/features/join-us/schema";
+import { getLocaleDirection } from "@/lib/locales";
 import { cn } from "@/lib/utils";
 
 type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en" };
@@ -39,7 +40,8 @@ export function JoinApplicationSection({
   content,
   locale,
 }: JoinApplicationSectionProps) {
-  const formDirection = locale === "ar" ? "[direction:rtl] lg:[direction:ltr]" : "[direction:ltr]";
+  const isArabic = locale === "ar";
+  const direction = getLocaleDirection(locale);
   const [submitted, setSubmitted] = useState(false);
   const form = useForm<JoinApplicationFormValues>({
     resolver: zodResolver(createJoinApplicationSchema(content.validation)),
@@ -66,8 +68,19 @@ export function JoinApplicationSection({
       className="bg-background px-5 py-16 sm:px-8 sm:py-24 lg:py-28"
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 [direction:ltr] lg:grid-cols-[minmax(0,1.12fr)_minmax(310px,0.88fr)] lg:gap-12">
-        <div className="order-2  lg:order-1">
+      <div
+        className={cn(
+          "mx-auto grid max-w-[1440px] grid-cols-1 gap-8 lg:gap-12",
+          isArabic
+            ? "lg:grid-cols-[minmax(0,1.12fr)_minmax(310px,0.88fr)]"
+            : "lg:grid-cols-[minmax(310px,0.88fr)_minmax(0,1.12fr)]",
+        )}
+        dir="ltr"
+      >
+        <div
+          className={isArabic ? "order-2 lg:order-1" : "order-2 lg:order-2"}
+          dir={direction}
+        >
           {submitted ? (
             <div
               role="status"
@@ -79,17 +92,22 @@ export function JoinApplicationSection({
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               noValidate
-              className={`grid grid-cols-1 gap-x-4 gap-y-5 ${formDirection} sm:grid-cols-2`}
+              dir={direction}
             >
-              <TextField
+              <div
+                className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2"
+                dir="ltr"
+              >
+                <TextField
                 name="fullName"
                 label={content.fields.fullName}
                 placeholder={content.placeholders.fullName}
                 icon={UserRound}
                 form={form}
-                className=" lg:col-start-2 lg:row-start-1"
+                locale={locale}
+                className="lg:col-start-2 lg:row-start-1"
               />
-              <div className=" lg:col-start-1 lg:row-start-1">
+              <div className="lg:col-start-1 lg:row-start-1" dir={direction}>
                 <FieldLabel htmlFor="phone">{content.fields.phone}</FieldLabel>
                 <div
                   className="mt-2 flex h-12 overflow-hidden rounded-full border border-input bg-card focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20"
@@ -126,7 +144,8 @@ export function JoinApplicationSection({
                 placeholder={content.placeholders.email}
                 icon={FileText}
                 form={form}
-                className=" lg:col-start-2 lg:row-start-2"
+                locale={locale}
+                className="lg:col-start-2 lg:row-start-2"
               />
               <TextField
                 name="city"
@@ -134,7 +153,8 @@ export function JoinApplicationSection({
                 placeholder={content.placeholders.city}
                 icon={Truck}
                 form={form}
-                className=" lg:col-start-1 lg:row-start-2"
+                locale={locale}
+                className="lg:col-start-1 lg:row-start-2"
               />
               <SelectField
                 name="experienceYears"
@@ -142,7 +162,8 @@ export function JoinApplicationSection({
                 placeholder={content.selectPlaceholders.experienceYears}
                 options={content.experienceOptions}
                 form={form}
-                className=" lg:col-start-2 lg:row-start-3"
+                locale={locale}
+                className="lg:col-start-2 lg:row-start-3"
               />
               <SelectField
                 name="transportType"
@@ -150,7 +171,8 @@ export function JoinApplicationSection({
                 placeholder={content.selectPlaceholders.transportType}
                 options={content.transportOptions}
                 form={form}
-                className=" lg:col-start-1 lg:row-start-3"
+                locale={locale}
+                className="lg:col-start-1 lg:row-start-3"
               />
               <FileField
                 name="nationalId"
@@ -158,7 +180,8 @@ export function JoinApplicationSection({
                 icon={IdCard}
                 form={form}
                 hint={content.fileHint}
-                className=" lg:col-start-2 lg:row-start-4"
+                locale={locale}
+                className="lg:col-start-2 lg:row-start-4"
               />
               <FileField
                 name="drivingLicense"
@@ -166,9 +189,10 @@ export function JoinApplicationSection({
                 icon={Paperclip}
                 form={form}
                 hint={content.fileHint}
-                className=" lg:col-start-1 lg:row-start-4"
+                locale={locale}
+                className="lg:col-start-1 lg:row-start-4"
               />
-              <div className=" sm:col-span-2">
+              <div className="sm:col-span-2" dir={direction}>
                 <Button
                   type="submit"
                   size="lg"
@@ -177,11 +201,18 @@ export function JoinApplicationSection({
                   {content.submit}
                 </Button>
               </div>
-            </form>
+            </div>
+          </form>
           )}
         </div>
 
-        <aside className="order-1  rounded-[2rem] bg-brand-navy px-7 py-9 text-start text-white shadow-xl sm:px-9 lg:order-2 lg:flex lg:flex-col lg:justify-center">
+        <aside
+          className={cn(
+            "order-1 rounded-[2rem] bg-brand-navy px-7 py-9 text-start text-white shadow-xl lg:flex lg:flex-col lg:justify-center",
+            isArabic ? "lg:order-2" : "lg:order-1",
+          )}
+          dir={direction}
+        >
           <h2
             id="join-application-heading"
             className="text-3xl font-extrabold tracking-tight lg:text-[2.5rem]"
@@ -261,6 +292,7 @@ function TextField({
   placeholder,
   icon: Icon,
   form,
+  locale,
   className,
 }: {
   name: TextFieldName;
@@ -269,11 +301,12 @@ function TextField({
   placeholder?: string;
   icon: typeof UserRound;
   form: ReturnType<typeof useForm<JoinApplicationFormValues>>;
+  locale: "ar" | "en";
   className?: string;
 }) {
   const error = form.formState.errors[name];
   return (
-    <div className={className}>
+    <div className={className} dir={getLocaleDirection(locale)}>
       <FieldLabel htmlFor={name}>{label}</FieldLabel>
       <div className="mt-2 flex h-12 items-center rounded-full border border-input bg-card px-3 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20">
         <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
@@ -298,6 +331,7 @@ function SelectField({
   placeholder,
   options,
   form,
+  locale,
   className,
 }: {
   name: "experienceYears" | "transportType";
@@ -305,11 +339,12 @@ function SelectField({
   placeholder: string;
   options: readonly string[];
   form: ReturnType<typeof useForm<JoinApplicationFormValues>>;
+  locale: "ar" | "en";
   className?: string;
 }) {
   const error = form.formState.errors[name];
   return (
-    <div className={className}>
+    <div className={className} dir={getLocaleDirection(locale)}>
       <FieldLabel htmlFor={name}>{label}</FieldLabel>
       <Controller
         name={name}
@@ -324,7 +359,7 @@ function SelectField({
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent dir={getLocaleDirection(locale)}>
               {options.map((option) => (
                 <SelectItem key={option} value={option}>
                   {option}
@@ -345,6 +380,7 @@ function FileField({
   icon: Icon,
   hint,
   form,
+  locale,
   className,
 }: {
   name: "nationalId" | "drivingLicense";
@@ -352,12 +388,13 @@ function FileField({
   icon: typeof IdCard;
   hint: string;
   form: ReturnType<typeof useForm<JoinApplicationFormValues>>;
+  locale: "ar" | "en";
   className?: string;
 }) {
   const error = form.formState.errors[name];
   const file = form.watch(name);
   return (
-    <div className={className}>
+    <div className={className} dir={getLocaleDirection(locale)}>
       <FieldLabel htmlFor={name}>{label}</FieldLabel>
       <label
         htmlFor={name}
