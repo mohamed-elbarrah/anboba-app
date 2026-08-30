@@ -9,6 +9,61 @@
     "logoLabel": "ANBOBA home",
     "downloadApp": "Download app"
   },
+  "serviceOverview": {
+    "highlightedHeading": "Door-to-door service",
+    "primaryHeading": "Delivery, installation, and inspection in one visit",
+    "description": "A service designed for comfort and confidence, making your gas order easy from the moment you request it through delivery.",
+    "imageAlt": "Gas cylinder with an inspection panel and green safety shield"
+  },
+  "statistics": {
+    "heading": "Anboba in numbers",
+    "items": [
+      { "value": "15K+", "label": "Happy customers" },
+      { "value": "50K+", "label": "Cylinders delivered" },
+      { "value": "120+", "label": "Certified technicians" },
+      { "value": "8+", "label": "Cities covered" }
+    ]
+  },
+  "whyChooseUs": {
+    "eyebrow": "About us",
+    "headingStart": "Why do ",
+    "headingHighlight": "thousands choose us?",
+    "subtitle": "Excellence lives in the details we care about",
+    "cardHeading": "Our story and vision",
+    "cardParagraph": "We started with a simple question: why shouldn’t gas service be as clear and fast as the best service apps? Our vision is for ordering, delivery, and installation to become a reliable, measurable experience.",
+    "featuresHeading": "Key benefits",
+    "features": [
+      "Operational safety standards",
+      "Growing area coverage",
+      "Verified distributors and technicians",
+      "Dedicated customer support"
+    ],
+    "imageAlt": "Anboba gas cylinder"
+  },
+  "aboutVisionMission": { "vision": { "heading": "Our vision", "description": "To be the region's leading technology partner for home energy solutions, providing a safe environment" }, "mission": { "heading": "Our mission", "description": "Empowering customers through innovative, easy delivery solutions while strictly adhering to the highest professional safety standards" } },
+  "serviceBenefits": {
+    "eyebrow": "Benefits",
+    "headingHighlight": "A home service",
+    "headingRest": " with a high-trust digital experience",
+    "subtitle": "The same content, organized more simply with interfaces that are comfortable to read and use.",
+    "items": [
+      { "title": "Faster ordering", "description": "Choose your cylinder and location, then send your order in under a minute.", "icon": "clock" },
+      { "title": "Trusted safety", "description": "Installation and leak checks before completing the order in the app.", "icon": "shield" },
+      { "title": "Live tracking", "description": "Know your order status and expected arrival time without repeated calls.", "icon": "send" },
+      { "title": "Continued support", "description": "A support team that takes care of the experience from order to installation.", "icon": "headset" }
+    ]
+  },
+  "joinApplication": {
+    "heading": "Start your journey today",
+    "description": "Fill out the form and our recruitment team will contact you within 48 hours at most.",
+    "fields": { "fullName": "Full name", "phone": "Phone number", "email": "Email", "city": "City", "experienceYears": "Years of experience", "transportType": "Transport type", "nationalId": "National ID image", "drivingLicense": "Driving license image" },
+    "selectPlaceholders": { "experienceYears": "Years of experience", "transportType": "Transport type" },
+    "experienceOptions": ["No experience", "Less than one year", "1 to 3 years", "More than 3 years"],
+    "transportOptions": ["Car", "Truck", "Motorcycle"],
+    "fileHint": "Attach file (JPG, PNG, PDF)", "submit": "Submit application", "benefits": ["Quick registration process", "Electronic document upload", "Direct support during application"], "note": "Make sure your information is accurate to avoid delays.", "success": "Your application was submitted successfully. Our team will contact you soon."
+  },
+  "partnerRegistration": { "eyebrow": "Join as a distributor", "headingStart": "Start your journey", "headingHighlight": "today", "description": "Fill out the form and our recruitment team will contact you within 48 business hours at most.", "fields": { "company": "Company name *", "phone": "Responsible person's mobile *", "email": "Email", "city": "City *" }, "placeholders": { "company": "Company name", "phone": "Mobile number", "email": "Email address", "city": "City" }, "countryCode": "+966", "countryLabel": "Saudi Arabia flag", "cityOptions": ["Riyadh", "Jeddah", "Makkah", "Madinah", "Dammam", "Khobar"], "submit": "Submit application", "success": "Your application was submitted successfully. Our team will contact you soon." },
+  "faqSupport": { "faq": { "heading": "Have frequently asked questions?", "description": "Before contacting us, you may find your answer in our help center. We collected the most frequently asked questions to help you quickly.", "cta": "Browse frequently asked questions", "href": "/en/faq" }, "support": { "heading": "Live support", "description": "Speak directly with one of our representatives available on WhatsApp", "cta": "Contact us", "href": "https://wa.me/96644043044" } },
   "hero": {
     "headingStart": "Order ",
     "headingHighlightGas": "your gas cylinder",
@@ -17,6 +72,25 @@
     "description": "Live tracking, a verified technician, and a safety check before closing the order",
     "cta": "Download the app"
   },
+  "contact": {
+    "eyebrow": "Contact us",
+    "headingStart": "A support team close to the",
+    "headingHighlight": "customer",
+    "description": "We are here to help. Whether you have an inquiry or would like to join us as a partner, our team is ready to respond.",
+    "details": [
+      { "kind": "phone", "value": "9200 123 456", "href": "tel:9200123456" },
+      { "kind": "email", "value": "support@anabeeb.app", "href": "mailto:support@anabeeb.app" },
+      { "kind": "location", "value": "Dammam - Al Noor district - Saudi Arabia" },
+      { "kind": "hours", "value": "Support from 8 AM to 12 AM" }
+    ],
+    "fields": { "fullName": "Full name", "phone": "Phone number", "message": "Message" },
+    "placeholders": { "fullName": "Full name", "phone": "Phone number", "message": "Describe your service" },
+    "countryCode": "+966",
+    "countryLabel": "Saudi Arabia country code",
+    "submit": "Send",
+    "success": "Your message was sent successfully. Our team will contact you soon."
+  },
+  "pageTitle": { "eyebrow": "ANBOBA app", "heading": "Privacy policy", "description": "Privacy policy page Privacy policy page Privacy policy page" },
   "footer": {
     "brandDescription": "The leading platform for home energy and gas delivery services",
     "quickLinks": "Quick links",

@@ -1,5 +1,8 @@
-import { LocalePlaceholder } from "@/components/public/locale-placeholder";
+import { PageTitleSection } from "@/components/public/sections/page-title-section";
+import { getDictionary } from "@/lib/dictionaries";
 
-export default function Page() {
-  return <LocalePlaceholder locale="ar" page="policies" />;
+export default async function ArabicPoliciesPage() {
+  const dictionary = await getDictionary("ar");
+
+  return <PageTitleSection content={dictionary.pageTitle} locale="ar" />;
 }

@@ -47,10 +47,15 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
       className="mt-auto bg-muted px-5 py-10 text-foreground sm:px-8 sm:py-12"
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
-      <div className="mx-auto max-w-[1040px]">
+      <div className="mx-auto max-w-[1400px]">
         <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-[2fr_1fr_1fr] sm:gap-8">
-          <section aria-labelledby="footer-brand-heading" className="col-span-2 min-w-0 space-y-4 sm:col-span-1">
-            <h2 id="footer-brand-heading" className="sr-only">ANBOBA</h2>
+          <section
+            aria-labelledby="footer-brand-heading"
+            className="col-span-2 min-w-0 space-y-4 sm:col-span-1"
+          >
+            <h2 id="footer-brand-heading" className="sr-only">
+              ANBOBA
+            </h2>
             <Image
               src="/brand/ANBOBA.png"
               alt={dictionary.pages.logoLabel}
@@ -61,7 +66,10 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
             <p className="max-w-xs text-sm leading-7 text-muted-foreground">
               {dictionary.footer.brandDescription}
             </p>
-            <div className="grid grid-cols-2 gap-2" aria-label={dictionary.pages.downloadApp}>
+            <div
+              className="grid grid-cols-2 gap-2"
+              aria-label={dictionary.pages.downloadApp}
+            >
               {footer.appStores.map((store) => (
                 <div
                   key={store.name}
@@ -99,7 +107,10 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
           </nav>
 
           <section aria-labelledby="footer-contact-heading" className="min-w-0">
-            <h2 id="footer-contact-heading" className="mb-4 text-base font-bold">
+            <h2
+              id="footer-contact-heading"
+              className="mb-4 text-base font-bold"
+            >
               {dictionary.footer.contact}
             </h2>
             <ul className="space-y-4">

@@ -18,22 +18,38 @@ export function HeroAppShowcase({ content }: { content: ShowcaseContent }) {
   return (
     <section
       aria-labelledby="hero-showcase-heading"
-      className="hero-app-showcase mx-auto mt-14 w-full max-w-[920px]"
+      className="hero-app-showcase mx-auto mt-14 w-full max-w-[1400px]"
     >
       <h2 id="hero-showcase-heading" className="sr-only">
         {content.heading}
       </h2>
       <div className="showcase-card showcase-card-top-left">
-        <GuaranteeCard label={content.guaranteeLabel} title={first} side="left" />
+        <GuaranteeCard
+          label={content.guaranteeLabel}
+          title={first}
+          side="left"
+        />
       </div>
       <div className="showcase-card showcase-card-bottom-left">
-        <GuaranteeCard label={content.guaranteeLabel} title={second} side="left" />
+        <GuaranteeCard
+          label={content.guaranteeLabel}
+          title={second}
+          side="left"
+        />
       </div>
       <div className="showcase-card showcase-card-top-right">
-        <GuaranteeCard label={content.guaranteeLabel} title={third} side="right" />
+        <GuaranteeCard
+          label={content.guaranteeLabel}
+          title={third}
+          side="right"
+        />
       </div>
       <div className="showcase-card showcase-card-bottom-right">
-        <GuaranteeCard label={content.guaranteeLabel} title={fourth} side="right" />
+        <GuaranteeCard
+          label={content.guaranteeLabel}
+          title={fourth}
+          side="right"
+        />
       </div>
       <div className="showcase-phones flex items-start justify-center">
         <PhoneMockup variant="left" />

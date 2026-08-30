@@ -28,13 +28,20 @@ export type PublicFooterData = {
   links: FooterLink[];
   contacts: FooterContact[];
   appStores: FooterAppStore[];
+  whatsappHref: string;
 };
+
+/** Build the WhatsApp destination from the phone number shown in the footer. */
+export function getWhatsAppHref(phone: string) {
+  return `https://wa.me/${phone.replace(/\D/g, "")}`;
+}
 
 export function getPublicFooterData(
   locale: Locale,
   dictionary: Dictionary,
 ): PublicFooterData {
   return {
+    whatsappHref: getWhatsAppHref(dictionary.footer.phone),
     links: [
       { key: "about", label: dictionary.pages.about, href: `/${locale}/about` },
       {

@@ -66,6 +66,7 @@
   --spacing: 0.25rem;
   --background: #eae6e4;
   --foreground: #171514;
+  --brand-navy: #06254b;
 }
 
 .dark {
@@ -133,6 +134,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-brand-navy: var(--brand-navy);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);

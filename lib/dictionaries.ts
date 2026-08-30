@@ -1,8 +1,16 @@
 import type { Locale } from "@/lib/locales";
 
+export type ServiceBenefitIcon = "clock" | "shield" | "send" | "headset";
+
 const dictionaries = {
-  ar: () => import("@/dictionaries/ar.json").then((module) => module.default),
-  en: () => import("@/dictionaries/en.json").then((module) => module.default),
+  ar: () =>
+    import("@/dictionaries/ar.json").then(
+      (module) => module.default as Dictionary,
+    ),
+  en: () =>
+    import("@/dictionaries/en.json").then(
+      (module) => module.default as Dictionary,
+    ),
 } satisfies Record<Locale, () => Promise<Dictionary>>;
 
 export type Dictionary = {
@@ -15,6 +23,73 @@ export type Dictionary = {
     placeholder: string;
     logoLabel: string;
     downloadApp: string;
+  };
+  serviceOverview: {
+    highlightedHeading: string;
+    primaryHeading: string;
+    description: string;
+    imageAlt: string;
+  };
+  statistics: {
+    heading: string;
+    items: readonly {
+      value: string;
+      label: string;
+    }[];
+  };
+  whyChooseUs: {
+    eyebrow: string;
+    headingStart: string;
+    headingHighlight: string;
+    subtitle: string;
+    cardHeading: string;
+    cardParagraph: string;
+    featuresHeading: string;
+    features: readonly string[];
+    imageAlt: string;
+  };
+  aboutVisionMission: {
+    vision: {
+      heading: string;
+      description: string;
+    };
+    mission: {
+      heading: string;
+      description: string;
+    };
+  };
+  serviceBenefits: {
+    eyebrow: string;
+    headingHighlight: string;
+    headingRest: string;
+    subtitle: string;
+    items: readonly {
+      title: string;
+      description: string;
+      icon: ServiceBenefitIcon;
+    }[];
+  };
+  joinApplication: import("@/features/join-us/schema").JoinApplicationContent;
+  partnerRegistration: import("@/features/join-us/partner-registration").PartnerRegistrationContent;
+  contact: import("@/features/contact/schema").ContactContent;
+  pageTitle: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+  };
+  faqSupport: {
+    faq: {
+      heading: string;
+      description: string;
+      cta: string;
+      href: string;
+    };
+    support: {
+      heading: string;
+      description: string;
+      cta: string;
+      href: string;
+    };
   };
   hero: {
     headingStart: string;
