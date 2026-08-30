@@ -204,3 +204,149 @@
     radial-gradient(circle at 50% 0%, color-mix(in oklab, var(--primary) 7%, transparent), transparent 48%),
     var(--background);
 }
+
+.hero-app-showcase {
+  /* The desktop composition scales between the supplied 1280 and 1827px
+     references rather than switching between fixed mockup sizes. */
+  --phone-width: clamp(168px, calc(15vw - 24px), 250px);
+  --phone-gap: clamp(24px, calc(5.85vw - 51px), 56px);
+  --phone-offset: clamp(100px, calc(10.6vw - 35.7px), 158px);
+  --card-width: clamp(250px, calc(23.8vw - 54.4px), 380px);
+  position: relative;
+  width: min(100%, clamp(920px, calc(100vw - 360px), 1400px));
+  min-height: clamp(520px, calc(49.4vw - 112px), 790px);
+  /* Keep the reference's left/right physical composition stable in RTL. */
+  direction: ltr;
+}
+
+.showcase-phones {
+  position: absolute;
+  inset-inline-start: 50%;
+  top: 0;
+  gap: var(--phone-gap);
+  direction: ltr;
+  transform: translateX(-50%);
+}
+
+.showcase-phones .phone-mockup-frame {
+  /* Use one shared canvas ratio so the source files' 168/167px difference
+     cannot change the phones' physical width or height. */
+  width: var(--phone-width);
+  aspect-ratio: 168 / 397;
+}
+
+.showcase-phones .phone-mockup {
+  width: 100%;
+  height: 100%;
+}
+
+/* Both supplied compositions have the same physical dimensions; only the
+   reference stagger remains. */
+.showcase-phones .phone-mockup[data-variant="right"] { margin-top: var(--phone-offset); }
+
+.showcase-card {
+  position: absolute;
+  z-index: 20;
+  width: var(--card-width);
+}
+
+.guarantee-card {
+  min-height: clamp(80px, calc(7.3vw - 13.4px), 120px);
+  gap: clamp(16px, 1.3vw, 24px);
+  padding: clamp(12px, 1vw, 18px) clamp(20px, 1.5vw, 28px);
+}
+
+.guarantee-card > span {
+  width: clamp(40px, 2.6vw, 48px);
+  height: clamp(40px, 2.6vw, 48px);
+}
+.guarantee-card > span svg { width: clamp(21px, 1.35vw, 25px); height: clamp(21px, 1.35vw, 25px); }
+
+.showcase-card-top-left { left: 0; top: 3.5%; }
+.showcase-card-bottom-left { left: 0; top: 40.5%; }
+.showcase-card-top-right { right: 0; top: 17.3%; }
+.showcase-card-bottom-right { right: 0; top: 61%; }
+
+.guarantee-card-left { border-radius: 18px 18px 18px 7px; }
+.guarantee-card-right { border-radius: 18px 18px 7px 18px; }
+
+@media (max-width: 1100px) and (min-width: 641px) {
+  /* At tablet widths the floating composition becomes a bounded flow so cards
+     and phones never overlap or get clipped. */
+  .hero-app-showcase {
+    min-height: 0;
+    width: min(100%, 700px);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "top-left top-right"
+      "bottom-left bottom-right"
+      "phones phones";
+    gap: 24px clamp(16px, 4vw, 40px);
+    align-items: start;
+  }
+  .showcase-card {
+    position: static;
+    width: 100%;
+    min-width: 0;
+  }
+  .showcase-card-top-left { grid-area: top-left; }
+  .showcase-card-top-right { grid-area: top-right; }
+  .showcase-card-bottom-left { grid-area: bottom-left; }
+  .showcase-card-bottom-right { grid-area: bottom-right; }
+  .showcase-phones {
+    position: static;
+    grid-area: phones;
+    width: min(100%, 360px);
+    justify-self: center;
+    transform: none;
+  }
+  .showcase-phones .phone-mockup[data-variant="right"] { margin-top: 0; }
+}
+
+@media (max-width: 640px) {
+  .hero-app-showcase {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-top: 3rem;
+  }
+
+  .showcase-card {
+    position: static;
+    width: min(100%, 330px);
+  }
+
+  .showcase-card-top-left { order: 1; }
+  .showcase-card-top-right { order: 2; }
+  .showcase-phones {
+    position: static;
+    order: 3;
+    width: min(100%, 360px);
+    transform: none;
+    gap: 16px;
+  }
+  .showcase-phones .phone-mockup[data-variant="right"] { margin-top: 0; }
+  .showcase-card-bottom-left { order: 4; }
+  .showcase-card-bottom-right { order: 5; }
+
+  /* This selector intentionally matches the desktop rule's specificity: the
+     phone canvas must be fluid here instead of retaining --phone-width. */
+  .showcase-phones .phone-mockup-frame {
+    width: min(42vw, 168px, 100%);
+    height: auto;
+  }
+  .guarantee-card {
+    min-height: 78px;
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .showcase-phones {
+    flex-direction: column;
+    align-items: center;
+  }
+}

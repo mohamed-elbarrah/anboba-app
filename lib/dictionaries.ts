@@ -23,6 +23,11 @@ export type Dictionary = {
     headingHighlightHome: string;
     description: string;
     cta: string;
+    showcase?: {
+      heading: string;
+      guaranteeLabel: string;
+      guarantees: readonly string[];
+    };
   };
   footer: {
     brandDescription: string;
