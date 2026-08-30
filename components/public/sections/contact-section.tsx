@@ -47,7 +47,7 @@ export function ContactSection({
       dir={locale === "ar" ? "rtl" : "ltr"}
       className="bg-background px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-20"
     >
-      <header className="mx-auto max-w-[1400px] text-center">
+      <header className="mx-auto max-w-[1440px] text-center">
         <p className="mx-auto inline-flex rounded-full border border-primary/10 bg-primary/10 px-6 py-2 text-sm font-bold text-primary shadow-sm">
           {content.eyebrow}
         </p>
@@ -60,7 +60,7 @@ export function ContactSection({
         </p>
       </header>
 
-      <div className="mx-auto mt-14 grid max-w-[1400px] grid-cols-1 items-stretch gap-5 [direction:ltr] lg:grid-cols-[minmax(0,458fr)_minmax(0,558fr)] lg:gap-6">
+      <div className="mx-auto mt-14 grid max-w-[1440px] grid-cols-1 items-stretch gap-5 [direction:ltr] lg:grid-cols-[minmax(0,458fr)_minmax(0,558fr)] lg:gap-6">
         <aside
           aria-label={content.eyebrow}
           className={`order-2 flex flex-col gap-4 ${contentDirection} lg:order-1`}

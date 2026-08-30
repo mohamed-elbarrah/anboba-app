@@ -28,7 +28,7 @@ export function WhyChooseUsSection({
       dir="rtl"
     >
       <div
-        className={`mx-auto ${isAbout ? "max-w-[1400px]" : "max-w-[1100px]"}`}
+        className={`mx-auto ${isAbout ? "max-w-[1440px]" : "max-w-[1100px]"}`}
       >
         <header className="mx-auto max-w-2xl text-center">
           <p className="text-sm font-extrabold text-primary sm:text-base">

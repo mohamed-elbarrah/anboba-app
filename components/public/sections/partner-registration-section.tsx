@@ -48,7 +48,7 @@ export function PartnerRegistrationSection({ content }: Props) {
     >
       <section
         aria-labelledby="partner-registration-heading"
-        className="mx-auto max-w-[1400px]"
+        className="mx-auto max-w-[1440px]"
       >
         <header className="mx-auto max-w-2xl text-center">
           <p className="mx-auto inline-flex rounded-full bg-primary/10 px-6 py-2 text-base font-bold text-primary shadow-sm">

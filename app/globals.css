@@ -267,16 +267,16 @@
   width: 100%;
   align-items: center;
   gap: clamp(16px, 1.3vw, 24px);
-  padding: clamp(15px, 1vw, 18px) clamp(22px, 1.5vw, 28px);
+  padding: clamp(8px, 1vw, 14px) clamp(8px, 1.5vw, 14px);
   border: 1px solid rgb(255 255 255 / 88%);
-  border-radius: 18px 18px 18px 7px;
+  border-radius: 40px 40px 4px 40px;
   background: rgb(255 252 248 / 60%);
   box-shadow: 0 12px 20px rgb(111 78 58 / 10%);
   text-align: right;
 }
 
 .guarantee-card-right {
-  border-radius: 18px 18px 7px 18px;
+  border-radius: 40px 40px 40px 4px;
 }
 
 .guarantee-card-icon {

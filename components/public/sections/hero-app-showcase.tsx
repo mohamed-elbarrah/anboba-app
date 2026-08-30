@@ -21,7 +21,12 @@ export function HeroSide({ side, phoneVariant, cards, label }: HeroSideProps) {
     <div className={`hero-side hero-side-${side}`}>
       <div className="hero-side-cards">
         {cards.map((title, index) => (
-          <GuaranteeCard key={`${side}-${index}`} label={label} title={title} side={side} />
+          <GuaranteeCard
+            key={`${side}-${index}`}
+            label={label}
+            title={title}
+            side={side}
+          />
         ))}
       </div>
       <PhoneMockup variant={phoneVariant} />
@@ -40,7 +45,7 @@ export function HeroAppShowcase({ content }: { content: ShowcaseContent }) {
   return (
     <section
       aria-labelledby="hero-showcase-heading"
-      className="hero-app-showcase mx-auto mt-14 w-full max-w-[1400px]"
+      className="hero-app-showcase mx-auto mt-14 w-full max-w-[1440px]"
     >
       <h2 id="hero-showcase-heading" className="sr-only">
         {content.heading}

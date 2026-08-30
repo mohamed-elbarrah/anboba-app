@@ -14,7 +14,7 @@ export function GuaranteeCard({ label, title, side }: GuaranteeCardProps) {
       </span>
       <div className="guarantee-card-copy">
         <p>{label}</p>
-        <h4 className="font-bold text-sm">{title}</h4>
+        <h3 className="font-bold ">{title}</h3>
       </div>
     </article>
   );

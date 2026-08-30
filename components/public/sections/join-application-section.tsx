@@ -61,7 +61,7 @@ export function JoinApplicationSection({
       className="bg-background px-5 py-16 sm:px-8 sm:py-24 lg:py-28"
       dir="rtl"
     >
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-8 [direction:ltr] lg:grid-cols-[minmax(0,1.12fr)_minmax(310px,0.88fr)] lg:gap-12">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 [direction:ltr] lg:grid-cols-[minmax(0,1.12fr)_minmax(310px,0.88fr)] lg:gap-12">
         <div className="order-2 [direction:rtl] lg:order-1">
           {submitted ? (
             <div

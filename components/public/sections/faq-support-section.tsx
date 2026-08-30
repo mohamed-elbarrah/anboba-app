@@ -27,7 +27,7 @@ export function FaqSupportSection({
       <h2 id="faq-support-heading" className="sr-only">
         {content.faq.heading}
       </h2>
-      <div className="mx-auto grid max-w-[1400px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-6">
+      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-6">
         <article className="relative isolate flex min-h-[300px] min-w-0 flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card px-7 py-8 text-right shadow-sm sm:px-10 sm:py-10 lg:col-start-2 lg:row-start-1">
           <span
             aria-hidden="true"

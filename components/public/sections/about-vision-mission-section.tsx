@@ -14,7 +14,7 @@ export function AboutVisionMissionSection({
       className="bg-background px-5 pb-20 sm:px-8 sm:pb-24 lg:pb-28"
       dir="rtl"
     >
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-[1440px]">
         <h2 id="about-vision-mission-heading" className="sr-only">
           {content.vision.heading} و {content.mission.heading}
         </h2>

@@ -12,6 +12,8 @@
   "serviceOverview": {
     "highlightedHeading": "Door-to-door service",
     "primaryHeading": "Delivery, installation, and inspection in one visit",
+    "primaryHeadingStart": "Delivery, installation, and inspection in ",
+    "primaryHeadingHighlight": "one visit",
     "description": "A service designed for comfort and confidence, making your gas order easy from the moment you request it through delivery.",
     "imageAlt": "Gas cylinder with an inspection panel and green safety shield"
   },

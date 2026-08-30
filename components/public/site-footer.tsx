@@ -47,7 +47,7 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
       className="mt-auto bg-muted px-5 py-10 text-foreground sm:px-8 sm:py-12"
       dir={locale === "ar" ? "rtl" : "ltr"}
     >
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-[1440px]">
         <div className="grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-[2fr_1fr_1fr] sm:gap-8">
           <section
             aria-labelledby="footer-brand-heading"

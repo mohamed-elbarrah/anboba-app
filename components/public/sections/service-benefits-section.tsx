@@ -27,7 +27,7 @@ export function ServiceBenefitsSection({
       className="bg-background px-5 py-20 sm:px-8 sm:py-24 lg:py-28"
       dir="rtl"
     >
-      <div className="mx-auto max-w-[1400px]">
+      <div className="mx-auto max-w-[1440px]">
         <header className="mx-auto max-w-2xl text-center">
           <p className="mx-auto inline-flex rounded-full bg-primary/10 px-4 py-1 text-xs font-extrabold text-primary sm:text-sm">
             {content.eyebrow}
