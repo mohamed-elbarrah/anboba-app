@@ -2,11 +2,12 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Check,
+  Clock3,
   FileText,
+  FileUp,
+  Headphones,
   IdCard,
   Paperclip,
-  Send,
   Truck,
   UserRound,
 } from "lucide-react";
@@ -29,6 +30,8 @@ import {
 import { cn } from "@/lib/utils";
 
 type JoinApplicationSectionProps = { content: JoinApplicationContent };
+
+const benefitIcons = [Clock3, FileUp, Headphones] as const;
 
 type TextFieldName = "fullName" | "phone" | "email" | "city";
 
@@ -87,7 +90,7 @@ export function JoinApplicationSection({
               <div className="[direction:rtl] lg:col-start-1 lg:row-start-1">
                 <FieldLabel htmlFor="phone">{content.fields.phone}</FieldLabel>
                 <div
-                  className="mt-2 flex h-12 overflow-hidden rounded-xl border border-input bg-card focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20"
+                  className="mt-2 flex h-12 overflow-hidden rounded-full border border-input bg-card focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20"
                   dir="ltr"
                 >
                   <span
@@ -167,9 +170,8 @@ export function JoinApplicationSection({
                 <Button
                   type="submit"
                   size="lg"
-                  className="h-12 w-full rounded-xl text-base font-extrabold shadow-lg shadow-primary/20"
+                  className="mx-auto block h-14 w-full max-w-[255px] rounded-full text-base font-extrabold shadow-lg shadow-primary/20"
                 >
-                  <Send className="size-4" aria-hidden="true" />{" "}
                   {content.submit}
                 </Button>
               </div>
@@ -188,21 +190,23 @@ export function JoinApplicationSection({
             {content.description}
           </p>
           <ul className="mt-8 space-y-5">
-            {content.benefits.map((benefit) => (
-              <li
-                key={benefit}
-                className="flex items-center gap-3 text-base font-bold"
-              >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                  <Check
-                    className="size-4"
-                    strokeWidth={3}
+            {content.benefits.map((benefit, index) => {
+              const Icon = benefitIcons[index] ?? Clock3;
+
+              return (
+                <li
+                  key={benefit}
+                  className="flex items-center gap-3 text-base font-bold"
+                >
+                  <Icon
+                    className="size-7 shrink-0 text-primary"
+                    strokeWidth={1.8}
                     aria-hidden="true"
                   />
-                </span>
-                {benefit}
-              </li>
-            ))}
+                  {benefit}
+                </li>
+              );
+            })}
           </ul>
           <div className="mt-8 border-t border-white/15 pt-6 text-xs leading-7 text-white/70">
             {content.note}
@@ -269,7 +273,7 @@ function TextField({
   return (
     <div className={className}>
       <FieldLabel htmlFor={name}>{label}</FieldLabel>
-      <div className="mt-2 flex h-12 items-center rounded-xl border border-input bg-card px-3 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20">
+      <div className="mt-2 flex h-12 items-center rounded-full border border-input bg-card px-3 focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20">
         <Icon className="size-4 shrink-0 text-primary" aria-hidden="true" />
         <input
           id={name}
@@ -314,7 +318,7 @@ function SelectField({
               id={name}
               aria-invalid={!!error}
               aria-describedby={error ? `${name}-error` : undefined}
-              className="mt-2 h-12 w-full rounded-xl border-input bg-card px-3 text-sm"
+              className="mt-2 !h-12 w-full rounded-full border-input bg-card px-3 text-sm"
             >
               <SelectValue placeholder={placeholder} />
             </SelectTrigger>
@@ -356,7 +360,7 @@ function FileField({
       <label
         htmlFor={name}
         className={cn(
-          "mt-2 flex min-h-12 cursor-pointer items-center gap-3 rounded-xl border border-dashed border-input bg-card px-3 text-sm transition-colors hover:border-primary",
+          "mt-2 flex h-12 cursor-pointer items-center gap-3 rounded-full border border-dashed border-input bg-card px-3 text-sm transition-colors hover:border-primary",
           error && "border-destructive",
         )}
       >

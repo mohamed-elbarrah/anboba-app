@@ -1,4 +1,4 @@
-import { Headphones } from "lucide-react";
+import { ArrowLeft, Headphones } from "lucide-react";
 import Link from "next/link";
 
 import { PublicCtaLink } from "@/components/public/public-cta-link";
@@ -27,44 +27,45 @@ export function FaqSupportSection({
       <h2 id="faq-support-heading" className="sr-only">
         {content.faq.heading}
       </h2>
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-8">
-        <article className="relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-primary/10 bg-card px-7 py-8 text-right shadow-sm sm:px-10 sm:py-10 lg:col-start-2 lg:row-start-1">
+      <div className="mx-auto grid max-w-[1326px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,1fr)_minmax(0,2.05fr)] lg:gap-10">
+        <article className="relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-white/90 bg-white/50 px-7 py-8 text-right shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-10 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-8 lg:py-12 lg:col-start-2 lg:row-start-1">
           <span
             aria-hidden="true"
-            className="pointer-events-none absolute bottom-5 left-8 size-20 rotate-12 rounded-2xl border-2 border-primary/10 bg-primary/[0.025] text-center text-6xl font-black leading-[4.5rem] text-primary/10 shadow-[0_8px_18px_color-mix(in_srgb,var(--primary)_4%,transparent)]"
+            className="pointer-events-none absolute -bottom-7 left-0 size-40 rotate-12 rounded-2xl border-2 border-primary/10 bg-primary/[0.025] text-center text-8xl font-black leading-[9rem] text-primary/10 shadow-[0_8px_18px_color-mix(in_srgb,var(--primary)_4%,transparent)]"
           >
             ?
           </span>
           <div className="relative z-10 flex h-full flex-col items-start [direction:rtl]">
-            <p className="text-sm font-extrabold text-primary">FAQ</p>
-            <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-[2rem]">
+            <p className="text-base font-extrabold text-primary">FAQ</p>
+            <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-[2.25rem]">
               {content.faq.heading}
             </h3>
-            <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.15rem] lg:leading-relaxed">
+            <p className="mt-4 max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.25rem] lg:leading-relaxed">
               {content.faq.description}
             </p>
-            <PublicCtaLink href={faqHref} className="mt-auto pt-3">
+            <PublicCtaLink href={faqHref} className="mt-auto min-h-14 gap-3 px-7 pt-3 text-lg">
               {content.faq.cta}
+              <ArrowLeft className="size-6" aria-hidden="true" />
             </PublicCtaLink>
           </div>
         </article>
 
-        <article className="flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:col-start-1 lg:row-start-1">
+        <article className="flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-10 lg:py-[4.25rem] lg:col-start-1 lg:row-start-1">
           <div className="flex h-full flex-col items-start [direction:rtl]">
             <Headphones
-              className="size-7 text-white"
+              className="size-12 text-white"
               strokeWidth={1.8}
               aria-hidden="true"
             />
-            <h3 className="mt-6 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-[2rem]">
+            <h3 className="mt-8 text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-[2.25rem]">
               {content.support.heading}
             </h3>
-            <p className="mt-4 text-base leading-8 text-primary-foreground/85 sm:text-lg lg:text-[1.15rem] lg:leading-relaxed">
+            <p className="mt-4 text-base leading-8 text-primary-foreground/85 sm:text-lg lg:text-[1.2rem] lg:leading-relaxed">
               {content.support.description}
             </p>
             <Link
               href={supportHref}
-              className="mt-auto inline-flex min-h-12 items-center justify-center rounded-full bg-white/90 px-6 py-3 text-base font-bold text-primary shadow-sm transition-colors hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="mt-auto inline-flex min-h-14 w-full max-w-[255px] self-center items-center justify-center rounded-full bg-white/35 px-6 py-3 text-lg font-bold text-primary-foreground shadow-sm transition-colors hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
             >
               {content.support.cta}
             </Link>

@@ -232,7 +232,7 @@ function CityField({
               aria-invalid={!!error}
               aria-describedby={error ? "partner-city-error" : undefined}
               className={cn(
-                "mt-2 h-12 w-full rounded-full border-white bg-white/55 px-5",
+                "mt-2 !h-12 w-full rounded-full border-white bg-white/55 px-5",
                 error && "border-destructive",
               )}
             >
