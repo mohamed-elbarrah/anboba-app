@@ -2,13 +2,13 @@ import Image from "next/image";
 
 const phoneVariants = {
   left: {
-    src: "/images/hero/left-phone.png",
+    src: "/images/hero/Mockup-left.png",
     width: 168,
     height: 397,
     alt: "تطبيق أنبوبة لطلب أسطوانة الغاز",
   },
   right: {
-    src: "/images/hero/right-phone.png",
+    src: "/images/hero/Mockup-right.png",
     width: 168,
     height: 397,
     alt: "تطبيق أنبوبة لتتبع طلب التوصيل",

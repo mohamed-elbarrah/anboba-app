@@ -27,7 +27,7 @@ export function HeroSection({
         className="absolute -end-28 bottom-0 -z-10 size-72 rounded-full bg-primary/5 blur-3xl sm:size-96"
       />
       <div className="mx-auto flex max-w-[1440px] flex-col items-center text-center">
-        <div className="flex max-w-3xl flex-col items-center">
+        <div className="flex max-w-7xl flex-col items-center">
           <h1
             id="hero-heading"
             className="text-balance text-4xl font-extrabold leading-[1.3] tracking-tight text-foreground sm:text-5xl sm:leading-[1.25] lg:text-6xl"

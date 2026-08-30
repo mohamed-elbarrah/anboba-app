@@ -115,7 +115,7 @@ export function PartnerRegistrationSection({ content }: Props) {
                 <Button
                   type="submit"
                   size="lg"
-                  className="mx-auto h-12 w-full max-w-[200px] rounded-full text-base font-extrabold shadow-lg shadow-primary/25"
+                  className="mx-auto block h-14 w-full max-w-[255px] rounded-full cursor-pointer text-base font-extrabold shadow-lg shadow-primary/25"
                 >
                   {content.submit}
                 </Button>

@@ -261,64 +261,6 @@
   height: 100%;
 }
 
-.guarantee-card {
-  display: flex;
-  min-height: clamp(96px, 6.25vw, 111px);
-  width: 100%;
-  align-items: center;
-  gap: clamp(16px, 1.3vw, 24px);
-  padding: clamp(8px, 1vw, 14px) clamp(8px, 1.5vw, 14px);
-  border: 1px solid rgb(255 255 255 / 88%);
-  border-radius: 40px 40px 4px 40px;
-  background: rgb(255 252 248 / 60%);
-  box-shadow: 0 12px 20px rgb(111 78 58 / 10%);
-  text-align: right;
-}
-
-.guarantee-card-right {
-  border-radius: 40px 40px 40px 4px;
-}
-
-.guarantee-card-icon {
-  display: flex;
-  width: clamp(48px, 3.75vw, 66px);
-  height: clamp(48px, 3.75vw, 66px);
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  border-radius: 16px;
-  background: var(--primary);
-  color: white;
-}
-
-.guarantee-card-icon svg {
-  width: clamp(25px, 1.35vw, 29px);
-  height: clamp(25px, 1.35vw, 29px);
-}
-
-.guarantee-card-copy {
-  min-width: 0;
-}
-
-.guarantee-card-copy p,
-.guarantee-card-copy h3 {
-  margin: 0;
-}
-
-.guarantee-card-copy p {
-  color: #8d8986;
-  font-size: clamp(17px, 1.15vw, 22px);
-  font-weight: 500;
-  line-height: 1.35;
-}
-
-.guarantee-card-copy h3 {
-  color: var(--foreground);
-  font-size: clamp(21px, 1.45vw, 28px);
-  font-weight: 800;
-  line-height: 1.35;
-}
-
 @media (max-width: 1100px) and (min-width: 641px) {
   .hero-app-showcase {
     display: grid;
@@ -347,21 +289,6 @@
     flex-basis: clamp(130px, 16vw, 168px);
   }
 
-  .guarantee-card {
-    min-height: 78px;
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .guarantee-card-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 11px;
-  }
-
-  .guarantee-card-icon svg { width: 21px; height: 21px; }
-  .guarantee-card-copy p { font-size: 13px; }
-  .guarantee-card-copy h3 { font-size: 16px; }
 }
 
 @media (max-width: 640px) {
@@ -401,19 +328,4 @@
   .hero-side-right .hero-side-cards { order: 2; }
   .hero-side-right .phone-mockup-frame { order: 1; }
 
-  .guarantee-card {
-    min-height: 78px;
-    gap: 9px;
-    padding: 10px 11px;
-  }
-
-  .guarantee-card-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-  }
-
-  .guarantee-card-icon svg { width: 20px; height: 20px; }
-  .guarantee-card-copy p { font-size: clamp(11px, 3.3vw, 14px); }
-  .guarantee-card-copy h3 { font-size: clamp(14px, 4vw, 18px); }
 }
