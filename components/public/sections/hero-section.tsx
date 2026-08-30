@@ -48,7 +48,7 @@ export function HeroSection({
           </PublicCtaLink>
         </div>
         {content.showcase ? (
-          <HeroAppShowcase content={content.showcase} />
+          <HeroAppShowcase content={content.showcase} locale={locale} />
         ) : null}
       </div>
     </section>

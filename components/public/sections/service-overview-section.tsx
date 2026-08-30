@@ -6,12 +6,15 @@ type ServiceOverviewContent = Dictionary["serviceOverview"];
 
 export function ServiceOverviewSection({
   content,
+  locale = "ar",
 }: {
   content: ServiceOverviewContent;
+  locale?: "ar" | "en";
 }) {
   return (
     <section
       aria-labelledby="service-overview-heading"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className="bg-background px-5 py-10 pb-20 sm:px-8 sm:py-14 sm:pb-24 lg:py-16 lg:pb-28"
     >
       <div className="mx-auto max-w-[1440px]">
@@ -26,7 +29,7 @@ export function ServiceOverviewSection({
               className="h-auto w-[min(52vw,180px)] object-contain sm:w-[180px] lg:w-[180px]"
             />
           </div>
-          <div dir="rtl" className="text-center lg:text-right">
+          <div dir={locale === "ar" ? "rtl" : "ltr"} className="text-center lg:text-start">
             <h2
               id="service-overview-heading"
               className="leading-tight tracking-tight"

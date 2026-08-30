@@ -4,13 +4,14 @@ type GuaranteeCardProps = {
   label: string;
   title: string;
   side: "left" | "right";
+  locale: "ar" | "en";
 };
 
-export function GuaranteeCard({ label, title, side }: GuaranteeCardProps) {
+export function GuaranteeCard({ label, title, side, locale }: GuaranteeCardProps) {
   return (
     <article
-      className={`flex min-h-[clamp(96px,6.25vw,111px)] w-full items-center gap-[clamp(16px,1.3vw,24px)] rounded-[40px_40px_4px_40px] border max-[640px]:rounded-[28px_28px_4px_28px] border-white/[.88] bg-[#fffdf8]/60 px-[clamp(8px,1.5vw,14px)] py-[clamp(8px,1vw,14px)] text-right shadow-[0_12px_20px_rgb(111_78_58_/_10%)] max-[1100px]:min-h-[78px] max-[1100px]:gap-2.5 max-[1100px]:p-3 max-[640px]:min-h-[78px] max-[640px]:gap-2 max-[640px]:px-2 max-[640px]:py-2 ${side === "right" ? "rounded-[40px_40px_40px_4px] max-[640px]:rounded-[28px_28px_28px_4px]" : ""}`}
-      dir="rtl"
+      className={`flex min-h-[clamp(96px,6.25vw,111px)] w-full items-center gap-[clamp(16px,1.3vw,24px)] rounded-[40px_40px_4px_40px] border max-[640px]:rounded-[28px_28px_4px_28px] border-white/[.88] bg-[#fffdf8]/60 px-[clamp(8px,1.5vw,14px)] py-[clamp(8px,1vw,14px)] text-start shadow-[0_12px_20px_rgb(111_78_58_/_10%)] max-[1100px]:min-h-[78px] max-[1100px]:gap-2.5 max-[1100px]:p-3 max-[640px]:min-h-[78px] max-[640px]:gap-2 max-[640px]:px-2 max-[640px]:py-2 ${side === "right" ? "rounded-[40px_40px_40px_4px] max-[640px]:rounded-[28px_28px_28px_4px]" : ""}`}
+      dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <span className="flex size-[clamp(48px,3.75vw,66px)] shrink-0 items-center justify-center rounded-2xl bg-primary text-white max-[1100px]:size-10 max-[1100px]:rounded-[11px] max-[640px]:size-9 max-[640px]:rounded-[10px]">
         <ShieldCheck

@@ -1,4 +1,4 @@
-import { ArrowLeft, Headphones } from "lucide-react";
+import { ArrowLeft, ArrowRight, Headphones } from "lucide-react";
 import Link from "next/link";
 
 import { PublicCtaLink } from "@/components/public/public-cta-link";
@@ -10,32 +10,34 @@ type FaqSupportSectionProps = {
   content: FaqSupportContent;
   faqHref: string;
   supportHref: string;
+  locale?: "ar" | "en";
 };
 
 export function FaqSupportSection({
   content,
   faqHref,
   supportHref,
+  locale = "ar",
 }: FaqSupportSectionProps) {
   return (
     <section
       id="faq"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       aria-labelledby="faq-support-heading"
       className="bg-background px-5 py-16 sm:px-8 sm:py-24 lg:py-28"
-      dir="rtl"
     >
       <h2 id="faq-support-heading" className="sr-only">
         {content.faq.heading}
       </h2>
       <div className="mx-auto grid max-w-[1326px] grid-cols-1 gap-5 [direction:ltr] lg:grid-cols-[minmax(0,1fr)_minmax(0,2.05fr)] lg:gap-10">
-        <article className="relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-white/90 bg-white/50 px-7 py-8 text-right shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-10 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-8 lg:py-12 lg:col-start-2 lg:row-start-1">
+        <article className="relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-white/90 bg-white/50 px-7 py-8 text-start shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-10 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-8 lg:py-12 lg:col-start-2 lg:row-start-1">
           <span
             aria-hidden="true"
             className="pointer-events-none absolute -bottom-7 left-0 size-40 rotate-12 rounded-2xl border-2 border-primary/10 bg-primary/[0.025] text-center text-8xl font-black leading-[9rem] text-primary/10 shadow-[0_8px_18px_color-mix(in_srgb,var(--primary)_4%,transparent)]"
           >
             ?
           </span>
-          <div className="relative z-10 flex h-full flex-col items-start [direction:rtl]">
+          <div className="relative z-10 flex h-full flex-col items-start" dir={locale === "ar" ? "rtl" : "ltr"}>
             <p className="text-base font-extrabold text-primary">FAQ</p>
             <h3 className="mt-3 text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl lg:text-[2.25rem]">
               {content.faq.heading}
@@ -45,13 +47,17 @@ export function FaqSupportSection({
             </p>
             <PublicCtaLink href={faqHref} className="mt-auto min-h-14 gap-3 px-7 pt-3 text-lg">
               {content.faq.cta}
-              <ArrowLeft className="size-6" aria-hidden="true" />
+              {locale === "ar" ? (
+                <ArrowLeft className="size-6" aria-hidden="true" />
+              ) : (
+                <ArrowRight className="size-6" aria-hidden="true" />
+              )}
             </PublicCtaLink>
           </div>
         </article>
 
-        <article className="flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-10 lg:py-[4.25rem] lg:col-start-1 lg:row-start-1">
-          <div className="flex h-full flex-col items-start [direction:rtl]">
+        <article className="flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-start text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-10 lg:py-[4.25rem] lg:col-start-1 lg:row-start-1">
+          <div className="flex h-full flex-col items-start" dir={locale === "ar" ? "rtl" : "ltr"}>
             <Headphones
               className="size-12 text-white"
               strokeWidth={1.8}

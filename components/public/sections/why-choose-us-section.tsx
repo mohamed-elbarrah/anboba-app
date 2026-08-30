@@ -11,10 +11,12 @@ export function WhyChooseUsSection({
   content,
   variant = "default",
   headingLevel = "h2",
+  locale = "ar",
 }: {
   content: WhyChooseUsContent;
   variant?: WhyChooseUsVariant;
   headingLevel?: WhyChooseUsHeadingLevel;
+  locale?: "ar" | "en";
 }) {
   const isAbout = variant === "about";
   const Heading = headingLevel;
@@ -22,10 +24,10 @@ export function WhyChooseUsSection({
   return (
     <section
       aria-labelledby="why-choose-us-heading"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className={`bg-background px-4 sm:px-8 ${
         isAbout ? "py-20 sm:py-20 lg:py-24" : "py-20 sm:py-24 lg:py-32"
       }`}
-      dir="rtl"
     >
       <div className="mx-auto max-w-[1440px]">
         <header className="mx-auto max-w-2xl text-center">
@@ -58,7 +60,7 @@ export function WhyChooseUsSection({
             />
           </div>
 
-          <div dir="rtl" className="flex flex-col gap-6 text-right">
+          <div dir={locale === "ar" ? "rtl" : "ltr"} className="flex flex-col gap-6 text-start">
             <article className="rounded-[1.75rem] border border-white/90 bg-white/50 px-5 py-6 shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:rounded-[2rem] sm:px-9 sm:py-9 lg:rounded-[2.25rem] lg:px-12 lg:py-9">
               <h3 className="text-xl font-extrabold text-foreground sm:text-2xl lg:text-[2rem]">
                 {content.cardHeading}

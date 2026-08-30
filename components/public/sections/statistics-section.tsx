@@ -2,12 +2,12 @@ import type { Dictionary } from "@/lib/dictionaries";
 
 type StatisticsContent = Dictionary["statistics"];
 
-export function StatisticsSection({ content }: { content: StatisticsContent }) {
+export function StatisticsSection({ content, locale = "ar" }: { content: StatisticsContent; locale?: "ar" | "en" }) {
   return (
     <section
       aria-labelledby="statistics-heading"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className="relative isolate overflow-hidden bg-primary px-5 py-10 text-primary-foreground sm:px-8 sm:py-12 lg:flex lg:min-h-[344px] lg:flex-col lg:justify-center lg:py-0"
-      dir="rtl"
     >
       <div
         aria-hidden="true"

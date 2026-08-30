@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
 import {
-  contactSchema,
+  createContactSchema,
   type ContactContent,
   type ContactFormValues,
 } from "@/features/contact/schema";
@@ -31,7 +31,7 @@ export function ContactSection({
   const contentDirection =
     locale === "ar" ? "[direction:rtl]" : "[direction:ltr]";
   const form = useForm<ContactFormValues>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(createContactSchema(content.validation)),
     mode: "onBlur",
     defaultValues: { fullName: "", phone: "", message: "" },
   });

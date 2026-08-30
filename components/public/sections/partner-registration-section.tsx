@@ -13,20 +13,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  partnerRegistrationSchema,
+  createPartnerRegistrationSchema,
   type PartnerRegistrationContent,
   type PartnerRegistrationFormValues,
 } from "@/features/join-us/partner-registration";
 import { cn } from "@/lib/utils";
 
-type Props = { content: PartnerRegistrationContent };
+type Props = { content: PartnerRegistrationContent; locale: "ar" | "en" };
 type FieldName = keyof PartnerRegistrationFormValues;
 
-export function PartnerRegistrationSection({ content }: Props) {
+export function PartnerRegistrationSection({ content, locale }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const successRef = useRef<HTMLDivElement>(null);
   const form = useForm<PartnerRegistrationFormValues>({
-    resolver: zodResolver(partnerRegistrationSchema),
+    resolver: zodResolver(createPartnerRegistrationSchema(content.validation)),
     mode: "onBlur",
     defaultValues: { company: "", phone: "", email: "", city: "" },
   });
@@ -43,7 +43,7 @@ export function PartnerRegistrationSection({ content }: Props) {
 
   return (
     <main
-      dir="rtl"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className="public-hero-surface px-5 pb-20 pt-20 sm:px-8 sm:pt-24 lg:pb-24 lg:pt-20"
     >
       <section
@@ -78,12 +78,13 @@ export function PartnerRegistrationSection({ content }: Props) {
               {content.success}
             </div>
           ) : (
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              noValidate
-              dir="ltr"
-              className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"
-            >
+            <div className="[direction:ltr]">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                noValidate
+                dir={locale === "ar" ? "rtl" : "ltr"}
+                className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"
+              >
               <PartnerField
                 name="company"
                 label={content.fields.company}
@@ -94,6 +95,7 @@ export function PartnerRegistrationSection({ content }: Props) {
               />
               <PhoneField
                 content={content}
+                locale={locale}
                 form={form}
                 className="lg:col-start-1 lg:row-start-1"
               />
@@ -111,7 +113,7 @@ export function PartnerRegistrationSection({ content }: Props) {
                 form={form}
                 className="lg:col-start-1 lg:row-start-2"
               />
-              <div dir="rtl" className="pt-2 lg:col-span-2">
+              <div className="pt-2 lg:col-span-2">
                 <Button
                   type="submit"
                   size="lg"
@@ -120,7 +122,8 @@ export function PartnerRegistrationSection({ content }: Props) {
                   {content.submit}
                 </Button>
               </div>
-            </form>
+              </form>
+            </div>
           )}
         </div>
       </section>
@@ -184,7 +187,7 @@ function PartnerField({
 }) {
   const error = form.formState.errors[name];
   return (
-    <div dir="rtl" className={className}>
+    <div className={className}>
       <FieldLabel htmlFor={`partner-${name}`}>{label}</FieldLabel>
       <input
         id={`partner-${name}`}
@@ -216,7 +219,7 @@ function CityField({
 }) {
   const error = form.formState.errors.city;
   return (
-    <div dir="rtl" className={className}>
+    <div className={className}>
       <FieldLabel htmlFor="partner-city">{content.fields.city}</FieldLabel>
       <Controller
         name="city"
@@ -255,16 +258,18 @@ function CityField({
 
 function PhoneField({
   content,
+  locale,
   form,
   className,
 }: {
   content: PartnerRegistrationContent;
+  locale: "ar" | "en";
   form: Form;
   className?: string;
 }) {
   const error = form.formState.errors.phone;
   return (
-    <div dir="rtl" className={className}>
+    <div className={className}>
       <FieldLabel htmlFor="partner-phone">{content.fields.phone}</FieldLabel>
       <div
         dir="ltr"
@@ -275,7 +280,7 @@ function PhoneField({
       >
         <span
           role="img"
-          aria-label={`${content.countryCode}، ${content.countryLabel}`}
+          aria-label={`${content.countryCode}${locale === "ar" ? "،" : ","} ${content.countryLabel}`}
           className="flex shrink-0 items-center gap-2 border-r border-border/60 px-3 text-sm text-muted-foreground"
         >
           <span aria-hidden="true">🇸🇦</span>

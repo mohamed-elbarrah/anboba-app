@@ -5,25 +5,29 @@ type AboutVisionMissionContent = Dictionary["aboutVisionMission"];
 
 export function AboutVisionMissionSection({
   content,
+  locale = "ar",
 }: {
   content: AboutVisionMissionContent;
+  locale?: "ar" | "en";
 }) {
+  const conjunction = locale === "ar" ? "و" : "and";
+
   return (
     <section
       aria-labelledby="about-vision-mission-heading"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className="bg-background px-5 pb-20 sm:px-8 sm:pb-24 lg:pb-28"
-      dir="rtl"
     >
       <div className="mx-auto max-w-[1440px]">
         <h2 id="about-vision-mission-heading" className="sr-only">
-          {content.vision.heading} و {content.mission.heading}
+          {content.vision.heading} {conjunction} {content.mission.heading}
         </h2>
 
         <div className="grid gap-5 lg:grid-cols-2 lg:gap-7">
-          <article className="rounded-[2rem] bg-primary px-7 py-8 text-right text-primary-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
+          <article className="rounded-[2rem] bg-primary px-7 py-8 text-start text-primary-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Eye
               aria-hidden="true"
-              className="ml-auto size-14"
+              className="size-14 self-start"
               strokeWidth={2}
             />
             <h3 className="mt-5 text-2xl font-extrabold sm:text-3xl lg:text-[2rem]">
@@ -34,10 +38,10 @@ export function AboutVisionMissionSection({
             </p>
           </article>
 
-          <article className="rounded-[2rem] border border-border/70 bg-card px-7 py-8 text-right text-card-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
+          <article className="rounded-[2rem] border border-border/70 bg-card px-7 py-8 text-start text-card-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Rocket
               aria-hidden="true"
-              className="ml-auto size-14 text-primary"
+              className="size-14 self-start text-primary"
               strokeWidth={2}
             />
             <h3 className="mt-5 text-2xl font-extrabold text-foreground sm:text-3xl lg:text-[2rem]">

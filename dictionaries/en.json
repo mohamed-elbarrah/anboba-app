@@ -20,10 +20,22 @@
   "statistics": {
     "heading": "Anboba in numbers",
     "items": [
-      { "value": "15K+", "label": "Happy customers" },
-      { "value": "50K+", "label": "Cylinders delivered" },
-      { "value": "120+", "label": "Certified technicians" },
-      { "value": "8+", "label": "Cities covered" }
+      {
+        "value": "15K+",
+        "label": "Happy customers"
+      },
+      {
+        "value": "50K+",
+        "label": "Cylinders delivered"
+      },
+      {
+        "value": "120+",
+        "label": "Certified technicians"
+      },
+      {
+        "value": "8+",
+        "label": "Cities covered"
+      }
     ]
   },
   "whyChooseUs": {
@@ -42,37 +54,172 @@
     ],
     "imageAlt": "Anboba gas cylinder"
   },
-  "aboutVisionMission": { "vision": { "heading": "Our vision", "description": "To be the region's leading technology partner for home energy solutions, providing a safe environment" }, "mission": { "heading": "Our mission", "description": "Empowering customers through innovative, easy delivery solutions while strictly adhering to the highest professional safety standards" } },
+  "aboutVisionMission": {
+    "vision": {
+      "heading": "Our vision",
+      "description": "To be the region's leading technology partner for home energy solutions, providing a safe environment"
+    },
+    "mission": {
+      "heading": "Our mission",
+      "description": "Empowering customers through innovative, easy delivery solutions while strictly adhering to the highest professional safety standards"
+    }
+  },
   "serviceBenefits": {
     "eyebrow": "Benefits",
     "headingHighlight": "A home service",
     "headingRest": " with a high-trust digital experience",
     "subtitle": "The same content, organized more simply with interfaces that are comfortable to read and use.",
     "items": [
-      { "title": "Faster ordering", "description": "Choose your cylinder and location, then send your order in under a minute.", "icon": "clock" },
-      { "title": "Trusted safety", "description": "Installation and leak checks before completing the order in the app.", "icon": "shield" },
-      { "title": "Live tracking", "description": "Know your order status and expected arrival time without repeated calls.", "icon": "send" },
-      { "title": "Continued support", "description": "A support team that takes care of the experience from order to installation.", "icon": "headset" }
+      {
+        "title": "Faster ordering",
+        "description": "Choose your cylinder and location, then send your order in under a minute.",
+        "icon": "clock"
+      },
+      {
+        "title": "Trusted safety",
+        "description": "Installation and leak checks before completing the order in the app.",
+        "icon": "shield"
+      },
+      {
+        "title": "Live tracking",
+        "description": "Know your order status and expected arrival time without repeated calls.",
+        "icon": "send"
+      },
+      {
+        "title": "Continued support",
+        "description": "A support team that takes care of the experience from order to installation.",
+        "icon": "headset"
+      }
     ]
   },
   "joinApplication": {
     "heading": "Start your journey today",
     "description": "Fill out the form and our recruitment team will contact you within 48 hours at most.",
-    "fields": { "fullName": "Full name", "phone": "Phone number", "email": "Email", "city": "City", "experienceYears": "Years of experience", "transportType": "Transport type", "nationalId": "National ID image", "drivingLicense": "Driving license image" },
-    "selectPlaceholders": { "experienceYears": "Years of experience", "transportType": "Transport type" },
-    "experienceOptions": ["No experience", "Less than one year", "1 to 3 years", "More than 3 years"],
-    "transportOptions": ["Car", "Truck", "Motorcycle"],
-    "fileHint": "Attach file (JPG, PNG, PDF)", "submit": "Submit application", "benefits": ["Quick registration process", "Electronic document upload", "Direct support during application"], "note": "Make sure your information is accurate to avoid delays.", "success": "Your application was submitted successfully. Our team will contact you soon."
+    "fields": {
+      "fullName": "Full name",
+      "phone": "Phone number",
+      "email": "Email",
+      "city": "City",
+      "experienceYears": "Years of experience",
+      "transportType": "Transport type",
+      "nationalId": "National ID image",
+      "drivingLicense": "Driving license image"
+    },
+    "selectPlaceholders": {
+      "experienceYears": "Years of experience",
+      "transportType": "Transport type"
+    },
+    "experienceOptions": [
+      "No experience",
+      "Less than one year",
+      "1 to 3 years",
+      "More than 3 years"
+    ],
+    "transportOptions": [
+      "Car",
+      "Truck",
+      "Motorcycle"
+    ],
+    "fileHint": "Attach file (JPG, PNG, PDF)",
+    "submit": "Submit application",
+    "benefits": [
+      "Quick registration process",
+      "Electronic document upload",
+      "Direct support during application"
+    ],
+    "note": "Make sure your information is accurate to avoid delays.",
+    "success": "Your application was submitted successfully. Our team will contact you soon.",
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "phone": "05xxxxxxxx",
+      "email": "example@email.com",
+      "city": "Enter your city"
+    },
+    "validation": {
+      "fullNameMin": "Please enter your full name.",
+      "fullNameMax": "Name is too long.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "email": "Please enter a valid email address.",
+      "city": "Please enter your city.",
+      "experience": "Please select your experience.",
+      "transport": "Please select your transport type.",
+      "nationalId": "Please attach your national ID.",
+      "drivingLicense": "Please attach your driving license.",
+      "fileSize": "File must be no larger than 5 MB.",
+      "fileType": "Only JPG, PNG, and PDF files are allowed."
+    },
+    "countryCode": "+966",
+    "countryLabel": "Saudi Arabia country code"
   },
-  "partnerRegistration": { "eyebrow": "Join as a distributor", "headingStart": "Start your journey", "headingHighlight": "today", "description": "Fill out the form and our recruitment team will contact you within 48 business hours at most.", "fields": { "company": "Company name *", "phone": "Responsible person's mobile *", "email": "Email", "city": "City *" }, "placeholders": { "company": "Company name", "phone": "Mobile number", "email": "Email address", "city": "City" }, "countryCode": "+966", "countryLabel": "Saudi Arabia flag", "cityOptions": ["Riyadh", "Jeddah", "Makkah", "Madinah", "Dammam", "Khobar"], "submit": "Submit application", "success": "Your application was submitted successfully. Our team will contact you soon." },
-  "faqSupport": { "faq": { "heading": "Have frequently asked questions?", "description": "Before contacting us, you may find your answer in our help center. We collected the most frequently asked questions to help you quickly.", "cta": "Browse frequently asked questions", "href": "/en/faq" }, "support": { "heading": "Live support", "description": "Speak directly with one of our representatives available on WhatsApp", "cta": "Contact us", "href": "https://wa.me/96644043044" } },
+  "partnerRegistration": {
+    "eyebrow": "Join as a distributor",
+    "headingStart": "Start your journey",
+    "headingHighlight": "today",
+    "description": "Fill out the form and our recruitment team will contact you within 48 business hours at most.",
+    "fields": {
+      "company": "Company name *",
+      "phone": "Responsible person's mobile *",
+      "email": "Email",
+      "city": "City *"
+    },
+    "placeholders": {
+      "company": "Company name",
+      "phone": "Mobile number",
+      "email": "Email address",
+      "city": "City"
+    },
+    "countryCode": "+966",
+    "countryLabel": "Saudi Arabia flag",
+    "cityOptions": [
+      "Riyadh",
+      "Jeddah",
+      "Makkah",
+      "Madinah",
+      "Dammam",
+      "Khobar"
+    ],
+    "submit": "Submit application",
+    "success": "Your application was submitted successfully. Our team will contact you soon.",
+    "validation": {
+      "company": "Please enter the company name.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "email": "Please enter a valid email address.",
+      "city": "Please enter your city."
+    }
+  },
+  "faqSupport": {
+    "faq": {
+      "heading": "Have frequently asked questions?",
+      "description": "Before contacting us, you may find your answer in our help center. We collected the most frequently asked questions to help you quickly.",
+      "cta": "Browse frequently asked questions",
+      "href": "/en/faq"
+    },
+    "support": {
+      "heading": "Live support",
+      "description": "Speak directly with one of our representatives available on WhatsApp",
+      "cta": "Contact us",
+      "href": "https://wa.me/96644043044"
+    }
+  },
   "hero": {
     "headingStart": "Order ",
     "headingHighlightGas": "your gas cylinder",
     "headingMiddle": " easily and we will deliver and install it right to your ",
     "headingHighlightHome": "doorstep",
     "description": "Live tracking, a verified technician, and a safety check before closing the order",
-    "cta": "Download the app"
+    "cta": "Download the app",
+    "showcase": {
+      "heading": "ANBOBA service benefits",
+      "guaranteeLabel": "Installation guarantee",
+      "guarantees": [
+        "Pre-departure check",
+        "Safe installation",
+        "Verified technician",
+        "Live order tracking"
+      ],
+      "phoneLeftAlt": "ANBOBA app for ordering gas cylinders",
+      "phoneRightAlt": "ANBOBA app for tracking delivery"
+    }
   },
   "contact": {
     "eyebrow": "Contact us",
@@ -80,19 +227,52 @@
     "headingHighlight": "customer",
     "description": "We are here to help. Whether you have an inquiry or would like to join us as a partner, our team is ready to respond.",
     "details": [
-      { "kind": "phone", "value": "9200 123 456", "href": "tel:9200123456" },
-      { "kind": "email", "value": "support@anabeeb.app", "href": "mailto:support@anabeeb.app" },
-      { "kind": "location", "value": "Dammam - Al Noor district - Saudi Arabia" },
-      { "kind": "hours", "value": "Support from 8 AM to 12 AM" }
+      {
+        "kind": "phone",
+        "value": "9200 123 456",
+        "href": "tel:9200123456"
+      },
+      {
+        "kind": "email",
+        "value": "support@anabeeb.app",
+        "href": "mailto:support@anabeeb.app"
+      },
+      {
+        "kind": "location",
+        "value": "Dammam - Al Noor district - Saudi Arabia"
+      },
+      {
+        "kind": "hours",
+        "value": "Support from 8 AM to 12 AM"
+      }
     ],
-    "fields": { "fullName": "Full name", "phone": "Phone number", "message": "Message" },
-    "placeholders": { "fullName": "Full name", "phone": "Phone number", "message": "Describe your service" },
+    "fields": {
+      "fullName": "Full name",
+      "phone": "Phone number",
+      "message": "Message"
+    },
+    "placeholders": {
+      "fullName": "Full name",
+      "phone": "Phone number",
+      "message": "Describe your service"
+    },
     "countryCode": "+966",
     "countryLabel": "Saudi Arabia country code",
     "submit": "Send",
-    "success": "Your message was sent successfully. Our team will contact you soon."
+    "success": "Your message was sent successfully. Our team will contact you soon.",
+    "validation": {
+      "fullNameMin": "Please enter your full name.",
+      "fullNameMax": "Name is too long.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "messageMin": "Please write your message.",
+      "messageMax": "Message is too long."
+    }
   },
-  "pageTitle": { "eyebrow": "ANBOBA app", "heading": "Privacy policy", "description": "Privacy policy page Privacy policy page Privacy policy page" },
+  "pageTitle": {
+    "eyebrow": "ANBOBA app",
+    "heading": "Privacy policy",
+    "description": "Learn how Anboba protects your privacy and handles the information you share when using our services."
+  },
   "footer": {
     "brandDescription": "The leading platform for home energy and gas delivery services",
     "quickLinks": "Quick links",
@@ -110,5 +290,33 @@
     "comingSoon": "Coming soon",
     "languageLabel": "Language",
     "copyright": "All rights reserved to Anboba app"
+  },
+  "validation": {
+    "contact": {
+      "fullNameMin": "Please enter your full name.",
+      "fullNameMax": "Name is too long.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "messageMin": "Please write your message.",
+      "messageMax": "Message is too long."
+    },
+    "join": {
+      "fullNameMin": "Please enter your full name.",
+      "fullNameMax": "Name is too long.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "email": "Please enter a valid email address.",
+      "city": "Please enter your city.",
+      "experience": "Please select your experience.",
+      "transport": "Please select your transport type.",
+      "nationalId": "Please attach your national ID.",
+      "drivingLicense": "Please attach your driving license.",
+      "fileSize": "File must be no larger than 5 MB.",
+      "fileType": "Only JPG, PNG, and PDF files are allowed."
+    },
+    "partner": {
+      "company": "Please enter the company name.",
+      "phone": "Please enter a valid Saudi mobile number.",
+      "email": "Please enter a valid email address.",
+      "city": "Please enter your city."
+    }
   }
 }

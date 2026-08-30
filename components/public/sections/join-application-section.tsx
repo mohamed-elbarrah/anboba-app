@@ -23,13 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  joinApplicationSchema,
+  createJoinApplicationSchema,
   type JoinApplicationContent,
   type JoinApplicationFormValues,
 } from "@/features/join-us/schema";
 import { cn } from "@/lib/utils";
 
-type JoinApplicationSectionProps = { content: JoinApplicationContent };
+type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en" };
 
 const benefitIcons = [Clock3, FileUp, Headphones] as const;
 
@@ -37,10 +37,12 @@ type TextFieldName = "fullName" | "phone" | "email" | "city";
 
 export function JoinApplicationSection({
   content,
+  locale,
 }: JoinApplicationSectionProps) {
+  const formDirection = locale === "ar" ? "[direction:rtl] lg:[direction:ltr]" : "[direction:ltr]";
   const [submitted, setSubmitted] = useState(false);
   const form = useForm<JoinApplicationFormValues>({
-    resolver: zodResolver(joinApplicationSchema),
+    resolver: zodResolver(createJoinApplicationSchema(content.validation)),
     mode: "onBlur",
     defaultValues: {
       fullName: "",
@@ -62,10 +64,10 @@ export function JoinApplicationSection({
     <section
       aria-labelledby="join-application-heading"
       className="bg-background px-5 py-16 sm:px-8 sm:py-24 lg:py-28"
-      dir="rtl"
+      dir={locale === "ar" ? "rtl" : "ltr"}
     >
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 [direction:ltr] lg:grid-cols-[minmax(0,1.12fr)_minmax(310px,0.88fr)] lg:gap-12">
-        <div className="order-2 [direction:rtl] lg:order-1">
+        <div className="order-2  lg:order-1">
           {submitted ? (
             <div
               role="status"
@@ -77,17 +79,17 @@ export function JoinApplicationSection({
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               noValidate
-              className="grid grid-cols-1 gap-x-4 gap-y-5 [direction:rtl] sm:grid-cols-2 lg:[direction:ltr]"
+              className={`grid grid-cols-1 gap-x-4 gap-y-5 ${formDirection} sm:grid-cols-2`}
             >
               <TextField
                 name="fullName"
                 label={content.fields.fullName}
-                placeholder="أدخل الاسم الثلاثي"
+                placeholder={content.placeholders.fullName}
                 icon={UserRound}
                 form={form}
-                className="[direction:rtl] lg:col-start-2 lg:row-start-1"
+                className=" lg:col-start-2 lg:row-start-1"
               />
-              <div className="[direction:rtl] lg:col-start-1 lg:row-start-1">
+              <div className=" lg:col-start-1 lg:row-start-1">
                 <FieldLabel htmlFor="phone">{content.fields.phone}</FieldLabel>
                 <div
                   className="mt-2 flex h-12 overflow-hidden rounded-full border border-input bg-card focus-within:border-primary focus-within:ring-3 focus-within:ring-primary/20"
@@ -95,9 +97,9 @@ export function JoinApplicationSection({
                 >
                   <span
                     className="flex items-center gap-1 border-r border-input bg-muted/50 px-3 text-sm font-bold text-muted-foreground"
-                    aria-label="رمز المملكة العربية السعودية"
+                    aria-label={`${content.countryLabel} ${content.countryCode}`}
                   >
-                    <span aria-hidden="true">🇸🇦</span> +966
+                    <span aria-hidden="true">🇸🇦</span> {content.countryCode}
                   </span>
                   <input
                     id="phone"
@@ -106,7 +108,7 @@ export function JoinApplicationSection({
                     autoComplete="tel-national"
                     {...form.register("phone")}
                     className="min-w-0 flex-1 bg-transparent px-3 text-left text-sm outline-none placeholder:text-muted-foreground/70"
-                    placeholder="05xxxxxxxx"
+                    placeholder={content.placeholders.phone}
                     aria-invalid={!!form.formState.errors.phone}
                     aria-describedby={
                       form.formState.errors.phone ? "phone-error" : undefined
@@ -121,18 +123,18 @@ export function JoinApplicationSection({
                 name="email"
                 label={content.fields.email}
                 type="email"
-                placeholder="example@email.com"
+                placeholder={content.placeholders.email}
                 icon={FileText}
                 form={form}
-                className="[direction:rtl] lg:col-start-2 lg:row-start-2"
+                className=" lg:col-start-2 lg:row-start-2"
               />
               <TextField
                 name="city"
                 label={content.fields.city}
-                placeholder="أدخل المدينة"
+                placeholder={content.placeholders.city}
                 icon={Truck}
                 form={form}
-                className="[direction:rtl] lg:col-start-1 lg:row-start-2"
+                className=" lg:col-start-1 lg:row-start-2"
               />
               <SelectField
                 name="experienceYears"
@@ -140,7 +142,7 @@ export function JoinApplicationSection({
                 placeholder={content.selectPlaceholders.experienceYears}
                 options={content.experienceOptions}
                 form={form}
-                className="[direction:rtl] lg:col-start-2 lg:row-start-3"
+                className=" lg:col-start-2 lg:row-start-3"
               />
               <SelectField
                 name="transportType"
@@ -148,7 +150,7 @@ export function JoinApplicationSection({
                 placeholder={content.selectPlaceholders.transportType}
                 options={content.transportOptions}
                 form={form}
-                className="[direction:rtl] lg:col-start-1 lg:row-start-3"
+                className=" lg:col-start-1 lg:row-start-3"
               />
               <FileField
                 name="nationalId"
@@ -156,7 +158,7 @@ export function JoinApplicationSection({
                 icon={IdCard}
                 form={form}
                 hint={content.fileHint}
-                className="[direction:rtl] lg:col-start-2 lg:row-start-4"
+                className=" lg:col-start-2 lg:row-start-4"
               />
               <FileField
                 name="drivingLicense"
@@ -164,9 +166,9 @@ export function JoinApplicationSection({
                 icon={Paperclip}
                 form={form}
                 hint={content.fileHint}
-                className="[direction:rtl] lg:col-start-1 lg:row-start-4"
+                className=" lg:col-start-1 lg:row-start-4"
               />
-              <div className="[direction:rtl] sm:col-span-2">
+              <div className=" sm:col-span-2">
                 <Button
                   type="submit"
                   size="lg"
@@ -179,7 +181,7 @@ export function JoinApplicationSection({
           )}
         </div>
 
-        <aside className="order-1 [direction:rtl] rounded-[2rem] bg-brand-navy px-7 py-9 text-right text-white shadow-xl sm:px-9 lg:order-2 lg:flex lg:flex-col lg:justify-center">
+        <aside className="order-1  rounded-[2rem] bg-brand-navy px-7 py-9 text-start text-white shadow-xl sm:px-9 lg:order-2 lg:flex lg:flex-col lg:justify-center">
           <h2
             id="join-application-heading"
             className="text-3xl font-extrabold tracking-tight lg:text-[2.5rem]"
@@ -378,17 +380,11 @@ function FileField({
           onChange={(event) => {
             const selected = event.target.files?.[0];
             if (!selected) return;
-            const isAccepted =
-              selected.size <= 5 * 1024 * 1024 &&
-              ["image/jpeg", "image/png", "application/pdf"].includes(
-                selected.type,
-              );
-            if (isAccepted) {
-              form.setValue(name, selected, { shouldValidate: true });
-            } else {
-              form.resetField(name);
-              event.currentTarget.value = "";
-            }
+            form.setValue(name, selected, {
+              shouldDirty: true,
+              shouldTouch: true,
+              shouldValidate: true,
+            });
           }}
           aria-invalid={!!error}
           aria-describedby={error ? `${name}-error` : undefined}

@@ -11,8 +11,9 @@ export default async function ArabicAboutPage() {
         content={dictionary.whyChooseUs}
         variant="about"
         headingLevel="h1"
+        locale="ar"
       />
-      <AboutVisionMissionSection content={dictionary.aboutVisionMission} />
+      <AboutVisionMissionSection content={dictionary.aboutVisionMission} locale="ar" />
     </main>
   );
 }

@@ -74,6 +74,11 @@ export type Dictionary = {
   joinApplication: import("@/features/join-us/schema").JoinApplicationContent;
   partnerRegistration: import("@/features/join-us/partner-registration").PartnerRegistrationContent;
   contact: import("@/features/contact/schema").ContactContent;
+  validation: {
+    contact: import("@/features/contact/schema").ContactValidationMessages;
+    join: import("@/features/join-us/schema").JoinValidationMessages;
+    partner: import("@/features/join-us/partner-registration").PartnerValidationMessages;
+  };
   pageTitle: {
     eyebrow: string;
     heading: string;
@@ -104,6 +109,8 @@ export type Dictionary = {
       heading: string;
       guaranteeLabel: string;
       guarantees: readonly string[];
+      phoneLeftAlt: string;
+      phoneRightAlt: string;
     };
   };
   footer: {

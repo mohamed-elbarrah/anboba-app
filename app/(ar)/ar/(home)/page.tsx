@@ -15,15 +15,16 @@ export default async function ArabicHome() {
   return (
     <main>
       <HeroSection content={dictionary.hero} locale="ar" />
-      <ServiceOverviewSection content={dictionary.serviceOverview} />
-      <StatisticsSection content={dictionary.statistics} />
-      <WhyChooseUsSection content={dictionary.whyChooseUs} />
-      <ServiceBenefitsSection content={dictionary.serviceBenefits} />
-      <JoinApplicationSection content={dictionary.joinApplication} />
+      <ServiceOverviewSection content={dictionary.serviceOverview} locale="ar" />
+      <StatisticsSection content={dictionary.statistics} locale="ar" />
+      <WhyChooseUsSection content={dictionary.whyChooseUs} locale="ar" />
+      <ServiceBenefitsSection content={dictionary.serviceBenefits} locale="ar" />
+      <JoinApplicationSection content={dictionary.joinApplication} locale="ar" />
       <FaqSupportSection
         content={dictionary.faqSupport}
         faqHref="/ar/faq"
         supportHref={footer.whatsappHref}
+        locale="ar"
       />
     </main>
   );

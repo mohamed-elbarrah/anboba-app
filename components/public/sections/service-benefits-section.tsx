@@ -18,14 +18,16 @@ const icons: Record<ServiceBenefitIcon, LucideIcon> = {
 
 export function ServiceBenefitsSection({
   content,
+  locale = "ar",
 }: {
   content: ServiceBenefitsContent;
+  locale?: "ar" | "en";
 }) {
   return (
     <section
       aria-labelledby="service-benefits-heading"
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className="bg-background px-5 py-20 sm:px-8 sm:py-24 lg:py-28"
-      dir="rtl"
     >
       <div className="mx-auto max-w-[1440px]">
         <header className="mx-auto max-w-2xl text-center">
@@ -55,7 +57,7 @@ export function ServiceBenefitsSection({
             return (
               <li
                 key={item.title}
-                className={`flex min-h-[240px] flex-col items-start rounded-3xl border px-7 py-8 text-right shadow-sm transition-shadow hover:shadow-md lg:min-h-[250px] lg:px-8 lg:py-9 ${
+                className={`flex min-h-[240px] flex-col items-start rounded-3xl border px-7 py-8 text-start shadow-sm transition-shadow hover:shadow-md lg:min-h-[250px] lg:px-8 lg:py-9 ${
                   isHighlighted
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border/70 bg-card text-foreground"

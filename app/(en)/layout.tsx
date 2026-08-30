@@ -4,8 +4,12 @@ import SiteHeader from "@/components/public/site-header";
 import SiteFooter from "@/components/public/site-footer";
 
 export const metadata: Metadata = {
-  title: "ANBOBA",
-  description: "ANBOBA public website",
+  title: {
+    default: "ANBOBA",
+    template: "%s | ANBOBA",
+  },
+  description:
+    "ANBOBA makes ordering, delivery, and installation of home gas cylinders simple and reliable.",
 };
 
 export default function EnglishRootLayout({
