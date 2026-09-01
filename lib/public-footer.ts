@@ -2,7 +2,7 @@ import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/locales";
 
 export type FooterLink = {
-  key: "about" | "terms" | "privacy";
+  key: "about" | "terms" | "privacy" | "refunds";
   label: string;
   href: string;
 };
@@ -53,6 +53,11 @@ export function getPublicFooterData(
         key: "privacy",
         label: dictionary.footer.privacy,
         href: `/${locale}/policies/privacy`,
+      },
+      {
+        key: "refunds",
+        label: dictionary.footer.refunds,
+        href: `/${locale}/policies/refunds`,
       },
     ],
     contacts: [

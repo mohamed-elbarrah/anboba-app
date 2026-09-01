@@ -119,6 +119,7 @@ export type Dictionary = {
     contact: string;
     terms: string;
     privacy: string;
+    refunds: string;
     phoneLabel: string;
     phone: string;
     emailLabel: string;
