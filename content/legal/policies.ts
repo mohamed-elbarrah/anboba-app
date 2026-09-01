@@ -216,6 +216,213 @@ export const arabicLegalDocuments: readonly LegalDocument[] = [
   },
 ];
 
+export const englishLegalDocuments: readonly LegalDocument[] = [
+  {
+    slug: "privacy",
+    title: "Privacy Policy",
+    summary:
+      "ANBOBA respects your privacy and is committed to protecting your personal data. This policy explains what information we collect, why we collect it, how we use and protect it, and the choices available to you regarding your data.",
+    sections: [
+      {
+        heading: "01 — Introduction",
+        paragraphs: [
+          "ANBOBA respects your privacy and is committed to protecting your personal data. This policy explains what information we collect, why we collect it, how we use and protect it, and the choices available to you regarding your data.",
+        ],
+      },
+      {
+        heading: "02 — Data We Collect",
+        paragraphs: [
+          "ANBOBA collects the data you provide when registering or using the app, such as your name, email address, and mobile number.",
+          "We may also collect data and information entered within the app, depending on the services and features you use.",
+        ],
+      },
+      {
+        heading: "03 — Use of Data",
+        paragraphs: ["Data is used to:"],
+        items: [
+          "Provide services and enable you to benefit from the app's features.",
+          "Provide technical support and service-related notifications.",
+          "Continuously develop and improve the app.",
+        ],
+      },
+      {
+        heading: "04 — Data Protection",
+        paragraphs: [
+          "ANBOBA is committed to applying appropriate technical and organizational measures to protect data from unauthorized access, alteration, or disclosure.",
+          "Access to data is limited to authorized personnel and only for the purposes described above.",
+        ],
+      },
+      {
+        heading: "05 — Data Sharing",
+        paragraphs: [
+          "User data is not shared with any third party except when necessary to provide the service or where permitted or required by applicable law.",
+          "In the event of a merger, acquisition, or sale of the business, data may be transferred to the new entity while ensuring that its protection continues under this policy.",
+        ],
+      },
+      {
+        heading: "06 — Security Incident Notice",
+        paragraphs: [
+          "If a security breach affecting user data occurs, ANBOBA will take the necessary steps to address the incident and reduce its effects, and will notify the relevant authorities or affected users in accordance with applicable laws and regulations.",
+        ],
+      },
+      {
+        heading: "07 — User Rights",
+        paragraphs: [
+          "You have the right to request correction or updating of your data at any time.",
+          "You may also request deletion of your account in accordance with the app's policy, unless a legal obligation requires the data to be retained.",
+        ],
+      },
+      {
+        heading: "08 — Policy Changes",
+        paragraphs: [
+          "The Privacy Policy may be updated from time to time. Users will be notified of material changes before or when they take effect, as required by applicable laws.",
+          "Continuing to use the app after changes means that you accept the updated policy.",
+        ],
+      },
+      {
+        heading: "09 — Contact Us",
+        paragraphs: [
+          "If you have any questions about this Privacy Policy or ANBOBA's data processing practices",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "terms",
+    title: "Terms of Use",
+    summary:
+      "Welcome to ANBOBA. These Terms of Use explain the rules and provisions governing use of the app and the services provided through it.",
+    sections: [
+      {
+        heading: "01 — Introduction",
+        paragraphs: [
+          "Welcome to ANBOBA. These Terms of Use explain the rules and provisions governing use of the app and the services provided through it. By using the app, you acknowledge that you have read these terms and agree to comply with them.",
+        ],
+      },
+      {
+        heading: "02 — Use of the App",
+        paragraphs: [
+          "You must use the app in a lawful and legitimate manner and must not use it for purposes that violate applicable laws or cause harm to the app or other users.",
+          "You are responsible for the truthfulness and accuracy of the information you provide during registration or while using the services.",
+        ],
+      },
+      {
+        heading: "03 — User Account",
+        paragraphs: [
+          "Some app services may require you to create a personal account.",
+          "You must keep your login details confidential and are responsible for all activity carried out through your account.",
+          "You must notify the app administration immediately if you suspect unauthorized use of your account.",
+        ],
+      },
+      {
+        heading: "04 — Services and Orders",
+        paragraphs: [
+          "ANBOBA provides various services and features as described within the app.",
+          "The services, prices, and displayed details are subject to change from time to time, and some may be modified or discontinued when necessary.",
+        ],
+      },
+      {
+        heading: "05 — Payments",
+        paragraphs: [
+          "When making a payment through the app, you must provide accurate payment details and use a payment method you are authorized to use.",
+          "Payments are processed through approved payment service providers and may be subject to the provider's terms and conditions.",
+        ],
+      },
+      {
+        heading: "06 — Prohibited Use",
+        paragraphs: [
+          "You may not use the app for any unlawful activity, attempt unauthorized access to the app's systems, tamper with the services, or use other users' data without permission.",
+          "ANBOBA may take appropriate action, including suspending or terminating a violating account.",
+        ],
+      },
+      {
+        heading: "07 — User Responsibility",
+        paragraphs: [
+          "You are responsible for your use of the app and for the information you enter or share through it.",
+          "You may not use the app in a way that harms the rights of ANBOBA, its users, or other parties.",
+        ],
+      },
+      {
+        heading: "08 — Changes to the Terms",
+        paragraphs: [
+          "The Terms of Use may be updated from time to time to reflect service development or legal requirements.",
+          "Users will be notified of material changes as required by applicable laws. Continuing to use the app after an update means that you accept the amended terms.",
+        ],
+      },
+      {
+        heading: "09 — Contact Us",
+        paragraphs: [
+          "If you have any questions about these Terms of Use or the services provided through the ANBOBA app",
+        ],
+      },
+    ],
+  },
+  {
+    slug: "refunds",
+    title: "Refund Policy",
+    summary:
+      "This Refund Policy explains the procedures for canceling orders and recovering amounts paid for services provided through the ANBOBA app.",
+    sections: [
+      {
+        heading: "01 — Introduction",
+        paragraphs: [
+          "This Refund Policy explains the procedures for canceling orders and recovering amounts paid for services provided through the ANBOBA app.",
+        ],
+      },
+      {
+        heading: "02 — Requesting a Refund",
+        paragraphs: [
+          "You may submit a refund request through ANBOBA's approved communication channels, explaining the reason for the request and providing the information needed to process it.",
+        ],
+      },
+      {
+        heading: "03 — Refund Cases",
+        paragraphs: [
+          "Refund requests are reviewed based on the nature of the service, the status of the order, and the reason for cancellation.",
+          "A refund may be approved where the service was not provided or where a substantial problem prevents you from benefiting from it, in accordance with applicable laws and terms.",
+        ],
+      },
+      {
+        heading: "04 — Non-Refundable Cases",
+        paragraphs: [
+          "A refund may not be available where the service has been fully provided or used, or where the reason for cancellation is outside ANBOBA's responsibility, depending on the nature of the service and the published terms.",
+        ],
+      },
+      {
+        heading: "05 — Processing a Refund Request",
+        paragraphs: [
+          "The refund request and transaction details will be reviewed and verified before a decision is made.",
+          "If the refund is approved, the amount will be returned to the payment method used for the transaction, according to the applicable procedures.",
+        ],
+      },
+      {
+        heading: "06 — Refund Timeline",
+        paragraphs: [
+          "After a refund request is approved, depositing the amount into your account may take several business days, depending on the bank or payment service provider used.",
+          "ANBOBA is not responsible for delays caused by the payment provider or bank.",
+        ],
+      },
+      {
+        heading: "07 — Fees and Discounts",
+        paragraphs: [
+          "Any due or non-refundable fees may be deducted from the returned amount if those fees were explained to you before completing the payment.",
+        ],
+      },
+      {
+        heading: "08 — Policy Changes",
+        paragraphs: [
+          "The Refund Policy may be updated from time to time to reflect service development and legal requirements.",
+          "Changes will be published in the app. The policy in effect when the refund request is submitted will apply, unless applicable laws require otherwise.",
+        ],
+      },
+    ],
+  },
+];
+
 export function getArabicLegalDocument(slug: LegalDocumentSlug) {
   return arabicLegalDocuments.find((document) => document.slug === slug);
+}
+
+export function getEnglishLegalDocument(slug: LegalDocumentSlug) {
+  return englishLegalDocuments.find((document) => document.slug === slug);
 }

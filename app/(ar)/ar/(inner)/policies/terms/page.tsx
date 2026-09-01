@@ -12,5 +12,5 @@ export const metadata: Metadata = {
 
 export default function ArabicTermsPolicyPage() {
   if (!document) return null;
-  return <LegalPolicyDocument document={document} />;
+  return <LegalPolicyDocument document={document} locale="ar" />;
 }

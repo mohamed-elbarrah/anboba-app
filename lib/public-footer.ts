@@ -47,12 +47,12 @@ export function getPublicFooterData(
       {
         key: "terms",
         label: dictionary.footer.terms,
-        href: locale === "ar" ? `/${locale}/policies/terms` : `/${locale}/policies`,
+        href: `/${locale}/policies/terms`,
       },
       {
         key: "privacy",
         label: dictionary.footer.privacy,
-        href: locale === "ar" ? `/${locale}/policies/privacy` : `/${locale}/policies`,
+        href: `/${locale}/policies/privacy`,
       },
     ],
     contacts: [

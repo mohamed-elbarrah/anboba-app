@@ -1,16 +1,15 @@
 import type { Metadata } from "next";
 
-import { PageTitleSection } from "@/components/public/sections/page-title-section";
+import { LegalPolicyOverview } from "@/components/public/legal-policy";
 import { getDictionary } from "@/lib/dictionaries";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy",
-  description:
-    "Learn how ANBOBA protects your privacy and handles information shared while using our services.",
+  title: "Legal policies",
+  description: "Read ANBOBA's Privacy Policy, Terms of Use, and Refund Policy.",
 };
 
 export default async function EnglishPoliciesPage() {
   const dictionary = await getDictionary("en");
 
-  return <PageTitleSection content={dictionary.pageTitle} locale="en" />;
+  return <LegalPolicyOverview heroContent={dictionary.pageTitle} locale="en" />;
 }

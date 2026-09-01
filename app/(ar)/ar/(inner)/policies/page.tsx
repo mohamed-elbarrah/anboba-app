@@ -11,5 +11,5 @@ export const metadata: Metadata = {
 export default async function ArabicPoliciesPage() {
   const dictionary = await getDictionary("ar");
 
-  return <LegalPolicyOverview heroContent={dictionary.pageTitle} />;
+  return <LegalPolicyOverview heroContent={dictionary.pageTitle} locale="ar" />;
 }
