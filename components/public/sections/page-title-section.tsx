@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/locales";
 
-type PageTitleContent = {
+export type PageTitleContent = {
   eyebrow: string;
   heading: string;
   description: string;
@@ -9,13 +9,22 @@ type PageTitleContent = {
 type PageTitleSectionProps = {
   content: PageTitleContent;
   locale: Locale;
+  asSection?: boolean;
+  compact?: boolean;
 };
 
-export function PageTitleSection({ content, locale }: PageTitleSectionProps) {
+export function PageTitleSection({
+  content,
+  locale,
+  asSection = false,
+  compact = false,
+}: PageTitleSectionProps) {
+  const Element = asSection ? "section" : "main";
+
   return (
-    <main
+    <Element
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className="flex min-h-[min(800px,calc(100vh-420px))] flex-1 flex-col bg-background px-5 pb-16 pt-20 text-foreground sm:px-8 sm:pt-20"
+      className={`flex ${compact ? "min-h-0" : "min-h-[min(800px,calc(100vh-420px))]"} flex-1 flex-col bg-background px-5 pb-16 pt-20 text-foreground sm:px-8 sm:pt-20`}
     >
       <section
         aria-labelledby="public-page-title"
@@ -34,6 +43,6 @@ export function PageTitleSection({ content, locale }: PageTitleSectionProps) {
           {content.description}
         </p>
       </section>
-    </main>
+    </Element>
   );
 }
