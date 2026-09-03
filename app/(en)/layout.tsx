@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "../globals.css";
 import SiteHeader from "@/components/public/site-header";
 import SiteFooter from "@/components/public/site-footer";
+import { pingARLT } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -17,7 +18,7 @@ export default function EnglishRootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" dir="ltr">
-      <body className="flex min-h-screen flex-col">
+      <body className={`${pingARLT.className} flex min-h-screen flex-col`}>
         <SiteHeader locale="en" />
         <div className="flex flex-1 flex-col">{children}</div>
         <SiteFooter locale="en" />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import { pingARLT } from "@/lib/fonts";
 
 export const metadata: Metadata = {
   title: "ANBOBA",
@@ -11,7 +12,7 @@ export default function ArabicRootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ar" dir="rtl">
-      <body>{children}</body>
+      <body className={pingARLT.className}>{children}</body>
     </html>
   );
 }
