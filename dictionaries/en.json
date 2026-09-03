@@ -198,7 +198,7 @@
       "heading": "Live support",
       "description": "Speak directly with one of our representatives available on WhatsApp",
       "cta": "Contact us",
-      "href": "https://wa.me/96644043044"
+      "href": "https://wa.me/966550500055"
     }
   },
   "hero": {
@@ -229,13 +229,13 @@
     "details": [
       {
         "kind": "phone",
-        "value": "9200 123 456",
-        "href": "tel:9200123456"
+        "value": "0550500055",
+        "href": "tel:0550500055"
       },
       {
         "kind": "email",
-        "value": "support@anabeeb.app",
-        "href": "mailto:support@anabeeb.app"
+        "value": "info@anboba.sa",
+        "href": "mailto:info@anboba.sa"
       },
       {
         "kind": "location",
@@ -281,9 +281,9 @@
     "privacy": "Privacy policy",
     "refunds": "Refund policy",
     "phoneLabel": "Phone",
-    "phone": "966 4404 3044",
+    "phone": "0550500055",
     "emailLabel": "Email",
-    "email": "info@anabib.com",
+    "email": "info@anboba.sa",
     "locationLabel": "Location",
     "location": "Dammam - Al Noor district",
     "googlePlay": "Google Play",

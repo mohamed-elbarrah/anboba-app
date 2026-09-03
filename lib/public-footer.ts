@@ -65,7 +65,7 @@ export function getPublicFooterData(
         kind: "phone",
         label: dictionary.footer.phoneLabel,
         value: dictionary.footer.phone,
-        href: "tel:+96644043044",
+        href: "tel:0550500055",
       },
       {
         kind: "email",
