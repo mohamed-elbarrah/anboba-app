@@ -8,10 +8,10 @@ import {
 import type { Locale } from "@/lib/locales";
 import { getLocaleDirection } from "@/lib/locales";
 
-const documentLinks = {
+const documentLinks: Record<Locale, Record<string, string>> = {
   ar: { privacy: "الخصوصية", terms: "الشروط والأحكام", refunds: "الاسترداد" },
   en: { privacy: "Privacy", terms: "Terms of Use", refunds: "Refunds" },
-} as const;
+};
 
 const overviewCopy = {
   ar: { ariaLabel: "التنقل بين الوثائق القانونية", heading: "السياسات القانونية", description: "اختر الوثيقة التي تريد قراءتها.", read: "قراءة الوثيقة", arrow: "←" },
@@ -37,7 +37,7 @@ export function LegalPolicyNavigation({
               href={`/${locale}/policies/${document.slug}`}
               aria-current={current === document.slug ? "page" : undefined}
               className="inline-flex min-h-11 items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >{documentLinks[locale][document.slug]}</Link>
+            >{documentLinks[locale][document.slug] ?? document.title}</Link>
           </li>
         ))}
       </ul>

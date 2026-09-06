@@ -433,6 +433,57 @@ export const authLoginAttempts = mysqlTable(
 
 export const mediaKinds = ["image", "video"] as const;
 
+export const policyDocuments = mysqlTable(
+  "policy_documents",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    slug: varchar("slug", { length: 100 }).notNull(),
+    archivedAt: timestamp("archived_at"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [uniqueIndex("policy_documents_locale_slug_unique").on(table.locale, table.slug)],
+);
+
+export const policyRevisions = mysqlTable(
+  "policy_revisions",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    policyDocumentId: id("policy_document_id").notNull().references(() => policyDocuments.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    revisionNumber: int("revision_number", { unsigned: true }).notNull(),
+    status: mysqlEnum("status", revisionStatuses).notNull().default("draft"),
+    title: varchar("title", { length: 255 }).notNull(),
+    summary: text("summary").notNull(),
+    contentJson: json("content_json").notNull(),
+    createdBy: id("created_by").notNull().references(() => admins.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("policy_revisions_document_number_unique").on(table.policyDocumentId, table.revisionNumber),
+    uniqueIndex("policy_revisions_document_id_id_unique").on(table.policyDocumentId, table.id),
+    index("policy_revisions_document_status_idx").on(table.policyDocumentId, table.status),
+  ],
+);
+
+export const policyRevisionPointers = mysqlTable(
+  "policy_revision_pointers",
+  {
+    policyDocumentId: id("policy_document_id").primaryKey(),
+    draftRevisionId: id("draft_revision_id"),
+    publishedRevisionId: id("published_revision_id"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    foreignKey({ name: "policy_revision_pointers_document_fk", columns: [table.policyDocumentId], foreignColumns: [policyDocuments.id] }).onDelete("cascade").onUpdate("cascade"),
+    foreignKey({ name: "policy_revision_pointers_draft_fk", columns: [table.policyDocumentId, table.draftRevisionId], foreignColumns: [policyRevisions.policyDocumentId, policyRevisions.id] }).onDelete("restrict").onUpdate("restrict"),
+    foreignKey({ name: "policy_revision_pointers_published_fk", columns: [table.policyDocumentId, table.publishedRevisionId], foreignColumns: [policyRevisions.policyDocumentId, policyRevisions.id] }).onDelete("restrict").onUpdate("restrict"),
+  ],
+);
+
+
 export const media = mysqlTable(
   "media",
   {

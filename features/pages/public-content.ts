@@ -1,7 +1,8 @@
 import "server-only";
 
 import { getDictionary, type Dictionary } from "@/lib/dictionaries";
-import { getArabicLegalDocument, getEnglishLegalDocument, type LegalDocumentSlug } from "@/content/legal/policies";
+import { getArabicLegalDocument, getEnglishLegalDocument, type LegalDocument, type LegalDocumentSlug } from "@/content/legal/policies";
+import { getPublishedPolicies, getPublishedPolicy } from "@/features/policies/queries";
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/locales";
 import { getPage } from "./queries";
@@ -92,11 +93,30 @@ function importLegal(locale: "ar" | "en") {
   return locale === "ar" ? [getArabicLegalDocument("privacy"), getArabicLegalDocument("terms"), getArabicLegalDocument("refunds")].filter(Boolean) : [getEnglishLegalDocument("privacy"), getEnglishLegalDocument("terms"), getEnglishLegalDocument("refunds")].filter(Boolean);
 }
 
+function richTextToSections(content: unknown) {
+  const sections: { heading: string; paragraphs: string[]; items?: string[] }[] = [];
+  for (const node of (content as { content?: unknown[] })?.content ?? []) {
+    const value = node as { type?: string; text?: string; content?: unknown[] };
+    const text = value.text ?? (value.content as { text?: string }[] | undefined)?.map((item) => item.text ?? "").join("") ?? "";
+    if (value.type === "heading") sections.push({ heading: text, paragraphs: [] });
+    else if (value.type === "paragraph" && text) (sections.at(-1) ?? (sections.push({ heading: "", paragraphs: [] }), sections.at(-1)!)).paragraphs.push(text);
+    else if ((value.type === "bulletList" || value.type === "orderedList") && value.content) (sections.at(-1) ?? (sections.push({ heading: "", paragraphs: [] }), sections.at(-1)!)).items = (value.content as { content?: { content?: { text?: string }[] }[] }[]).map((item) => (item.content ?? []).flatMap((paragraph) => paragraph.content ?? []).map((part) => part.text ?? "").join(""));
+  }
+  return sections.filter((section) => section.heading || section.paragraphs.length || section.items?.length).map((section) => ({ heading: section.heading || "Content", paragraphs: section.paragraphs, items: section.items }));
+}
+
+function toLegalDocument(policy: Awaited<ReturnType<typeof getPublishedPolicies>>[number]): LegalDocument {
+  return { slug: policy.slug as LegalDocumentSlug, title: policy.title, summary: policy.summary, sections: richTextToSections(policy.content) };
+}
+
 export async function getPublishedLegalDocuments(locale: Locale) {
-  return (await getPublishedPublicPage(locale, "policies")).sections.policies.documents;
+  try { return (await getPublishedPolicies(locale)).map(toLegalDocument); }
+  catch (error) { if (process.env.NODE_ENV !== "development") throw error; return (await getPublishedPublicPage(locale, "policies")).sections.policies.documents; }
 }
 
 export async function getPublishedLegalDocument(locale: Locale, slug: LegalDocumentSlug) {
+  try { const document = await getPublishedPolicy(locale, slug); if (document) return toLegalDocument(document); }
+  catch (error) { if (process.env.NODE_ENV !== "development") throw error; }
   const documents = await getPublishedLegalDocuments(locale);
   const document = documents.find((item) => item.slug === slug);
   if (document) return document;

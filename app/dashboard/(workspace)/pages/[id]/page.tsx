@@ -1,4 +1,5 @@
 import { AlertCircle } from "lucide-react";
+import { redirect } from "next/navigation";
 import { PageEditor } from "@/components/dashboard/page-editor";
 import { getEditorDocument, listPages } from "@/features/pages/queries";
 export const dynamic = "force-dynamic";
@@ -19,6 +20,7 @@ export default async function PageEditorRoute({ params }: Props) {
   // Resolve the shared page identity first, then load each locale independently.
   const requested = pages.find((page) => page.id.toString() === id);
   if (!requested) return <EditorError message="The requested page was not found." />;
+  if (requested.slug === "policies") redirect("/dashboard/policies");
   const matching = pages.filter((page) => page.slug === requested.slug);
   const localePages = {
     ar: matching.find((page) => page.locale === "ar"),

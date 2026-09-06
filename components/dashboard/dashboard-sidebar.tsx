@@ -17,6 +17,7 @@ export function DashboardSidebar() {
     { label: copy.pages, href: "/dashboard/pages", icon: FileText, disabled: false },
     { label: copy.forms, href: "/dashboard/forms", icon: Braces, disabled: false },
     { label: copy.media, href: "/dashboard/media", icon: Images, disabled: false },
+    { label: "Policies", href: "/dashboard/policies", icon: FileText, disabled: false },
     { label: copy.messages, href: null, icon: Mail, disabled: true },
     { label: "Profile", href: "/dashboard/profile", icon: UserCircle, disabled: false },
     { label: copy.settings, href: null, icon: Settings, disabled: true },

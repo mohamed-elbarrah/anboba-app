@@ -57,6 +57,20 @@
       "when": 1788728544515,
       "tag": "0007_white_namorita",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1788731109441,
+      "tag": "0008_abnormal_natasha_romanoff",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "5",
+      "when": 1788731294414,
+      "tag": "0009_material_sinister_six",
+      "breakpoints": true
     }
   ]
 }

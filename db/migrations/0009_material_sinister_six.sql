@@ -1,0 +1,1 @@
+ALTER TABLE `policy_documents` ADD `archived_at` timestamp;

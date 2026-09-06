@@ -1,4 +1,4 @@
-export type LegalDocumentSlug = "privacy" | "terms" | "refunds";
+export type LegalDocumentSlug = string;
 
 export type LegalSection = {
   heading: string;
