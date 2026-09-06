@@ -22,21 +22,30 @@ import {
 import { parseSectionContent, parseStrictSectionOwnedFormContent } from "@/features/pages/content-schemas";
 import type { EditorDocument, SectionKey } from "@/features/pages/types";
 
-const sectionNames: Record<SectionKey, string> = {
-  hero: "Hero",
-  service_overview: "Service overview",
-  statistics: "Statistics",
-  why_choose_us: "Why choose us",
-  service_benefits: "Service benefits",
-  join_application: "Join application",
-  faq_support: "FAQ and support",
-  vision_mission: "Vision and mission",
-  contact: "Contact",
-  partner_registration: "Partner registration",
-  policies: "Policies",
+type Locale = "ar" | "en";
+const sectionNames: Record<SectionKey, Record<Locale, string>> = {
+  hero: { en: "Hero", ar: "الرئيسية" },
+  service_overview: { en: "Service overview", ar: "نظرة عامة على الخدمة" },
+  statistics: { en: "Statistics", ar: "الإحصائيات" },
+  why_choose_us: { en: "Why choose us", ar: "لماذا تختارنا" },
+  service_benefits: { en: "Service benefits", ar: "مزايا الخدمة" },
+  join_application: { en: "Join application", ar: "طلب الانضمام" },
+  faq_support: { en: "FAQ and support", ar: "الأسئلة الشائعة والدعم" },
+  vision_mission: { en: "Vision and mission", ar: "الرؤية والرسالة" },
+  contact: { en: "Contact", ar: "اتصل بنا" },
+  partner_registration: { en: "Partner registration", ar: "تسجيل الشركاء" },
+  policies: { en: "Policies", ar: "السياسات" },
 };
 
-type Locale = "ar" | "en";
+const fieldLabels: Record<string, string> = {
+  headingStart: "بداية العنوان", headingHighlight: "العنوان المميز", headingHighlightGas: "العنوان المميز للغاز", headingHighlightHome: "العنوان المميز للمنزل", headingMiddle: "وسط العنوان", description: "الوصف", eyebrow: "العنوان التمهيدي", subtitle: "العنوان الفرعي", cardHeading: "عنوان البطاقة", cardParagraph: "نص البطاقة", featuresHeading: "عنوان المزايا", imageAlt: "النص البديل للصورة", cta: "زر الإجراء", countryCode: "رمز الدولة", countryLabel: "اسم الدولة", heading: "العنوان", fileHint: "إرشادات الملف", note: "ملاحظة"
+};
+const labelFor = (locale: Locale, key: string) => locale === "ar" ? (fieldLabels[key] ?? key) : key;
+
+const editorCopy = {
+  en: { workspace: "Content workspace", unsaved: "Unsaved changes", saved: "All changes saved", saveDraft: "Save draft", publish: "Publish", discard: "Discard", preview: "Preview published page", unavailable: "Preview unavailable: this locale has no valid published revision." },
+  ar: { workspace: "مساحة المحتوى", unsaved: "تغييرات غير محفوظة", saved: "تم حفظ جميع التغييرات", saveDraft: "حفظ المسودة", publish: "نشر", discard: "تجاهل", preview: "معاينة الصفحة المنشورة", unavailable: "المعاينة غير متاحة؛ لا توجد نسخة منشورة صالحة لهذه اللغة." },
+} as const;
 type Section = EditorDocument["sections"][number];
 type Data = Record<string, unknown>;
 type EditableDocument = Pick<
@@ -121,6 +130,7 @@ export function PageEditor({
   const [issues, setIssues] = useState<string[]>([]);
 
   const current = documents[locale];
+  const ui = editorCopy[locale];
   const dirty = useMemo(
     () =>
       (["ar", "en"] as Locale[]).some(
@@ -227,7 +237,7 @@ export function PageEditor({
 
   function openPublishedPage() {
     if (!current || !current.hasPublishedRevision) {
-      setError("Preview is unavailable because this locale has no valid published revision.");
+      setError(ui.unavailable);
       return;
     }
     const previewWindow = window.open(
@@ -235,7 +245,7 @@ export function PageEditor({
       "_blank",
     );
     if (!previewWindow) {
-      setError("Preview was blocked. Allow pop-ups for this site and try again.");
+      setError(locale === "ar" ? "تم حظر المعاينة. اسمح بالنوافذ المنبثقة لهذا الموقع ثم حاول مرة أخرى." : "Preview was blocked. Allow pop-ups for this site and try again.");
       return;
     }
     previewWindow.opener = null;
@@ -282,12 +292,12 @@ export function PageEditor({
     <main className="mx-auto w-full max-w-none space-y-6 px-4 py-4 md:px-8 md:py-8">
       <header className="flex flex-col gap-5 border-b pb-6 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="text-sm font-medium text-primary">Content workspace</p>
+          <p className="text-sm font-medium text-primary">{ui.workspace}</p>
           <h1 className="mt-1 text-3xl font-semibold">{current.title}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
             /{locale}/{current.slug || "home"} ·{" "}
             <span className={dirty ? "text-amber-600" : "text-emerald-600"}>
-              {dirty ? "Unsaved changes" : "All changes saved"}
+              {dirty ? ui.unsaved : ui.saved}
             </span>
           </p>
         </div>
@@ -306,11 +316,11 @@ export function PageEditor({
               className="inline-flex h-8 items-center justify-center gap-1.5 rounded-lg border border-border bg-background px-2.5 text-sm font-medium transition-colors hover:bg-muted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50"
             >
               <Eye className="size-4" />
-              Preview published page
+              {ui.preview}
             </button>
             {!current.hasPublishedRevision && (
               <p className="max-w-64 text-xs text-muted-foreground">
-                Preview unavailable: this locale has no valid published revision.
+                {ui.unavailable}
               </p>
             )}
           </div>
@@ -319,17 +329,18 @@ export function PageEditor({
 
       {(initialErrors.ar || initialErrors.en) && (
         <p role="alert" className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm">
-          {initialErrors.ar && "Arabic could not be loaded. "}
-          {initialErrors.en && "English could not be loaded."}
+          {initialErrors.ar && (locale === "ar" ? "تعذر تحميل العربية. " : "Arabic could not be loaded. ")}
+          {initialErrors.en && (locale === "ar" ? "تعذر تحميل الإنجليزية." : "English could not be loaded.")}
         </p>
       )}
 
-      <Metadata document={current} update={update} />
+      <Metadata document={current} locale={locale} update={update} />
       <div className="space-y-4">
         {current.sections.map((section) => (
           <SectionForm
             key={section.key}
             section={section}
+            locale={locale}
             update={(content) => setSection(section.key, content)}
           />
         ))}
@@ -338,15 +349,15 @@ export function PageEditor({
       <footer className="sticky bottom-3 z-10 flex flex-wrap gap-2 rounded-xl border bg-background/95 p-3 shadow-lg">
         <Button disabled={busy} onClick={() => mutate("draft")}>
           <Save className="me-2 size-4" />
-          Save draft
+          {ui.saveDraft}
         </Button>
         <Button disabled={busy} variant="secondary" onClick={() => mutate("publish")}>
           <Check className="me-2 size-4" />
-          Publish
+          {ui.publish}
         </Button>
         <Button disabled={busy || !currentDirty} variant="outline" onClick={discard}>
           <Trash2 className="me-2 size-4" />
-          Discard
+          {ui.discard}
         </Button>
         {busy && <Loader2 className="size-5 animate-spin" />}
       </footer>
@@ -370,21 +381,23 @@ export function PageEditor({
 
 function Metadata({
   document,
+  locale,
   update,
 }: {
   document: EditorDocument;
+  locale: Locale;
   update: (change: (document: EditableDocument) => EditableDocument) => void;
 }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Page metadata</CardTitle>
-        <CardDescription>Search and page identity fields for this locale.</CardDescription>
+        <CardTitle>{locale === "ar" ? "بيانات الصفحة" : "Page metadata"}</CardTitle>
+        <CardDescription>{locale === "ar" ? "حقول البحث وهوية الصفحة لهذه اللغة." : "Search and page identity fields for this locale."}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 md:grid-cols-2">
-        <Field label="Page title" value={document.title} onChange={(value) => update((d) => ({ ...d, title: value }))} />
-        <Field label="SEO title" value={document.metaTitle ?? ""} onChange={(value) => update((d) => ({ ...d, metaTitle: value || null }))} />
-        <Field label="SEO description" multi value={document.metaDescription ?? ""} onChange={(value) => update((d) => ({ ...d, metaDescription: value || null }))} />
+        <Field label={locale === "ar" ? "عنوان الصفحة" : "Page title"} value={document.title} onChange={(value) => update((d) => ({ ...d, title: value }))} />
+        <Field label={locale === "ar" ? "عنوان SEO" : "SEO title"} value={document.metaTitle ?? ""} onChange={(value) => update((d) => ({ ...d, metaTitle: value || null }))} />
+        <Field label={locale === "ar" ? "وصف SEO" : "SEO description"} multi value={document.metaDescription ?? ""} onChange={(value) => update((d) => ({ ...d, metaDescription: value || null }))} />
       </CardContent>
     </Card>
   );
@@ -392,9 +405,11 @@ function Metadata({
 
 function SectionForm({
   section,
+  locale,
   update,
 }: {
   section: Section;
+  locale: Locale;
   update: (value: unknown) => void;
 }) {
   const data = section.content as Data;
@@ -405,7 +420,7 @@ function SectionForm({
       {keys.map((key) => (
         <Field
           key={key}
-          label={key}
+          label={labelFor(locale, key)}
           multi={multi.includes(key)}
           value={textValue(data, key)}
           onChange={(value) => set(key, value)}
@@ -581,13 +596,13 @@ function SectionForm({
     <Card>
       <CardHeader className="border-b">
         <CardTitle className="flex justify-between">
-          {sectionNames[section.key]}
+          {sectionNames[section.key][locale]}
           <span className="text-xs font-normal text-muted-foreground">
-            Section {section.sortOrder + 1} · fixed
+            {locale === "ar" ? `القسم ${section.sortOrder + 1} · ثابت` : `Section ${section.sortOrder + 1} · fixed`}
           </span>
         </CardTitle>
         <CardDescription>
-          Edit approved fields only. Structure and order are fixed.
+          {locale === "ar" ? "يمكنك تعديل الحقول المعتمدة فقط. البنية والترتيب ثابتان." : "Edit approved fields only. Structure and order are fixed."}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-5">{body}</CardContent>

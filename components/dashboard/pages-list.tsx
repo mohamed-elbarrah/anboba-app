@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useDashboardLocale } from "@/components/dashboard/dashboard-locale-provider";
 import { Archive, CheckCircle2, CircleDashed, Eye, TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,23 +20,24 @@ function Updated({ date }: { date: Date | null }) {
   return <span className="text-sm text-muted-foreground">{date ? new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(date) : "—"}</span>;
 }
 
-function PublicPreview({ slug, locale, published }: { slug: string; locale: "ar" | "en"; published: boolean }) {
+function PublicPreview({ slug, locale, published, label }: { slug: string; locale: "ar" | "en"; published: boolean; label: string }) {
   if (!published) return null;
-  return <a href={`/${locale}${slug ? `/${slug}` : ""}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"><Eye className="size-3.5" />Preview {locale.toUpperCase()}</a>;
+  return <a href={`/${locale}${slug ? `/${slug}` : ""}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"><Eye className="size-3.5" />{label} {locale.toUpperCase()}</a>;
 }
 
 export function PagesList({ pages }: { pages: DashboardPage[] }) {
+  const { copy } = useDashboardLocale();
   return <Card>
-    <CardHeader><CardTitle>Public pages</CardTitle><CardDescription>One row per public page identity. Locale availability is shown independently.</CardDescription></CardHeader>
+    <CardHeader><CardTitle>{copy.publicPages}</CardTitle><CardDescription>{copy.pageIdentityDescription}</CardDescription></CardHeader>
     <CardContent className="p-0">
       <Table>
-        <TableHeader><TableRow><TableHead>Page</TableHead><TableHead>Arabic</TableHead><TableHead>English</TableHead><TableHead>Last updated</TableHead><TableHead><span className="sr-only">Actions</span></TableHead></TableRow></TableHeader>
+        <TableHeader><TableRow><TableHead>{copy.pages}</TableHead><TableHead>{copy.arabic}</TableHead><TableHead>{copy.english}</TableHead><TableHead>{copy.lastUpdated}</TableHead><TableHead><span className="sr-only">Actions</span></TableHead></TableRow></TableHeader>
         <TableBody>{pages.map((page) => <TableRow key={page.slug || "home"}>
           <TableCell><div className="min-w-40"><p className="font-medium">{page.name}</p><p className="text-xs text-muted-foreground">{page.description}</p></div></TableCell>
           <TableCell><Availability value={page.locales.ar.availability} /></TableCell>
           <TableCell><Availability value={page.locales.en.availability} /></TableCell>
           <TableCell><Updated date={[page.locales.ar.updatedAt, page.locales.en.updatedAt].filter(Boolean).sort((a, b) => b!.getTime() - a!.getTime())[0] ?? null} /></TableCell>
-          <TableCell className="text-end">{page.locales.ar.id || page.locales.en.id ? <div className="flex flex-wrap justify-end gap-x-3 gap-y-1"><Link href={`/dashboard/pages/${page.locales.ar.id ?? page.locales.en.id}`} className="text-sm font-medium text-primary hover:underline">Open editor</Link><PublicPreview slug={page.slug} locale="ar" published={page.locales.ar.availability === "published"} /><PublicPreview slug={page.slug} locale="en" published={page.locales.en.availability === "published"} /></div> : <span className="text-sm text-muted-foreground">Not configured</span>}</TableCell>
+          <TableCell className="text-end">{page.locales.ar.id || page.locales.en.id ? <div className="flex flex-wrap justify-end gap-x-3 gap-y-1"><Link href={`/dashboard/pages/${page.locales.ar.id ?? page.locales.en.id}`} className="text-sm font-medium text-primary hover:underline">{copy.openEditor}</Link><PublicPreview slug={page.slug} locale="ar" published={page.locales.ar.availability === "published"} label={copy.preview} /><PublicPreview slug={page.slug} locale="en" published={page.locales.en.availability === "published"} label={copy.preview} /></div> : <span className="text-sm text-muted-foreground">Not configured</span>}</TableCell>
         </TableRow>)}</TableBody>
       </Table>
     </CardContent>

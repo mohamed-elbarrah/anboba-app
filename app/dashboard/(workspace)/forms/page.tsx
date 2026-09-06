@@ -1,4 +1,5 @@
 import { AlertCircle, Braces } from "lucide-react";
+import { cookies } from "next/headers";
 import { Card, CardContent } from "@/components/ui/card";
 import { FormsList } from "@/components/dashboard/forms-list";
 import { getFormInventory, type FormInventory } from "@/features/forms/queries";
@@ -10,6 +11,8 @@ function FormsError({ error }: { error: unknown }) {
 }
 
 export default async function DashboardFormsPage() {
+  const storedLocale = (await cookies()).get("dashboard-locale")?.value;
+  const ar = storedLocale === "ar";
   let forms: FormInventory[];
   try {
     forms = await getFormInventory();
@@ -19,7 +22,7 @@ export default async function DashboardFormsPage() {
   }
 
   return <main className="mx-auto w-full max-w-7xl space-y-8 p-4 md:p-8">
-    <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div className="space-y-2"><p className="text-sm font-medium text-primary">Content workspace</p><h1 className="text-3xl font-semibold tracking-tight">Forms</h1><p className="max-w-2xl text-muted-foreground">Inventory of the three system forms connected to the public site.</p></div><div className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-sm text-muted-foreground"><Braces className="size-4 text-primary" />{forms.length} system forms</div></section>
+    <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end"><div className="space-y-2"><p className="text-sm font-medium text-primary">{ar ? "مساحة المحتوى" : "Content workspace"}</p><h1 className="text-3xl font-semibold tracking-tight">{ar ? "النماذج" : "Forms"}</h1><p className="max-w-2xl text-muted-foreground">{ar ? "قائمة بالنماذج النظامية الثلاثة المرتبطة بالموقع العام." : "Inventory of the three system forms connected to the public site."}</p></div><div className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-sm text-muted-foreground"><Braces className="size-4 text-primary" />{forms.length} {ar ? "نماذج نظامية" : "system forms"}</div></section>
     {forms.length ? <FormsList forms={forms} /> : <Card><CardContent className="flex flex-col items-center gap-2 p-12 text-center"><Braces className="size-8 text-muted-foreground" /><h2 className="font-medium">No system forms configured</h2><p className="text-sm text-muted-foreground">Run the form seed after the database is configured to restore the built-in inventory.</p></CardContent></Card>}
   </main>;
 }
