@@ -58,6 +58,8 @@ export async function getPublishedPageMetadata(
 }
 
 async function fallbackPage(locale: Locale, slug: string): Promise<AdaptedPageContent> {
+  // This is reached only for an empty/unseeded database or a development-only
+  // infrastructure failure; CMS reference/content errors are rethrown above.
   const dictionary = await getDictionary(locale);
   const sections = fallbackSections(dictionary, locale, slug);
   return { revision: fallbackRevision(slug, dictionary), sections } as AdaptedPageContent;

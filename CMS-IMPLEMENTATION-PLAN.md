@@ -40,6 +40,8 @@ Authentication will be added after the CMS works correctly and is verified.
 - Existing public URLs must continue working.
 - Existing public pages must look and behave exactly as they do now.
 - Existing public components and styling should be reused, not redesigned.
+- The three existing public forms—contact, home join application, and partner registration—must start with and preserve their current layout, styling, field order, validation behavior, and interaction design.
+- The Form Builder must allow structural field editing through an allowlisted schema. Existing forms are seeded as exact templates; when an admin adds/removes/reorders fields, the controlled form renderer adapts within the same ANBOBA design system. No arbitrary CSS, components, or code are allowed.
 - RTL Arabic and LTR English behavior must remain unchanged.
 - Public forms and their validation rules remain code-controlled.
 - CMS content changes data only; they must not change the design system.
@@ -344,15 +346,46 @@ Responsibilities:
 - Add a Preview action that opens the corresponding published public URL in a new browser tab/window.
 - Do not build a dashboard preview route, device-preview controls, or duplicate public renderer.
 
-### Phase 6 — Verification and hardening
+### Phase 6 — Flexible Form Builder
+
+- Add a versioned, locale-aware Form Builder for reusable form definitions.
+- Seed the three existing forms with stable keys: `contact`, `join_application`, and `partner_registration`, using their exact current fields and values.
+- Replace the current raw content-field screen with a visual form canvas, field palette, and field-properties panel.
+- Allow admins to add, edit, remove, duplicate, and drag/reorder allowlisted fields.
+- Allow Arabic/English field-level labels, placeholders, help text, options, and messages.
+- Keep field types, validation presets, renderer presets, and design tokens allowlisted and server-controlled.
+- Preserve the initial visual design of the three existing forms; structural changes use the controlled ANBOBA form renderer and responsive layout rules, never arbitrary CSS/components/code.
+- Reference forms from page sections by stable `formId`, never copied code.
+- Allow safe archive/delete of unreferenced user-created forms. Built-in forms cannot be permanently deleted; referenced or historical forms cannot be hard-deleted.
+- Use the migration runbook in `db/migrations/README.md`: apply `0001` before `0002`, and `0002` before `0003`; `0002` and `0003` require `0001` to be present in live migration history.
+- Before applying `0002` or `0003`, perform a fresh read-only live schema/history check and verify a restorable backup against the intended Hostinger database.
+- Keep rollback ownership-specific: `0001` owns the form foundation and `page_sections.form_id`, `0002` owns the normalized field/localization/option/copy tables and nullable compatibility columns, and `0003` owns only its exact index. Do not remove objects owned by another migration.
+- Use additive migrations only because the Hostinger database already contains CMS tables and seeded data.
+- Do not implement authentication, permissions, uploads, or submission persistence in this phase.
+
+#### Flexible Form Builder UX
+
+- `/dashboard/forms`: form inventory with Create form, Edit, Archive, Delete where safe, references, and locale status.
+- `/dashboard/forms/new`: create a generic form from the approved field palette.
+- `/dashboard/forms/[id]`: full-width builder workspace.
+- Left: field palette (Text, Email, Phone, Textarea, Select, Radio, Checkbox, Number, Date).
+- Center: ordered field canvas with drag handles and add/remove/duplicate controls.
+- Right: selected-field properties (key, type, labels, placeholders, required state, options, safe validation preset, width).
+- Arabic/English tabs keep independent draft state.
+- Save Draft, Publish, Discard, and public-page Preview remain available.
+- Built-in forms show a clear warning that changing structure activates the controlled flexible renderer while preserving ANBOBA styling.
+- File fields, arbitrary HTML/CSS, custom JavaScript, custom React components, executable validation, and uploads remain unavailable.
+
+### Phase 7 — Verification and hardening
 
 - Test draft isolation.
 - Test publishing.
 - Test discard behavior.
 - Test invalid and incomplete translations.
-- Test all page sections.
+- Test all page sections and the three existing forms.
+- Test form references, safe archive/delete rules, and locale isolation.
 - Run lint, typecheck if available, and production build.
-- Verify no visual regressions on public pages.
+- Verify no visual regressions on public pages and no changes to the three form layouts/designs.
 
 ### Later phases
 
@@ -401,8 +434,10 @@ Subagents must work in small, isolated phases:
 5. Public integration agent: connect published content without redesigning components.
 6. Dashboard agent: implement pages list and fixed editor workspace.
 7. Public-page launcher agent: open the corresponding published public URL in a new tab/window and remove the dashboard preview implementation.
-8. UX/forms agent: polish dedicated section forms and validation states without changing public design.
-9. QA agent: test regressions, draft workflow, public-page launch behavior, and build.
+8. Form Builder backend agent: implement normalized flexible field definitions, revisions, references, and safe lifecycle actions.
+9. Form Builder UX agent: implement palette/canvas/properties editor and polished bilingual interactions.
+10. Form renderer integration agent: preserve the three initial form designs and add the controlled flexible renderer for structural changes.
+11. QA agent: test regressions, form editing, draft workflow, references, public-page launch behavior, and build.
 
 Rules:
 

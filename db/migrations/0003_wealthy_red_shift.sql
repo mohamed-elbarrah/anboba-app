@@ -1,0 +1,1 @@
+CREATE INDEX `form_revisions_renderer_mode_template_idx` ON `form_revisions` (`renderer_mode`,`template_key`);

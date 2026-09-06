@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FileText, LayoutDashboard, Mail, Images, Settings, Sparkles } from "lucide-react";
+import { FileText, LayoutDashboard, Mail, Images, Settings, Sparkles, Braces } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
@@ -11,6 +11,7 @@ import {
 const items = [
   { label: "Overview", href: "/dashboard", icon: LayoutDashboard, disabled: false },
   { label: "Pages", href: "/dashboard/pages", icon: FileText, disabled: false },
+  { label: "Forms", href: "/dashboard/forms", icon: Braces, disabled: false },
   { label: "Media", href: null, icon: Images, disabled: true },
   { label: "Messages", href: null, icon: Mail, disabled: true },
   { label: "Settings", href: null, icon: Settings, disabled: true },

@@ -5,7 +5,10 @@ loadEnvConfig(process.cwd());
 import ar from "../dictionaries/ar.json" with { type: "json" };
 import en from "../dictionaries/en.json" with { type: "json" };
 import { arabicLegalDocuments, englishLegalDocuments } from "../content/legal/policies";
-import { closePool, getDb } from "../db/connection";
+import { closePool, getDb, getPool } from "../db/connection";
+import { drizzle } from "drizzle-orm/mysql2";
+import * as schema from "../db/schema";
+import { acquireDataLock, releaseDataLock } from "./advisory-lock";
 import { pageRevisionPointers, pageRevisions, pageSections, pages, settings } from "../db/schema";
 import { pageDefinitions } from "../features/pages/page-map";
 import { parseSectionContent } from "../features/pages/content-schemas";
@@ -39,6 +42,7 @@ function refuse(message: string): never {
 
 /** Compare JSON as data, not as object-key insertion order. */
 function canonical(value: unknown): unknown {
+  if (typeof value === "bigint") return String(value);
   if (Array.isArray(value)) return value.map(canonical);
   if (value !== null && typeof value === "object") {
     return Object.fromEntries(Object.entries(value).sort(([a], [b]) => a.localeCompare(b)).map(([key, item]) => [key, canonical(item)]));
@@ -70,8 +74,10 @@ async function insertSections(tx: Parameters<Parameters<ReturnType<typeof getDb>
 }
 
 async function seed() {
-  const db = getDb();
-  await db.transaction(async (tx) => {
+  const connection = await getPool().getConnection();
+  const db = drizzle(connection, { schema, mode: "default" });
+  await acquireDataLock(connection);
+  try { await db.transaction(async (tx) => {
     // Settings are part of the initial seed only. Once any page or setting
     // exists, reruns must leave CMS-managed settings exactly as found.
     const hasExistingPages = (await tx.select({ id: pages.id }).from(pages).limit(1)).length > 0;
@@ -150,7 +156,7 @@ async function seed() {
         }
       }
     }
-  });
+  }); } finally { await releaseDataLock(connection); connection.release(); }
   console.log("Content seed complete.");
 }
 

@@ -5,6 +5,7 @@ import { getDb } from "@/db";
 import { pageRevisionPointers, pageRevisions, pageSections, pages, settings } from "@/db/schema";
 import type { Locale } from "@/lib/locales";
 import { adaptPageContent, adaptSections } from "./content-adapter";
+import { getPublishedFormById } from "@/features/forms/queries";
 import { pageDefinition } from "./page-map";
 import type { EditorDocument } from "./types";
 
@@ -35,7 +36,37 @@ export async function getPage(locale: Locale, slug: string, revision: "published
     throw new Error(`CMS ${revision} revision is missing or invalid: ${locale}:${slug || "home"}`);
   }
   const sections = await db.select().from(pageSections).where(eq(pageSections.revisionId, rows[0].id)).orderBy(asc(pageSections.sortOrder));
-  return adaptPageContent(rows[0], sections, slug);
+  const formSections = ["contact", "join_application", "partner_registration"] as const;
+
+  // Built-in form sections are references, never content-bearing sections.
+  // Validate their IDs before adapting contentJson so a broken reference can
+  // never render a copied/stale form configuration.
+  for (const section of sections) {
+    const expected = formSections.includes(section.sectionKey as typeof formSections[number]) ? section.sectionKey : null;
+    if (expected && section.formId == null) {
+      throw new Error(`Built-in form reference is missing on ${locale}:${slug || "home"}:${section.sectionKey}`);
+    }
+    if (!expected && section.formId != null) {
+      throw new Error(`Invalid form reference on ${locale}:${slug || "home"}`);
+    }
+  }
+
+  const adapted = adaptPageContent(rows[0], sections, slug);
+  const adaptedSectionMap = adapted.sections as unknown as Record<string, unknown>;
+  for (const section of sections) {
+    const expected = formSections.includes(section.sectionKey as typeof formSections[number]) ? section.sectionKey : null;
+    if (!expected) continue;
+    // The validation above guarantees this is present; keep the guard local
+    // so this remains safe if the database row type changes in the future.
+    if (section.formId == null) throw new Error(`Built-in form reference is missing on ${locale}:${slug || "home"}:${section.sectionKey}`);
+    const resolved = await getPublishedFormById(section.formId.toString(), locale);
+    const compatible = resolved && (resolved.form.rendererKey === "generic" || (resolved.form.rendererKey === expected && resolved.form.formKey === expected));
+    if (!compatible) {
+      throw new Error(`Published form reference is missing or incompatible on ${locale}:${slug || "home"}:${section.sectionKey}`);
+    }
+    adaptedSectionMap[section.sectionKey] = resolved.config;
+  }
+  return adapted;
 }
 
 /**
@@ -89,6 +120,7 @@ export async function getEditorDocument(pageId: string, locale: Locale, options?
       key: row.sectionKey,
       type: row.sectionType,
       sortOrder: index,
+      formId: row.formId === null ? null : row.formId.toString(),
       content: adaptedSections[row.sectionKey],
     })) as EditorDocument["sections"],
   };

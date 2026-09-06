@@ -8,6 +8,34 @@
       "when": 1788654653813,
       "tag": "0000_sweet_thanos",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1788690393794,
+      "tag": "0001_hard_skullbuster",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1788696858898,
+      "tag": "0002_silky_luke_cage",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1788696911361,
+      "tag": "0003_wealthy_red_shift",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1788703358342,
+      "tag": "0004_eager_junta",
+      "breakpoints": true
     }
   ]
 }

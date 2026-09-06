@@ -7,6 +7,7 @@ import { Breadcrumb, BreadcrumbItem, BreadcrumbList, BreadcrumbPage } from "@/co
 
 const sectionTitles = [
   ["/dashboard/pages", "Pages"],
+  ["/dashboard/forms", "Forms"],
   ["/dashboard/media", "Media"],
   ["/dashboard/messages", "Messages"],
   ["/dashboard/settings", "Settings"],

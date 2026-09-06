@@ -1,11 +1,13 @@
 import {
   bigint,
+  boolean,
   index,
   int,
   json,
   foreignKey,
   mysqlEnum,
   mysqlTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -16,6 +18,28 @@ import { sql } from "drizzle-orm";
 export const locales = ["ar", "en"] as const;
 export const revisionStatuses = ["draft", "published", "archived"] as const;
 export const contactMessageStatuses = ["unread", "read", "replied", "archived"] as const;
+export const formRendererKeys = [
+  "contact",
+  "join_application",
+  "partner_registration",
+  "generic",
+] as const;
+export const formKinds = ["system", "user"] as const;
+export const formRendererModes = ["legacy", "flexible"] as const;
+export const formFieldTypes = [
+  "text",
+  "email",
+  "phone",
+  "textarea",
+  "select",
+  "radio",
+  "checkbox",
+  "number",
+  "date",
+  // Protected legacy-only type. Generic and normalized application allowlists reject it.
+  "file",
+] as const;
+export const formFieldWidths = ["full", "half", "third"] as const;
 
 /** Fixed section keys from the approved initial CMS page map. */
 export const sectionKeys = [
@@ -39,6 +63,209 @@ const updatedAt = () =>
     .notNull()
     .default(sql`CURRENT_TIMESTAMP`)
     .onUpdateNow();
+
+/** Stable form identity. Renderer keys are code-owned and allowlisted. */
+export const forms = mysqlTable(
+  "forms",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    formKey: varchar("form_key", { length: 100 }).notNull(),
+    rendererKey: mysqlEnum("renderer_key", formRendererKeys).notNull(),
+    kind: mysqlEnum("kind", formKinds).notNull().default("user"),
+    archived: boolean("archived").notNull().default(false),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("forms_form_key_unique").on(table.formKey),
+    index("forms_renderer_archived_idx").on(table.rendererKey, table.archived),
+  ],
+);
+
+/** Locale-specific immutable form configuration revisions. */
+export const formRevisions = mysqlTable(
+  "form_revisions",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    formId: id("form_id")
+      .notNull()
+      .references(() => forms.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    locale: mysqlEnum("locale", locales).notNull(),
+    revisionNumber: int("revision_number", { unsigned: true }).notNull(),
+    status: mysqlEnum("status", revisionStatuses).notNull().default("draft"),
+    // Nullable for additive rollout: existing revisions remain legacy until a
+    // later, explicit migration/seed step classifies them.
+    rendererMode: mysqlEnum("renderer_mode", formRendererModes),
+    templateKey: varchar("template_key", { length: 100 }),
+    configJson: json("config_json").notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("form_revisions_form_locale_number_unique").on(
+      table.formId,
+      table.locale,
+      table.revisionNumber,
+    ),
+    // Required parent key for ownership-enforcing pointer foreign keys.
+    uniqueIndex("form_revisions_form_locale_id_unique").on(table.formId, table.locale, table.id),
+    index("form_revisions_form_locale_status_idx").on(table.formId, table.locale, table.status),
+    index("form_revisions_renderer_mode_template_idx").on(table.rendererMode, table.templateKey),
+  ],
+);
+
+/** Structural, allowlisted fields belonging to one immutable revision. */
+export const formRevisionFields = mysqlTable(
+  "form_revision_fields",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    revisionId: id("revision_id").notNull(),
+    fieldKey: varchar("field_key", { length: 100 }).notNull(),
+    fieldType: mysqlEnum("field_type", formFieldTypes).notNull(),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    required: boolean("required").notNull().default(false),
+    validationPreset: varchar("validation_preset", { length: 80 }),
+    width: mysqlEnum("width", formFieldWidths).notNull().default("full"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("form_revision_fields_revision_key_unique").on(table.revisionId, table.fieldKey),
+    uniqueIndex("form_revision_fields_revision_order_unique").on(table.revisionId, table.sortOrder),
+    uniqueIndex("form_revision_fields_revision_id_unique").on(table.revisionId, table.id),
+    foreignKey({
+      name: "form_revision_fields_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [formRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Bilingual field copy; the revision id prevents cross-revision localization. */
+export const formFieldLocalizations = mysqlTable(
+  "form_field_localizations",
+  {
+    fieldId: id("field_id").notNull(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    placeholder: varchar("placeholder", { length: 255 }),
+    helpText: text("help_text"),
+    validationMessage: varchar("validation_message", { length: 500 }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.fieldId, table.locale] }),
+    index("form_field_localizations_revision_locale_idx").on(table.revisionId, table.locale),
+    foreignKey({
+      name: "form_field_localizations_field_fk",
+      columns: [table.revisionId, table.fieldId],
+      foreignColumns: [formRevisionFields.revisionId, formRevisionFields.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Allowlisted options belong to a select/radio field revision. */
+export const formFieldOptions = mysqlTable(
+  "form_field_options",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    fieldId: id("field_id").notNull(),
+    optionKey: varchar("option_key", { length: 100 }).notNull(),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("form_field_options_field_key_unique").on(table.fieldId, table.optionKey),
+    uniqueIndex("form_field_options_field_order_unique").on(table.fieldId, table.sortOrder),
+    uniqueIndex("form_field_options_field_id_unique").on(table.fieldId, table.id),
+    foreignKey({
+      name: "form_field_options_field_fk",
+      columns: [table.fieldId],
+      foreignColumns: [formRevisionFields.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+export const formFieldOptionLocalizations = mysqlTable(
+  "form_field_option_localizations",
+  {
+    optionId: id("option_id").notNull(),
+    fieldId: id("field_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.optionId, table.locale] }),
+    index("form_field_option_localizations_field_locale_idx").on(table.fieldId, table.locale),
+    foreignKey({
+      name: "form_field_option_localizations_option_fk",
+      columns: [table.fieldId, table.optionId],
+      foreignColumns: [formFieldOptions.fieldId, formFieldOptions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Revision-scoped form copy (submit/success/error text and builder metadata). */
+export const formRevisionCopy = mysqlTable(
+  "form_revision_copy",
+  {
+    revisionId: id("revision_id").primaryKey(),
+    submitLabel: varchar("submit_label", { length: 255 }),
+    successMessage: text("success_message"),
+    errorMessage: text("error_message"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    foreignKey({
+      name: "form_revision_copy_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [formRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Draft/published pointers keep each locale's form lifecycle independent. */
+export const formRevisionPointers = mysqlTable(
+  "form_revision_pointers",
+  {
+    formId: id("form_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    draftRevisionId: id("draft_revision_id"),
+    publishedRevisionId: id("published_revision_id"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.formId, table.locale] }),
+    foreignKey({
+      name: "form_revision_pointers_form_fk",
+      columns: [table.formId],
+      foreignColumns: [forms.id],
+    })
+      .onDelete("cascade")
+      .onUpdate("cascade"),
+    foreignKey({
+      name: "form_revision_pointers_draft_revision_fk",
+      columns: [table.formId, table.locale, table.draftRevisionId],
+      foreignColumns: [formRevisions.formId, formRevisions.locale, formRevisions.id],
+    })
+      .onDelete("restrict")
+      .onUpdate("restrict"),
+    foreignKey({
+      name: "form_revision_pointers_published_revision_fk",
+      columns: [table.formId, table.locale, table.publishedRevisionId],
+      foreignColumns: [formRevisions.formId, formRevisions.locale, formRevisions.id],
+    })
+      .onDelete("restrict")
+      .onUpdate("restrict"),
+  ],
+);
 
 /** Stable page identity. Content and metadata live in page revisions. */
 export const pages = mysqlTable(
@@ -124,6 +351,11 @@ export const pageSections = mysqlTable(
     revisionId: id("revision_id")
       .notNull()
       .references(() => pageRevisions.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    // Nullable reusable form identity; references are intentionally restrictive.
+    formId: id("form_id").references(() => forms.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
     sectionKey: mysqlEnum("section_key", sectionKeys).notNull(),
     sectionType: mysqlEnum("section_type", sectionKeys).notNull(),
     sortOrder: int("sort_order", { unsigned: true }).notNull(),
@@ -169,6 +401,18 @@ export const contactMessages = mysqlTable(
   ],
 );
 
+export type Form = typeof forms.$inferSelect;
+export type NewForm = typeof forms.$inferInsert;
+export type FormRevision = typeof formRevisions.$inferSelect;
+export type NewFormRevision = typeof formRevisions.$inferInsert;
+export type FormRevisionField = typeof formRevisionFields.$inferSelect;
+export type NewFormRevisionField = typeof formRevisionFields.$inferInsert;
+export type FormFieldLocalization = typeof formFieldLocalizations.$inferSelect;
+export type FormFieldOption = typeof formFieldOptions.$inferSelect;
+export type FormFieldOptionLocalization = typeof formFieldOptionLocalizations.$inferSelect;
+export type FormRevisionCopy = typeof formRevisionCopy.$inferSelect;
+export type FormRevisionPointers = typeof formRevisionPointers.$inferSelect;
+export type NewFormRevisionPointers = typeof formRevisionPointers.$inferInsert;
 export type Page = typeof pages.$inferSelect;
 export type NewPage = typeof pages.$inferInsert;
 export type PageRevision = typeof pageRevisions.$inferSelect;

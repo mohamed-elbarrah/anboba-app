@@ -22,7 +22,7 @@ export type SectionKey =
   | "vision_mission" | "contact" | "partner_registration" | "policies";
 
 export type SectionContent = {
-  [K in SectionKey]: { key: K; type: K; sortOrder: number; content: SectionContentMap[K] }
+  [K in SectionKey]: { key: K; type: K; sortOrder: number; formId: string | null; content: SectionContentMap[K] }
 }[SectionKey];
 
 export type ContentSection = SectionContent;

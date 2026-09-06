@@ -51,7 +51,22 @@ export function adaptSections<K extends SectionKey>(slug: string, sections: read
   return result as AdaptedSections<K>;
 }
 
+const BUILT_IN_FORM_SECTIONS = ["contact", "join_application", "partner_registration"] as const;
+
+/**
+ * Public form sections are references to published system forms. They must not
+ * be adapted from page_sections.contentJson when their reference is absent.
+ */
+export function assertPublicFormReferences(sections: readonly PageSection[], slug: string) {
+  for (const section of sections) {
+    if (BUILT_IN_FORM_SECTIONS.includes(section.sectionKey as typeof BUILT_IN_FORM_SECTIONS[number]) && section.formId == null) {
+      throw new Error(`Built-in form reference is missing on ${slug || "home"}:${section.sectionKey}`);
+    }
+  }
+}
+
 export function adaptPageContent<K extends Exclude<SectionKey, never>>(revision: PageRevision, sections: readonly PageSection[], slug: string): { revision: PageRevision; sections: AdaptedSections<K> } {
+  assertPublicFormReferences(sections, slug);
   return { revision, sections: adaptSections<K>(slug, sections) };
 }
 
