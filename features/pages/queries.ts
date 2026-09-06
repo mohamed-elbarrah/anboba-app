@@ -42,13 +42,24 @@ export async function getPage(locale: Locale, slug: string, revision: "published
  * Returns a client-safe editor document. Draft is preferred, with published as
  * a fallback when no draft pointer exists. BigInt IDs and Dates are strings.
  */
-export async function getEditorDocument(pageId: string, locale: Locale): Promise<EditorDocument | null> {
+export async function getEditorDocument(pageId: string, locale: Locale, options?: { requireDraft?: boolean }): Promise<EditorDocument | null> {
   if (!/^[1-9]\d*$/.test(pageId)) return null;
   const numericId = BigInt(pageId);
   const db = getDb();
   const page = (await db.select().from(pages).where(and(eq(pages.id, numericId), eq(pages.locale, locale))).limit(1))[0];
   if (!page) return null;
   const pointer = (await db.select().from(pageRevisionPointers).where(eq(pageRevisionPointers.pageId, page.id)).limit(1))[0];
+  const publishedRevision = pointer?.publishedRevisionId
+    ? (await db.select({ id: pageRevisions.id })
+      .from(pageRevisions)
+      .where(and(
+        eq(pageRevisions.id, pointer.publishedRevisionId),
+        eq(pageRevisions.pageId, page.id),
+        eq(pageRevisions.status, "published"),
+      ))
+      .limit(1))[0]
+    : undefined;
+  const hasPublishedRevision = Boolean(publishedRevision);
   const candidateIds = [pointer?.draftRevisionId, pointer?.publishedRevisionId].filter((id): id is bigint => id !== null && id !== undefined);
   if (candidateIds.length === 0) return null;
   // The editor must never receive an archived revision as a draft candidate.
@@ -58,7 +69,7 @@ export async function getEditorDocument(pageId: string, locale: Locale): Promise
     eq(pageRevisions.status, "draft"),
   )).limit(1);
   let revision = candidates[0];
-  if (!revision) {
+  if (!revision && !options?.requireDraft) {
     const publishedId = pointer?.publishedRevisionId;
     if (!publishedId) return null;
     revision = (await db.select().from(pageRevisions).where(and(eq(pageRevisions.id, publishedId), eq(pageRevisions.pageId, page.id), eq(pageRevisions.status, "published"))).limit(1))[0];
@@ -71,6 +82,7 @@ export async function getEditorDocument(pageId: string, locale: Locale): Promise
   return {
     pageId: page.id.toString(), locale: page.locale, slug: page.slug as EditorDocument["slug"],
     revisionId: revision.id.toString(), revisionToken: revision.id.toString(), status: revision.status,
+    hasPublishedRevision,
     title: revision.title, metaTitle: revision.metaTitle, metaDescription: revision.metaDescription,
     updatedAt: (revision.updatedAt ?? revision.createdAt).toISOString(),
     sections: rows.map((row, index) => ({

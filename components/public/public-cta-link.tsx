@@ -8,10 +8,8 @@ type PublicCtaLinkProps = {
   href: string;
   children: React.ReactNode;
   className?: string;
-  preview?: boolean;
 };
 
-export function PublicCtaLink({ href, children, className, preview = false }: PublicCtaLinkProps) {
-  if (preview) return <span aria-hidden="true" className={cn(ctaClassName, className)}>{children}</span>;
+export function PublicCtaLink({ href, children, className }: PublicCtaLinkProps) {
   return <Link href={href} className={cn(ctaClassName, className)}>{children}</Link>;
 }

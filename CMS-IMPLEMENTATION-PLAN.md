@@ -13,7 +13,7 @@ The CMS must allow an admin to:
 - View the available pages as a list.
 - Edit Arabic and English content.
 - Edit supported images, image alt text, buttons, links, SEO fields, repeated items, and policy content.
-- Preview unsaved changes live in desktop, tablet, and mobile viewports.
+- Open the corresponding published public page directly in a new browser tab/window.
 - Save drafts, publish changes, preview, and discard changes.
 
 ## 2. Explicitly Out of Scope
@@ -107,41 +107,29 @@ The migration must preserve the existing component prop contracts. A CMS adapter
 - Discard.
 - Preview.
 
-Desktop layout:
+The editor is a full-width content workspace. Do not place a public preview beside the fields or build a dashboard-specific preview renderer.
 
 ```txt
-┌──────────────────────┬─────────────────────────┐
-│ Content fields        │ Live preview             │
-│ Arabic / English      │ Desktop / Tablet /      │
-│ Fixed sections        │ Mobile                  │
-│ Save / Publish        │ Existing public design  │
-└──────────────────────┴─────────────────────────┘
+┌─────────────────────────────────────────────┐
+│ Page title   Arabic | English    Actions     │
+│                                             │
+│ Metadata                                    │
+│ Hero section                                │
+│ Service overview                            │
+│ Statistics                                  │
+│ ...                                         │
+│                                             │
+│ Save draft   Preview   Publish              │
+└─────────────────────────────────────────────┘
 ```
 
-On smaller dashboard screens, use `Fields` and `Preview` tabs.
+Use dedicated, clearly labeled section forms with fixed section order. On smaller dashboard screens, the form remains a single-column workspace.
 
 ### Preview
 
-The preview must render the existing public components with draft state:
+The Preview action opens the corresponding published public URL in a new browser tab/window. There is no dashboard-specific preview route or renderer. Unsaved changes are not previewed; the admin must publish first for changes to appear publicly.
 
-```txt
-Draft editor state
-        ↓
-CMS content adapter
-        ↓
-Existing public page renderer
-```
-
-It must support:
-
-- Desktop viewport.
-- Tablet viewport.
-- Mobile viewport.
-- Arabic RTL preview.
-- English LTR preview.
-- Unsaved local edits.
-
-Do not create a second, separate preview design.
+The public page itself is the single source of truth for responsive behavior, navigation, forms, and styling.
 
 ## 6. Fixed Page and Section Map
 
@@ -281,8 +269,7 @@ components/dashboard/
 ├── pages-list.tsx
 ├── page-editor.tsx
 ├── section-fields.tsx
-├── page-preview.tsx
-└── device-preview-switcher.tsx
+└── public-page-launcher.tsx
 
 features/pages/
 ├── schema.ts
@@ -347,15 +334,15 @@ Responsibilities:
 - Display fixed available pages and status information.
 - Do not add auth yet.
 
-### Phase 5 — Dashboard editor and preview
+### Phase 5 — Dashboard editor and public-page launch
 
-- Implement `/dashboard/pages/[id]`.
-- Add Arabic/English tabs.
-- Add fixed section-specific field forms.
-- Add local draft state.
-- Add shared public renderer preview.
-- Add desktop/tablet/mobile preview controls.
-- Add Save Draft, Publish, Preview, and Discard.
+- Implement `/dashboard/pages/[id]` as a full-width editor workspace.
+- Add Arabic/English tabs with independent unsaved state.
+- Add dedicated, polished fixed section-specific field forms; no generic recursive editor.
+- Add local dirty state and clear validation/error feedback.
+- Add Save Draft, Publish, and Discard.
+- Add a Preview action that opens the corresponding published public URL in a new browser tab/window.
+- Do not build a dashboard preview route, device-preview controls, or duplicate public renderer.
 
 ### Phase 6 — Verification and hardening
 
@@ -412,9 +399,10 @@ Subagents must work in small, isolated phases:
 3. Database agent: implement connection and migrations only.
 4. Migration agent: seed existing content and implement adapter.
 5. Public integration agent: connect published content without redesigning components.
-6. Dashboard agent: implement pages list and editor.
-7. Preview agent: implement shared live preview and device modes.
-8. QA agent: test regressions and build.
+6. Dashboard agent: implement pages list and fixed editor workspace.
+7. Public-page launcher agent: open the corresponding published public URL in a new tab/window and remove the dashboard preview implementation.
+8. UX/forms agent: polish dedicated section forms and validation states without changing public design.
+9. QA agent: test regressions, draft workflow, public-page launch behavior, and build.
 
 Rules:
 
@@ -437,7 +425,7 @@ This phase is complete when:
 - Admin can edit both locales.
 - Admin can edit supported text, images, links, and repeated content.
 - Admin can save drafts, publish, preview, and discard.
-- Preview supports desktop, tablet, and mobile modes.
+- Preview opens the corresponding published public page in a new browser tab/window.
 - No reorder, hide/show, or delete controls exist.
 - No authentication is implemented yet.
 - Lint and production build pass.

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Archive, CheckCircle2, CircleDashed, TriangleAlert } from "lucide-react";
+import { Archive, CheckCircle2, CircleDashed, Eye, TriangleAlert } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -17,6 +17,11 @@ function Updated({ date }: { date: Date | null }) {
   return <span className="text-sm text-muted-foreground">{date ? new Intl.DateTimeFormat("en", { month: "short", day: "numeric", year: "numeric" }).format(date) : "—"}</span>;
 }
 
+function PublicPreview({ slug, locale, published }: { slug: string; locale: "ar" | "en"; published: boolean }) {
+  if (!published) return null;
+  return <a href={`/${locale}${slug ? `/${slug}` : ""}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"><Eye className="size-3.5" />Preview {locale.toUpperCase()}</a>;
+}
+
 export function PagesList({ pages }: { pages: DashboardPage[] }) {
   return <Card>
     <CardHeader><CardTitle>Public pages</CardTitle><CardDescription>One row per public page identity. Locale availability is shown independently.</CardDescription></CardHeader>
@@ -28,7 +33,7 @@ export function PagesList({ pages }: { pages: DashboardPage[] }) {
           <TableCell><Availability value={page.locales.ar.availability} /></TableCell>
           <TableCell><Availability value={page.locales.en.availability} /></TableCell>
           <TableCell><Updated date={[page.locales.ar.updatedAt, page.locales.en.updatedAt].filter(Boolean).sort((a, b) => b!.getTime() - a!.getTime())[0] ?? null} /></TableCell>
-          <TableCell className="text-end">{page.locales.ar.id || page.locales.en.id ? <Link href={`/dashboard/pages/${page.locales.ar.id ?? page.locales.en.id}`} className="text-sm font-medium text-primary hover:underline">Open editor</Link> : <span className="text-sm text-muted-foreground">Not configured</span>}</TableCell>
+          <TableCell className="text-end">{page.locales.ar.id || page.locales.en.id ? <div className="flex flex-wrap justify-end gap-x-3 gap-y-1"><Link href={`/dashboard/pages/${page.locales.ar.id ?? page.locales.en.id}`} className="text-sm font-medium text-primary hover:underline">Open editor</Link><PublicPreview slug={page.slug} locale="ar" published={page.locales.ar.availability === "published"} /><PublicPreview slug={page.slug} locale="en" published={page.locales.en.availability === "published"} /></div> : <span className="text-sm text-muted-foreground">Not configured</span>}</TableCell>
         </TableRow>)}</TableBody>
       </Table>
     </CardContent>

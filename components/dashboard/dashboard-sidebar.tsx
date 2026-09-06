@@ -46,7 +46,7 @@ export function DashboardSidebar() {
       </SidebarContent>
       <SidebarFooter className="p-3">
         <div className="rounded-lg bg-sidebar-accent p-3 text-xs text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden">
-          <p className="font-medium">CMS foundation</p><p className="mt-1 text-muted-foreground">Content workspace preview</p>
+          <p className="font-medium">CMS foundation</p><p className="mt-1 text-muted-foreground">Content workspace</p>
         </div>
       </SidebarFooter>
       </Sidebar>

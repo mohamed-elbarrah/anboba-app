@@ -30,7 +30,7 @@ import {
 import { getLocaleDirection } from "@/lib/locales";
 import { cn } from "@/lib/utils";
 
-type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en"; preview?: boolean };
+type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en" };
 
 const benefitIcons = [Clock3, FileUp, Headphones] as const;
 
@@ -39,7 +39,6 @@ type TextFieldName = "fullName" | "phone" | "email" | "city";
 export function JoinApplicationSection({
   content,
   locale,
-  preview = false,
 }: JoinApplicationSectionProps) {
   const isArabic = locale === "ar";
   const direction = getLocaleDirection(locale);
@@ -91,7 +90,7 @@ export function JoinApplicationSection({
             </div>
           ) : (
             <form
-              onSubmit={preview ? (event) => event.preventDefault() : form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(onSubmit)}
               noValidate
               dir={direction}
             >
@@ -175,7 +174,7 @@ export function JoinApplicationSection({
                 locale={locale}
                 className="lg:col-start-1 lg:row-start-3"
               />
-              {!preview && <FileField
+              <FileField
                 name="nationalId"
                 label={content.fields.nationalId}
                 icon={IdCard}
@@ -183,8 +182,8 @@ export function JoinApplicationSection({
                 hint={content.fileHint}
                 locale={locale}
                 className="lg:col-start-2 lg:row-start-4"
-              />}
-              {!preview && <FileField
+              />
+              <FileField
                 name="drivingLicense"
                 label={content.fields.drivingLicense}
                 icon={Paperclip}
@@ -192,7 +191,7 @@ export function JoinApplicationSection({
                 hint={content.fileHint}
                 locale={locale}
                 className="lg:col-start-1 lg:row-start-4"
-              />}
+              />
               <div className="sm:col-span-2" dir={direction}>
                 <Button
                   type="submit"

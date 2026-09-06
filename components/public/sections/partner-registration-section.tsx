@@ -19,10 +19,10 @@ import {
 } from "@/features/join-us/partner-registration";
 import { cn } from "@/lib/utils";
 
-type Props = { content: PartnerRegistrationContent; locale: "ar" | "en"; preview?: boolean };
+type Props = { content: PartnerRegistrationContent; locale: "ar" | "en" };
 type FieldName = keyof PartnerRegistrationFormValues;
 
-export function PartnerRegistrationSection({ content, locale, preview = false }: Props) {
+export function PartnerRegistrationSection({ content, locale }: Props) {
   const [submitted, setSubmitted] = useState(false);
   const successRef = useRef<HTMLDivElement>(null);
   const form = useForm<PartnerRegistrationFormValues>({
@@ -80,7 +80,7 @@ export function PartnerRegistrationSection({ content, locale, preview = false }:
           ) : (
             <div className="[direction:ltr]">
               <form
-                onSubmit={preview ? (event) => event.preventDefault() : form.handleSubmit(onSubmit)}
+                onSubmit={form.handleSubmit(onSubmit)}
                 noValidate
                 dir={locale === "ar" ? "rtl" : "ltr"}
                 className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"

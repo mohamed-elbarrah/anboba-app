@@ -34,7 +34,9 @@ export type EditorDocument = {
   slug: PageSlug;
   revisionId: string;
   revisionToken: string;
+  // Publication state is independent from the revision loaded for editing.
   status: "draft" | "published";
+  hasPublishedRevision: boolean;
   title: string;
   metaTitle: string | null;
   metaDescription: string | null;
