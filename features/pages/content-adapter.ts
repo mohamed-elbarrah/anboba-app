@@ -25,7 +25,13 @@ export type SectionContentMap = {
 export type AdaptedSections<K extends SectionKey = SectionKey> = {
   [P in K]: SectionContentMap[P];
 };
-export type AdaptedPageContent = { revision: PageRevision; sections: AdaptedSections };
+export type HeroShowcaseMedia = { left: string | null; right: string | null };
+export type AdaptedPageContent = {
+  revision: PageRevision;
+  sections: AdaptedSections;
+  /** Resolved on the server; absent for callers that only adapt CMS sections. */
+  heroShowcaseMedia?: HeroShowcaseMedia;
+};
 
 function expectedDefinition(slug: string) {
   const definition = pageDefinition(slug);

@@ -9,9 +9,11 @@ type HeroContent = Dictionary["hero"];
 export function HeroSection({
   content,
   locale,
+  showcaseMedia,
 }: {
   content: HeroContent;
   locale: Locale;
+  showcaseMedia?: { left: string | null; right: string | null };
 }) {
   return (
     <section
@@ -48,7 +50,7 @@ export function HeroSection({
           </PublicCtaLink>
         </div>
         {content.showcase ? (
-          <HeroAppShowcase content={content.showcase} locale={locale} />
+          <HeroAppShowcase content={content.showcase} locale={locale} media={showcaseMedia} />
         ) : null}
       </div>
     </section>

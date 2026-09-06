@@ -39,8 +39,11 @@ const details = fixedArray(z.object({ kind: z.enum(["phone", "email", "location"
 const contactValidation = z.object({ fullNameMin: nonEmpty, fullNameMax: nonEmpty, phone: nonEmpty, messageMin: nonEmpty, messageMax: nonEmpty });
 const joinValidation = z.object({ fullNameMin: nonEmpty, fullNameMax: nonEmpty, phone: nonEmpty, email: nonEmpty, city: nonEmpty, experience: nonEmpty, transport: nonEmpty, nationalId: nonEmpty, drivingLicense: nonEmpty, fileSize: nonEmpty, fileType: nonEmpty });
 const partnerValidation = z.object({ company: nonEmpty, phone: nonEmpty, email: nonEmpty, city: nonEmpty });
+const mediaId = z.string().regex(/^[1-9]\d*$/, "Media ID must be a positive integer");
+/** Image sources may be existing site assets or HTTPS URLs. Media IDs remain the preferred source. */
+const imageUrl = z.preprocess((value) => value === "" ? undefined : value, safeUrlSchema.refine((value) => (value.startsWith("/") && !value.startsWith("//")) || value.startsWith("https:"), "Only relative or HTTPS image URLs are allowed").optional());
 
-export const heroSchema = z.object({ headingStart: nonEmpty, headingHighlightGas: nonEmpty, headingMiddle: nonEmpty, headingHighlightHome: nonEmpty, description: nonEmpty, cta: nonEmpty, showcase: z.object({ heading: nonEmpty, guaranteeLabel: nonEmpty, guarantees: fixedArray(nonEmpty, 4), phoneLeftAlt: nonEmpty, phoneRightAlt: nonEmpty }).optional() });
+export const heroSchema = z.object({ headingStart: nonEmpty, headingHighlightGas: nonEmpty, headingMiddle: nonEmpty, headingHighlightHome: nonEmpty, description: nonEmpty, cta: nonEmpty, showcase: z.object({ heading: nonEmpty, guaranteeLabel: nonEmpty, guarantees: fixedArray(nonEmpty, 4), phoneLeftAlt: nonEmpty, phoneRightAlt: nonEmpty, phoneLeftMediaId: mediaId.optional(), phoneRightMediaId: mediaId.optional(), phoneLeftImageUrl: imageUrl, phoneRightImageUrl: imageUrl }).optional() });
 export const serviceOverviewSchema = z.object({ highlightedHeading: nonEmpty, primaryHeadingStart: nonEmpty, primaryHeadingHighlight: nonEmpty, description: nonEmpty, imageAlt: nonEmpty });
 export const statisticsSchema = z.object({ heading: nonEmpty, items: fixedArray(z.object({ value: nonEmpty, label: nonEmpty }), 4) });
 export const whyChooseUsSchema = z.object({ eyebrow: nonEmpty, headingStart: nonEmpty, headingHighlight: nonEmpty, subtitle: nonEmpty, cardHeading: nonEmpty, cardParagraph: nonEmpty, featuresHeading: nonEmpty, features: fixedArray(nonEmpty, 4), imageAlt: nonEmpty });

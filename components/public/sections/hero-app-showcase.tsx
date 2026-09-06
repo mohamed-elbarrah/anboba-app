@@ -10,6 +10,7 @@ export type HeroSideProps = {
   cards: readonly [string, string];
   label: string;
   phoneAlt: string;
+  phoneSrc?: string | null;
   locale: Locale;
 };
 
@@ -21,7 +22,7 @@ type ShowcaseContent = {
   phoneRightAlt: string;
 };
 
-export function HeroSide({ side, phoneVariant, cards, label, phoneAlt, locale }: HeroSideProps) {
+export function HeroSide({ side, phoneVariant, cards, label, phoneAlt, phoneSrc, locale }: HeroSideProps) {
   return (
     <div className={`hero-side hero-side-${side}`}>
       <div className="hero-side-cards">
@@ -35,12 +36,12 @@ export function HeroSide({ side, phoneVariant, cards, label, phoneAlt, locale }:
           />
         ))}
       </div>
-      <PhoneMockup variant={phoneVariant} alt={phoneAlt} />
+      <PhoneMockup variant={phoneVariant} alt={phoneAlt} src={phoneSrc} />
     </div>
   );
 }
 
-export function HeroAppShowcase({ content, locale }: { content: ShowcaseContent; locale: Locale }) {
+export function HeroAppShowcase({ content, locale, media }: { content: ShowcaseContent; locale: Locale; media?: { left: string | null; right: string | null } }) {
   const cards: [string, string, string, string] = [
     content.guarantees[0] ?? "",
     content.guarantees[1] ?? "",
@@ -62,6 +63,7 @@ export function HeroAppShowcase({ content, locale }: { content: ShowcaseContent;
         cards={[cards[0], cards[1]]}
         label={content.guaranteeLabel}
         phoneAlt={content.phoneLeftAlt}
+        phoneSrc={media?.left}
         locale={locale}
       />
       <HeroSide
@@ -70,6 +72,7 @@ export function HeroAppShowcase({ content, locale }: { content: ShowcaseContent;
         cards={[cards[2], cards[3]]}
         label={content.guaranteeLabel}
         phoneAlt={content.phoneRightAlt}
+        phoneSrc={media?.right}
         locale={locale}
       />
     </section>

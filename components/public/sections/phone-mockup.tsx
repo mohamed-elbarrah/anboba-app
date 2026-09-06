@@ -7,13 +7,13 @@ const phoneVariants = {
 
 type PhoneVariant = keyof typeof phoneVariants;
 
-export function PhoneMockup({ variant, alt }: { variant: PhoneVariant; alt: string }) {
+export function PhoneMockup({ variant, alt, src }: { variant: PhoneVariant; alt: string; src?: string | null }) {
   const phone = phoneVariants[variant];
 
   return (
     <span className="phone-mockup-frame block shrink-0">
       <Image
-        src={phone.src}
+        src={src || phone.src}
         alt={alt}
         width={phone.width}
         height={phone.height}

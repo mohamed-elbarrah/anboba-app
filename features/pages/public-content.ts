@@ -6,7 +6,8 @@ import { getPublishedPolicies, getPublishedPolicy } from "@/features/policies/qu
 import type { Metadata } from "next";
 import type { Locale } from "@/lib/locales";
 import { getPage } from "./queries";
-import type { AdaptedPageContent } from "./content-adapter";
+import type { AdaptedPageContent, HeroShowcaseMedia } from "./content-adapter";
+import { resolvePublicImagePath } from "@/features/media/queries";
 
 /**
  * Public CMS boundary. Routes use this rather than knowing about Drizzle or
@@ -18,7 +19,12 @@ export async function getPublishedPublicPage(locale: Locale, slug: string): Prom
   try {
     const page = await getPage(locale, slug, "published");
     // An empty database is the supported fresh-checkout development state.
-    if (page) return page;
+    if (page) {
+      return {
+        ...page,
+        heroShowcaseMedia: await resolveHeroShowcaseMedia(page.sections.hero),
+      };
+    }
     if (process.env.NODE_ENV !== "development") {
       throw new Error(`Published CMS page is missing: ${locale}:${slug || "home"}`);
     }
@@ -63,7 +69,11 @@ async function fallbackPage(locale: Locale, slug: string): Promise<AdaptedPageCo
   // infrastructure failure; CMS reference/content errors are rethrown above.
   const dictionary = await getDictionary(locale);
   const sections = fallbackSections(dictionary, locale, slug);
-  return { revision: fallbackRevision(slug, dictionary), sections } as AdaptedPageContent;
+  return {
+    revision: fallbackRevision(slug, dictionary),
+    sections,
+    heroShowcaseMedia: { left: null, right: null },
+  } as AdaptedPageContent;
 }
 
 function fallbackRevision(slug: string, dictionary: Dictionary) {
@@ -87,6 +97,16 @@ function fallbackSections(dictionary: Dictionary, locale: Locale, slug: string) 
   };
   const keys = slug === "" ? ["hero", "service_overview", "statistics", "why_choose_us", "service_benefits", "join_application", "faq_support"] : slug === "about" ? ["why_choose_us", "vision_mission"] : slug === "contact" ? ["contact"] : slug === "join-us" ? ["partner_registration"] : ["policies"];
   return Object.fromEntries(keys.map((key) => [key, source[key]])) as AdaptedPageContent["sections"];
+}
+
+async function resolveHeroShowcaseMedia(hero: Dictionary["hero"] | undefined): Promise<HeroShowcaseMedia> {
+  const showcase = hero?.showcase;
+  if (!showcase) return { left: null, right: null };
+  const [left, right] = await Promise.all([
+    resolvePublicImagePath(showcase.phoneLeftMediaId, showcase.phoneLeftImageUrl),
+    resolvePublicImagePath(showcase.phoneRightMediaId, showcase.phoneRightImageUrl),
+  ]);
+  return { left, right };
 }
 
 function importLegal(locale: "ar" | "en") {

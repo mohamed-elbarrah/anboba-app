@@ -26,7 +26,7 @@ export default async function ArabicHome() {
 
   return (
     <main>
-      <HeroSection content={page.sections.hero} locale="ar" />
+      <HeroSection content={page.sections.hero} locale="ar" showcaseMedia={page.heroShowcaseMedia} />
       <ServiceOverviewSection content={page.sections.service_overview} locale="ar" />
       <StatisticsSection content={page.sections.statistics} locale="ar" />
       <WhyChooseUsSection content={page.sections.why_choose_us} locale="ar" />

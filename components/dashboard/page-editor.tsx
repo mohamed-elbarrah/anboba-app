@@ -4,6 +4,8 @@ import { useMemo, useState } from "react";
 import { AlertCircle, Check, Eye, Loader2, Save, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { HomeSectionEditor } from "@/components/dashboard/home-section-editor";
+import type { MediaItem } from "@/features/media/types";
 import {
   Card,
   CardContent,
@@ -115,7 +117,11 @@ function Locales({
 export function PageEditor({
   initialDocuments,
   initialErrors,
+  isHome = false,
+  media = [],
 }: {
+  isHome?: boolean;
+  media?: readonly MediaItem[];
   initialDocuments: Record<Locale, EditorDocument | null>;
   initialErrors: Record<Locale, string | null>;
 }) {
@@ -336,7 +342,14 @@ export function PageEditor({
 
       <Metadata document={current} locale={locale} update={update} />
       <div className="space-y-4">
-        {current.sections.map((section) => (
+        {current.sections.map((section) => isHome ? (
+          <HomeSectionEditor
+            key={section.key}
+            section={section}
+            media={media}
+            update={(content) => setSection(section.key, content)}
+          />
+        ) : (
           <SectionForm
             key={section.key}
             section={section}

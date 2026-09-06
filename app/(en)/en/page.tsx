@@ -30,7 +30,7 @@ export default async function EnglishHome() {
   const footer = getPublicFooterData("en", dictionary);
   return (
     <main>
-      <HeroSection content={page.sections.hero} locale="en" />
+      <HeroSection content={page.sections.hero} locale="en" showcaseMedia={page.heroShowcaseMedia} />
       <ServiceOverviewSection content={page.sections.service_overview} locale="en" />
       <StatisticsSection content={page.sections.statistics} locale="en" />
       <WhyChooseUsSection content={page.sections.why_choose_us} locale="en" />

@@ -2,6 +2,7 @@ import { AlertCircle } from "lucide-react";
 import { redirect } from "next/navigation";
 import { PageEditor } from "@/components/dashboard/page-editor";
 import { getEditorDocument, listPages } from "@/features/pages/queries";
+import { listMedia } from "@/features/media/queries";
 export const dynamic = "force-dynamic";
 
 type Props = { params: Promise<{ id: string }> };
@@ -39,7 +40,8 @@ export default async function PageEditorRoute({ params }: Props) {
     }
   })));
 
-  return <PageEditor initialDocuments={documents} initialErrors={errors} />;
+  const media = requested.slug === "" ? await listMedia() : [];
+  return <PageEditor initialDocuments={documents} initialErrors={errors} isHome={requested.slug === ""} media={media} />;
 }
 
 function EditorError({ message, detail }: { message: string; detail?: string }) {

@@ -110,6 +110,10 @@ export type Dictionary = {
       guarantees: readonly string[];
       phoneLeftAlt: string;
       phoneRightAlt: string;
+      phoneLeftMediaId?: string;
+      phoneRightMediaId?: string;
+      phoneLeftImageUrl?: string;
+      phoneRightImageUrl?: string;
     };
   };
   footer: {
