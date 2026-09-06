@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 
 import { LegalPolicyDocument } from "@/components/public/legal-policy";
-import { getEnglishLegalDocument } from "@/content/legal/policies";
+import { getPublishedLegalDocument, getPublishedLegalDocuments } from "@/features/pages/public-content";
 
-const document = getEnglishLegalDocument("refunds");
-
-export const metadata: Metadata = {
+const fallbackMetadata: Metadata = {
   title: "Refund Policy",
   description: "Learn about refunds for services provided through the ANBOBA app.",
 };
 
-export default function EnglishRefundPolicyPage() {
-  if (!document) return null;
-  return <LegalPolicyDocument document={document} locale="en" />;
+export async function generateMetadata(): Promise<Metadata> {
+  const document = await getPublishedLegalDocument("en", "refunds");
+  return {
+    title: document.title || fallbackMetadata.title,
+    description: document.summary || fallbackMetadata.description,
+  };
+}
+
+export default async function EnglishRefundPolicyPage() {
+  const [document, documents] = await Promise.all([getPublishedLegalDocument("en", "refunds"), getPublishedLegalDocuments("en")]);
+  return <LegalPolicyDocument document={document} documents={documents} locale="en" />;
 }

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 
 import { ContactSection } from "@/components/public/sections/contact-section";
-import { getDictionary } from "@/lib/dictionaries";
+import { getPublishedPageMetadata, getPublishedPublicPage } from "@/features/pages/public-content";
 
-export const metadata: Metadata = {
-  title: "Contact ANBOBA",
-  description:
-    "Contact the ANBOBA team for service questions, support, or partnership inquiries.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublishedPageMetadata("en", "contact", {
+    title: "Contact ANBOBA",
+    description:
+      "Contact the ANBOBA team for service questions, support, or partnership inquiries.",
+  });
+}
 
 export default async function EnglishContactPage() {
-  const dictionary = await getDictionary("en");
+  const page = await getPublishedPublicPage("en", "contact");
 
-  return <ContactSection content={dictionary.contact} locale="en" />;
+  return <ContactSection content={page.sections.contact} locale="en" />;
 }

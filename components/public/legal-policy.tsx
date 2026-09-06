@@ -3,8 +3,6 @@ import Link from "next/link";
 import { PageTitleSection } from "@/components/public/sections/page-title-section";
 import type { PageTitleContent } from "@/components/public/sections/page-title-section";
 import {
-  arabicLegalDocuments,
-  englishLegalDocuments,
   type LegalDocument,
 } from "@/content/legal/policies";
 import type { Locale } from "@/lib/locales";
@@ -20,22 +18,20 @@ const overviewCopy = {
   en: { ariaLabel: "Legal document navigation", heading: "Legal policies", description: "Choose the document you would like to read.", read: "Read document", arrow: "→" },
 } as const;
 
-function documentsFor(locale: Locale) {
-  return locale === "ar" ? arabicLegalDocuments : englishLegalDocuments;
-}
-
 export function LegalPolicyNavigation({
   current,
   locale,
+  documents,
 }: {
   current?: LegalDocument["slug"];
   locale: Locale;
+  documents: readonly LegalDocument[];
 }) {
   const copy = overviewCopy[locale];
   return (
     <nav aria-label={copy.ariaLabel}>
       <ul className="flex flex-wrap gap-2 sm:gap-3">
-        {documentsFor(locale).map((document) => (
+        {documents.map((document) => (
           <li key={document.slug}>
             <Link
               href={`/${locale}/policies/${document.slug}`}
@@ -52,17 +48,17 @@ export function LegalPolicyNavigation({
 }
 
 export function LegalPolicyOverview({
-  heroContent,
+  content,
   locale,
 }: {
-  heroContent: PageTitleContent;
+  content: { hero: PageTitleContent; documents: readonly LegalDocument[] };
   locale: Locale;
 }) {
   const copy = overviewCopy[locale];
-  const documents = documentsFor(locale);
+  const documents = content.documents;
   return (
     <main dir={getLocaleDirection(locale)} className="flex-1 bg-background text-foreground">
-      <PageTitleSection content={heroContent} locale={locale} asSection compact />
+      <PageTitleSection content={content.hero} locale={locale} asSection compact />
       <section className="px-5 py-12 sm:px-8 sm:py-16" aria-labelledby="policies-overview-title">
         <div className="mx-auto w-full max-w-5xl">
           <header className="max-w-3xl">
@@ -93,7 +89,7 @@ export function LegalPolicyOverview({
   );
 }
 
-export function LegalPolicyDocument({ document, locale }: { document: LegalDocument; locale: Locale }) {
+export function LegalPolicyDocument({ document, locale, documents }: { document: LegalDocument; locale: Locale; documents?: readonly LegalDocument[] }) {
   return (
     <main dir={getLocaleDirection(locale)} className="flex-1 bg-background text-foreground">
       <PageTitleSection
@@ -123,7 +119,7 @@ export function LegalPolicyDocument({ document, locale }: { document: LegalDocum
           ))}
         </div>
         <div className="border-t border-border pt-8">
-          <LegalPolicyNavigation current={document.slug} locale={locale} />
+          <LegalPolicyNavigation current={document.slug} locale={locale} documents={documents ?? [document]} />
         </div>
       </article>
     </main>

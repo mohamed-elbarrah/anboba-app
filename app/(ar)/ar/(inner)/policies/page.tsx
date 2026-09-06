@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 
 import { LegalPolicyOverview } from "@/components/public/legal-policy";
-import { getDictionary } from "@/lib/dictionaries";
+import {
+  getPublishedPageMetadata,
+  getPublishedPublicPage,
+} from "@/features/pages/public-content";
 
-export const metadata: Metadata = {
-  title: "السياسات القانونية",
-  description: "الوثائق القانونية الخاصة بخدمات أنبوبة.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublishedPageMetadata("ar", "policies", {
+    title: "السياسات القانونية",
+    description: "الوثائق القانونية الخاصة بخدمات أنبوبة.",
+  });
+}
 
 export default async function ArabicPoliciesPage() {
-  const dictionary = await getDictionary("ar");
+  const page = await getPublishedPublicPage("ar", "policies");
 
-  return <LegalPolicyOverview heroContent={dictionary.pageTitle} locale="ar" />;
+  return <LegalPolicyOverview content={page.sections.policies} locale="ar" />;
 }

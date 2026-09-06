@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
 
 import { LegalPolicyOverview } from "@/components/public/legal-policy";
-import { getDictionary } from "@/lib/dictionaries";
+import {
+  getPublishedPageMetadata,
+  getPublishedPublicPage,
+} from "@/features/pages/public-content";
 
-export const metadata: Metadata = {
-  title: "Legal policies",
-  description: "Read ANBOBA's Privacy Policy, Terms of Use, and Refund Policy.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  return getPublishedPageMetadata("en", "policies", {
+    title: "Legal policies",
+    description: "Read ANBOBA's Privacy Policy, Terms of Use, and Refund Policy.",
+  });
+}
 
 export default async function EnglishPoliciesPage() {
-  const dictionary = await getDictionary("en");
+  const page = await getPublishedPublicPage("en", "policies");
 
-  return <LegalPolicyOverview heroContent={dictionary.pageTitle} locale="en" />;
+  return <LegalPolicyOverview content={page.sections.policies} locale="en" />;
 }

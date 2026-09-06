@@ -5,23 +5,33 @@ import { WhyChooseUsSection } from "@/components/public/sections/why-choose-us-s
 import { ServiceBenefitsSection } from "@/components/public/sections/service-benefits-section";
 import { JoinApplicationSection } from "@/components/public/sections/join-application-section";
 import { FaqSupportSection } from "@/components/public/sections/faq-support-section";
-import { getDictionary } from "@/lib/dictionaries";
+import {
+  getPublishedPageMetadata,
+  getPublishedPublicPage,
+} from "@/features/pages/public-content";
 import { getPublicFooterData } from "@/lib/public-footer";
+import { getDictionary } from "@/lib/dictionaries";
+
+export async function generateMetadata() {
+  return getPublishedPageMetadata("ar", "", { title: "ANBOBA" });
+}
 
 export default async function ArabicHome() {
+  const page = await getPublishedPublicPage("ar", "");
+  // Header/footer remain code-owned; only page sections come from published CMS content.
   const dictionary = await getDictionary("ar");
   const footer = getPublicFooterData("ar", dictionary);
 
   return (
     <main>
-      <HeroSection content={dictionary.hero} locale="ar" />
-      <ServiceOverviewSection content={dictionary.serviceOverview} locale="ar" />
-      <StatisticsSection content={dictionary.statistics} locale="ar" />
-      <WhyChooseUsSection content={dictionary.whyChooseUs} locale="ar" />
-      <ServiceBenefitsSection content={dictionary.serviceBenefits} locale="ar" />
-      <JoinApplicationSection content={dictionary.joinApplication} locale="ar" />
+      <HeroSection content={page.sections.hero} locale="ar" />
+      <ServiceOverviewSection content={page.sections.service_overview} locale="ar" />
+      <StatisticsSection content={page.sections.statistics} locale="ar" />
+      <WhyChooseUsSection content={page.sections.why_choose_us} locale="ar" />
+      <ServiceBenefitsSection content={page.sections.service_benefits} locale="ar" />
+      <JoinApplicationSection content={page.sections.join_application} locale="ar" />
       <FaqSupportSection
-        content={dictionary.faqSupport}
+        content={page.sections.faq_support}
         faqHref="/ar/faq"
         supportHref={footer.whatsappHref}
         locale="ar"

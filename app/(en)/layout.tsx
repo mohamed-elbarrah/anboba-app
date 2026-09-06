@@ -4,6 +4,9 @@ import SiteHeader from "@/components/public/site-header";
 import SiteFooter from "@/components/public/site-footer";
 import { pingARLT } from "@/lib/fonts";
 
+// Published CMS content is read at request time; do not bake DB state into a build.
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: {
     default: "ANBOBA",

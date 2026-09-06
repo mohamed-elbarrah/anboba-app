@@ -1,7 +1,11 @@
 import { ContactSection } from "@/components/public/sections/contact-section";
-import { getDictionary } from "@/lib/dictionaries";
+import { getPublishedPageMetadata, getPublishedPublicPage } from "@/features/pages/public-content";
+
+export async function generateMetadata() {
+  return getPublishedPageMetadata("ar", "contact", { title: "ANBOBA" });
+}
 
 export default async function Page() {
-  const dictionary = await getDictionary("ar");
-  return <ContactSection content={dictionary.contact} locale="ar" />;
+  const page = await getPublishedPublicPage("ar", "contact");
+  return <ContactSection content={page.sections.contact} locale="ar" />;
 }
