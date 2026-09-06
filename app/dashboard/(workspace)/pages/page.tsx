@@ -9,12 +9,13 @@ export const dynamic = "force-dynamic";
 
 function PagesWorkspace({ pages, locale }: { pages: DashboardPage[]; locale: "ar" | "en" }) {
   const ar = locale === "ar";
+  const regularPages = pages.filter((page) => page.slug !== "policies");
   return <main className="mx-auto w-full max-w-7xl space-y-8 p-4 md:p-8">
     <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
       <div className="space-y-2"><p className="text-sm font-medium text-primary">{ar ? "مساحة المحتوى" : "Content workspace"}</p><h1 className="text-3xl font-semibold tracking-tight">{ar ? "الصفحات" : "Pages"}</h1><p className="max-w-2xl text-muted-foreground">{ar ? "إدارة صفحات الموقع العامة ومتابعة جاهزية الترجمة." : "Manage the fixed public page set and monitor translation readiness."}</p></div>
       <div className="flex items-center gap-2 rounded-lg border bg-card px-3 py-2 text-sm text-muted-foreground"><FileText className="size-4 text-primary" />{pages.length} {ar ? "صفحات عامة" : "public pages"}</div>
     </section>
-    {pages.length ? <PagesList pages={pages} /> : <Card><CardContent className="flex flex-col items-center gap-2 p-12 text-center"><FileText className="size-8 text-muted-foreground" /><h2 className="font-medium">No pages configured</h2><p className="text-sm text-muted-foreground">The fixed public page identities are not available yet.</p></CardContent></Card>}
+    {regularPages.length ? <PagesList pages={regularPages} /> : <Card><CardContent className="flex flex-col items-center gap-2 p-12 text-center"><FileText className="size-8 text-muted-foreground" /><h2 className="font-medium">No pages configured</h2><p className="text-sm text-muted-foreground">The fixed public page identities are not available yet.</p></CardContent></Card>}
   </main>;
 }
 
