@@ -431,6 +431,29 @@ export const authLoginAttempts = mysqlTable(
   (table) => [index("auth_login_attempts_locked_idx").on(table.lockedUntil)],
 );
 
+export const mediaKinds = ["image", "video"] as const;
+
+export const media = mysqlTable(
+  "media",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    storageKey: varchar("storage_key", { length: 255 }).notNull(),
+    publicPath: varchar("public_path", { length: 500 }).notNull(),
+    originalFilename: varchar("original_filename", { length: 255 }).notNull(),
+    mimeType: varchar("mime_type", { length: 100 }).notNull(),
+    kind: mysqlEnum("kind", mediaKinds).notNull(),
+    sizeBytes: bigint("size_bytes", { mode: "number", unsigned: true }).notNull(),
+    uploadedBy: id("uploaded_by").notNull().references(() => admins.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("media_storage_key_unique").on(table.storageKey),
+    index("media_kind_created_idx").on(table.kind, table.createdAt),
+    index("media_uploaded_by_idx").on(table.uploadedBy),
+  ],
+);
+
 export const contactMessages = mysqlTable(
   "contact_messages",
   {
@@ -476,3 +499,5 @@ export type PageSection = typeof pageSections.$inferSelect;
 export type NewPageSection = typeof pageSections.$inferInsert;
 export type Setting = typeof settings.$inferSelect;
 export type ContactMessage = typeof contactMessages.$inferSelect;
+export type Media = typeof media.$inferSelect;
+export type NewMedia = typeof media.$inferInsert;
