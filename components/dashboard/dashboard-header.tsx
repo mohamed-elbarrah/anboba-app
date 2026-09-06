@@ -13,13 +13,14 @@ const sectionTitles = [
   ["/dashboard/media", "Media"],
   ["/dashboard/messages", "Messages"],
   ["/dashboard/settings", "Settings"],
+  ["/dashboard/profile", "Profile"],
 ] as const;
 
 export function DashboardHeader() {
   const pathname = usePathname();
   const { locale, setLocale, copy } = useDashboardLocale();
   const currentKey = sectionTitles.find(([path]) => pathname === path || pathname.startsWith(`${path}/`))?.[0];
-  const current = currentKey === "/dashboard/pages" ? copy.pages : currentKey === "/dashboard/forms" ? copy.forms : currentKey === "/dashboard/media" ? copy.media : currentKey === "/dashboard/messages" ? copy.messages : currentKey === "/dashboard/settings" ? copy.settings : copy.overview;
+  const current = currentKey === "/dashboard/pages" ? copy.pages : currentKey === "/dashboard/forms" ? copy.forms : currentKey === "/dashboard/media" ? copy.media : currentKey === "/dashboard/messages" ? copy.messages : currentKey === "/dashboard/settings" ? copy.settings : currentKey === "/dashboard/profile" ? "Profile" : copy.overview;
 
   return <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
     <SidebarTrigger aria-label="Toggle dashboard navigation" />

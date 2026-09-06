@@ -12,6 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
     "db:seed:content": "tsx scripts/seed-content.ts",
+    "db:seed:admin": "tsx scripts/seed-admin.ts",
     "db:seed:forms": "tsx scripts/seed-forms.ts",
     "db:migrate:forms-normalized": "tsx scripts/migrate-forms-config-to-normalized.ts",
     "db:verify:forms-normalized": "tsx scripts/verify-forms-normalized.ts",

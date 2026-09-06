@@ -6,6 +6,7 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { formRevisionPointers, formRevisions, forms, pageRevisions, pageSections, pages } from "@/db/schema";
 import { isLocale } from "@/lib/locales";
+import { getCurrentAdmin } from "@/features/auth/session";
 import { formRevisionSchema, bilingualGenericCreateConfigSchema } from "./schema";
 import { isBuiltInFormKey, parseFormConfig } from "./registry";
 import { normalizedFromConfig, validateNormalizedRevision } from "./normalized";
@@ -14,7 +15,6 @@ import { writeNormalizedRevision } from "./normalization";
 type Tx = Parameters<Parameters<ReturnType<typeof getDb>["transaction"]>[0]>[0];
 type Result = { ok: true; revisionToken: string; status: "draft" | "published" } | { ok: false; code: string; message: string };
 const authRequired = { ok: false, code: "AUTH_REQUIRED", message: "Authentication is required for form mutations" } as const;
-function mutationsAllowed() { return process.env.NODE_ENV !== "production"; }
 const invalid = { ok: false, code: "INVALID_INPUT", message: "Invalid form request" } as const;
 const notFound = { ok: false, code: "NOT_FOUND", message: "Form revision was not found" } as const;
 const stale = { ok: false, code: "STALE_REVISION", message: "The form draft is out of date" } as const;
@@ -109,7 +109,7 @@ async function createInitialDraft(tx: Tx, formId: bigint, locale: "ar" | "en", c
 }
 /** Create only a registry-owned generic form. No caller supplied renderer, component, or executable value is accepted. */
 export async function createForm(input: unknown): Promise<CreateFormResult> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const parsed = createFormInput.safeParse(input);
   if (!parsed.success) return { ok: false, code: "INVALID_INPUT", message: "Invalid form request" };
   const config = bilingualGenericCreateConfigSchema.safeParse(parsed.data.config);
@@ -153,7 +153,7 @@ export async function createForm(input: unknown): Promise<CreateFormResult> {
 }
 
 export async function saveFormDraft(input: unknown): Promise<Result> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const value = parseInput(input); if (!value) return invalid;
   try { return await getDb().transaction(async (tx) => {
     const found = await target(tx, value); if (found === "stale") return stale; if (!found) return notFound;
@@ -176,7 +176,7 @@ async function revalidateReferencingPages(formId: bigint) {
 }
 
 export async function publishForm(input: unknown): Promise<Result> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const value = parseInput(input); if (!value) return invalid;
   try {
     const result: Result = await getDb().transaction(async (tx) => {
@@ -201,7 +201,7 @@ export async function publishForm(input: unknown): Promise<Result> {
   } catch (error) { console.error("[forms:publish]", error); return { ok: false, code: "INTERNAL_ERROR", message: "Unable to publish form" }; }
 }
 export async function discardFormDraft(formId: string, locale: string, revisionToken: string): Promise<Result> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const value = parseInput({ formId, locale, revisionToken, config: {} }); if (!value) return invalid;
   try { return await getDb().transaction(async (tx) => {
     const found = await target(tx, value); if (found === "stale") return stale; if (!found || !found.pointer.publishedRevisionId) return notFound;
@@ -219,7 +219,7 @@ export const discardDraft = discardFormDraft;
 
 export async function archiveForm(formId: string): Promise<{ ok: boolean; code?: string; message?: string }> { return changeArchive(formId, true); }
 async function changeArchive(formId: string, archived: boolean): Promise<{ ok: boolean; code?: string; message?: string }> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   if (!/^[1-9]\d*$/.test(formId)) return { ok: false, code: "INVALID_INPUT" };
   try {
     return await getDb().transaction(async (tx) => {
@@ -235,7 +235,7 @@ async function changeArchive(formId: string, archived: boolean): Promise<{ ok: b
 }
 export async function restoreForm(formId: string) { return changeArchive(formId, false); }
 export async function deleteForm(formId: string): Promise<{ ok: boolean; code?: string; message?: string }> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   if (!/^[1-9]\d*$/.test(formId)) return { ok: false, code: "INVALID_INPUT" };
   try { return await getDb().transaction(async (tx) => {
     const form = (await tx.select().from(forms).where(eq(forms.id, BigInt(formId))).limit(1))[0];

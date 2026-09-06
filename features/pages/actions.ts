@@ -6,13 +6,12 @@ import { z } from "zod";
 import { getDb } from "@/db";
 import { forms, pageRevisionPointers, pageRevisions, pageSections, pages } from "@/db/schema";
 import { isLocale } from "@/lib/locales";
+import { getCurrentAdmin } from "@/features/auth/session";
 import { pageDefinition } from "./page-map";
 import { parseSectionContent, parseSectionOwnedFormContent, parseStrictSectionOwnedFormContent } from "./content-schemas";
 import { sectionKeys } from "@/db/schema";
 
-/** Authentication is deferred; production CMS mutations fail closed. */
 const authRequired = { ok: false, code: "AUTH_REQUIRED", message: "Authentication is required for page mutations" } as const;
-function mutationsAllowed() { return process.env.NODE_ENV !== "production"; }
 const idSchema = z.string().regex(/^[1-9]\d*$/, "Invalid numeric id");
 const documentSchema = z.object({
   pageId: idSchema,
@@ -165,7 +164,7 @@ async function runMutation(action: string, locale: "ar" | "en", work: () => Prom
 }
 
 export async function saveDraft(input: EditorDocumentInput): Promise<PageActionResult> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const parsed = parseDocument(input);
   if (parsed.error) return parsed.error;
   const document = parsed.document;
@@ -186,7 +185,7 @@ export async function saveDraft(input: EditorDocumentInput): Promise<PageActionR
 }
 
 export async function publishPage(input: EditorDocumentInput): Promise<PageActionResult> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const parsed = parseDocument(input);
   if (parsed.error) return parsed.error;
   const document = parsed.document;
@@ -208,7 +207,7 @@ export async function publishPage(input: EditorDocumentInput): Promise<PageActio
 }
 
 export async function discardDraft(pageId: string, locale: string, revisionToken: string): Promise<PageActionResult> {
-  if (!mutationsAllowed()) return authRequired;
+  if (!(await getCurrentAdmin())) return authRequired;
   const parsed = z.object({ pageId: idSchema, locale: z.string(), revisionToken: idSchema }).safeParse({ pageId, locale, revisionToken });
   if (!parsed.success || !isLocale(locale)) return failures.invalidInput;
   return runMutation("discard-draft", locale, async () => {

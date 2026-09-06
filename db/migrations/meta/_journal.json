@@ -36,6 +36,20 @@
       "when": 1788703358342,
       "tag": "0004_eager_junta",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1788713545575,
+      "tag": "0005_first_paper_doll",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1788713722739,
+      "tag": "0006_tricky_ghost_rider",
+      "breakpoints": true
     }
   ]
 }

@@ -16,6 +16,7 @@ import {
 import { sql } from "drizzle-orm";
 
 export const locales = ["ar", "en"] as const;
+export const adminRoles = ["admin"] as const;
 export const revisionStatuses = ["draft", "published", "archived"] as const;
 export const contactMessageStatuses = ["unread", "read", "replied", "archived"] as const;
 export const formRendererKeys = [
@@ -381,6 +382,55 @@ export const settings = mysqlTable(
   (table) => [uniqueIndex("settings_key_unique").on(table.key)],
 );
 
+export const admins = mysqlTable(
+  "admins",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    name: varchar("name", { length: 120 }).notNull(),
+    email: varchar("email", { length: 320 }).notNull(),
+    emailNormalized: varchar("email_normalized", { length: 320 }).notNull(),
+    passwordHash: varchar("password_hash", { length: 255 }).notNull(),
+    role: mysqlEnum("role", adminRoles).notNull().default("admin"),
+    isActive: boolean("is_active").notNull().default(true),
+    passwordChangedAt: timestamp("password_changed_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("admins_email_unique").on(table.email),
+    uniqueIndex("admins_email_normalized_unique").on(table.emailNormalized),
+  ],
+);
+
+export const adminSessions = mysqlTable(
+  "admin_sessions",
+  {
+    id: varchar("id", { length: 64 }).primaryKey(),
+    adminId: id("admin_id").notNull().references(() => admins.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    tokenHash: varchar("token_hash", { length: 64 }).notNull(),
+    expiresAt: timestamp("expires_at").notNull(),
+    createdAt: createdAt(),
+    lastSeenAt: timestamp("last_seen_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    revokedAt: timestamp("revoked_at"),
+  },
+  (table) => [
+    uniqueIndex("admin_sessions_token_hash_unique").on(table.tokenHash),
+    index("admin_sessions_admin_expires_idx").on(table.adminId, table.expiresAt),
+  ],
+);
+
+export const authLoginAttempts = mysqlTable(
+  "auth_login_attempts",
+  {
+    identifier: varchar("identifier", { length: 400 }).primaryKey(),
+    failures: int("failures", { unsigned: true }).notNull().default(0),
+    firstAttemptAt: timestamp("first_attempt_at").notNull().default(sql`CURRENT_TIMESTAMP`),
+    lockedUntil: timestamp("locked_until"),
+    updatedAt: updatedAt(),
+  },
+  (table) => [index("auth_login_attempts_locked_idx").on(table.lockedUntil)],
+);
+
 export const contactMessages = mysqlTable(
   "contact_messages",
   {
@@ -401,6 +451,9 @@ export const contactMessages = mysqlTable(
   ],
 );
 
+export type Admin = typeof admins.$inferSelect;
+export type NewAdmin = typeof admins.$inferInsert;
+export type AdminSession = typeof adminSessions.$inferSelect;
 export type Form = typeof forms.$inferSelect;
 export type NewForm = typeof forms.$inferInsert;
 export type FormRevision = typeof formRevisions.$inferSelect;

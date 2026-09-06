@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useDashboardLocale } from "@/components/dashboard/dashboard-locale-provider";
-import { FileText, LayoutDashboard, Mail, Images, Settings, Sparkles, Braces } from "lucide-react";
+import { FileText, LayoutDashboard, Mail, Images, Settings, Sparkles, Braces, UserCircle } from "lucide-react";
 import {
-  Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent,
+  Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
   SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
@@ -18,6 +18,7 @@ export function DashboardSidebar() {
     { label: copy.forms, href: "/dashboard/forms", icon: Braces, disabled: false },
     { label: copy.media, href: null, icon: Images, disabled: true },
     { label: copy.messages, href: null, icon: Mail, disabled: true },
+    { label: "Profile", href: "/dashboard/profile", icon: UserCircle, disabled: false },
     { label: copy.settings, href: null, icon: Settings, disabled: true },
   ] as const;
   return (
@@ -37,7 +38,7 @@ export function DashboardSidebar() {
               {items.map((item) => {
                 const active = !item.disabled && pathname === item.href || (!item.disabled && item.href !== "/dashboard" && pathname.startsWith(`${item.href}/`));
                 return <SidebarMenuItem key={item.label}>
-                  <SidebarMenuButton isActive={active} disabled={item.disabled} aria-disabled={item.disabled} tooltip={item.disabled ? `${item.label} — coming soon` : item.label} render={item.disabled ? undefined : <Link href={item.href} />}>
+                  <SidebarMenuButton className="h-11 text-base" isActive={active} disabled={item.disabled} aria-disabled={item.disabled} tooltip={item.disabled ? `${item.label} — coming soon` : item.label} render={item.disabled ? undefined : <Link href={item.href} />}>
                     <item.icon /><span>{item.label}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>;
@@ -46,11 +47,6 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="p-3">
-        <div className="rounded-lg bg-sidebar-accent p-3 text-xs text-sidebar-accent-foreground group-data-[collapsible=icon]:hidden">
-          <p className="font-medium">CMS foundation</p><p className="mt-1 text-muted-foreground">{copy.contentWorkspace}</p>
-        </div>
-      </SidebarFooter>
       </Sidebar>
     </nav>
   );
