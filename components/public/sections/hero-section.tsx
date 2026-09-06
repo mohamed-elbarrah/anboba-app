@@ -9,9 +9,11 @@ type HeroContent = Dictionary["hero"];
 export function HeroSection({
   content,
   locale,
+  preview = false,
 }: {
   content: HeroContent;
   locale: Locale;
+  preview?: boolean;
 }) {
   return (
     <section
@@ -42,6 +44,7 @@ export function HeroSection({
           </p>
           <PublicCtaLink
             href={getDownloadAppHref(locale)}
+            preview={preview}
             className="mt-8 min-h-12 px-8 text-base"
           >
             {content.cta}

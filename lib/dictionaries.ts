@@ -26,7 +26,6 @@ export type Dictionary = {
   };
   serviceOverview: {
     highlightedHeading: string;
-    primaryHeading: string;
     primaryHeadingStart: string;
     primaryHeadingHighlight: string;
     description: string;

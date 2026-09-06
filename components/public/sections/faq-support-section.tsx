@@ -11,6 +11,7 @@ type FaqSupportSectionProps = {
   faqHref: string;
   supportHref: string;
   locale?: "ar" | "en";
+  preview?: boolean;
 };
 
 export function FaqSupportSection({
@@ -18,6 +19,7 @@ export function FaqSupportSection({
   faqHref,
   supportHref,
   locale = "ar",
+  preview = false,
 }: FaqSupportSectionProps) {
   return (
     <section
@@ -52,7 +54,7 @@ export function FaqSupportSection({
             <p className="mt-4 max-w-3xl text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.25rem] lg:leading-relaxed">
               {content.faq.description}
             </p>
-            <PublicCtaLink href={faqHref} className="mt-auto min-h-14 gap-3 px-7 pt-3 text-lg">
+            <PublicCtaLink href={faqHref} preview={preview} className="mt-auto min-h-14 gap-3 px-7 pt-3 text-lg">
               {content.faq.cta}
               {locale === "ar" ? (
                 <ArrowLeft className="size-6" aria-hidden="true" />
@@ -81,12 +83,18 @@ export function FaqSupportSection({
             <p className="mt-4 text-base leading-8 text-primary-foreground/85 sm:text-lg lg:text-[1.2rem] lg:leading-relaxed">
               {content.support.description}
             </p>
-            <Link
-              href={supportHref}
-              className="mt-auto inline-flex min-h-14 w-full max-w-[255px] self-center items-center justify-center rounded-full bg-white/35 px-6 py-3 text-lg font-bold text-primary-foreground shadow-sm transition-colors hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              {content.support.cta}
-            </Link>
+            {preview ? (
+              <span className="mt-auto inline-flex min-h-14 w-full max-w-[255px] self-center items-center justify-center rounded-full bg-white/35 px-6 py-3 text-lg font-bold text-primary-foreground shadow-sm transition-colors hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                {content.support.cta}
+              </span>
+            ) : (
+              <Link
+                href={supportHref}
+                className="mt-auto inline-flex min-h-14 w-full max-w-[255px] self-center items-center justify-center rounded-full bg-white/35 px-6 py-3 text-lg font-bold text-primary-foreground shadow-sm transition-colors hover:bg-white/45 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              >
+                {content.support.cta}
+              </Link>
+            )}
           </div>
         </article>
       </div>

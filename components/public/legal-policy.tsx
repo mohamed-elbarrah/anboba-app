@@ -22,10 +22,12 @@ export function LegalPolicyNavigation({
   current,
   locale,
   documents,
+  preview = false,
 }: {
   current?: LegalDocument["slug"];
   locale: Locale;
   documents: readonly LegalDocument[];
+  preview?: boolean;
 }) {
   const copy = overviewCopy[locale];
   return (
@@ -33,13 +35,11 @@ export function LegalPolicyNavigation({
       <ul className="flex flex-wrap gap-2 sm:gap-3">
         {documents.map((document) => (
           <li key={document.slug}>
-            <Link
+            {preview ? <span aria-hidden="true" className="inline-flex min-h-11 items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-muted-foreground">{documentLinks[locale][document.slug]}</span> : <Link
               href={`/${locale}/policies/${document.slug}`}
               aria-current={current === document.slug ? "page" : undefined}
               className="inline-flex min-h-11 items-center rounded-full border border-border bg-background px-4 py-2 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-            >
-              {documentLinks[locale][document.slug]}
-            </Link>
+            >{documentLinks[locale][document.slug]}</Link>}
           </li>
         ))}
       </ul>
@@ -50,9 +50,11 @@ export function LegalPolicyNavigation({
 export function LegalPolicyOverview({
   content,
   locale,
+  preview = false,
 }: {
   content: { hero: PageTitleContent; documents: readonly LegalDocument[] };
   locale: Locale;
+  preview?: boolean;
 }) {
   const copy = overviewCopy[locale];
   const documents = content.documents;
@@ -74,12 +76,10 @@ export function LegalPolicyOverview({
               <article key={document.slug} className="flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-sm">
                 <h2 className="text-xl font-bold">{document.title}</h2>
                 <p className="mt-3 flex-1 text-base leading-8 text-muted-foreground">{document.summary}</p>
-                <Link
+                {preview ? <span className="mt-6 inline-flex min-h-11 items-center font-semibold text-primary">{copy.read} <span aria-hidden="true" className="ms-2">{copy.arrow}</span></span> : <Link
                   href={`/${locale}/policies/${document.slug}`}
                   className="mt-6 inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                  {copy.read} <span aria-hidden="true" className="ms-2">{copy.arrow}</span>
-                </Link>
+                >{copy.read} <span aria-hidden="true" className="ms-2">{copy.arrow}</span></Link>}
               </article>
             ))}
           </div>

@@ -23,9 +23,11 @@ const detailIcons = {
 export function ContactSection({
   content,
   locale = "ar",
+  preview = false,
 }: {
   content: ContactContent;
   locale?: "ar" | "en";
+  preview?: boolean;
 }) {
   const [submitted, setSubmitted] = useState(false);
   const contentDirection =
@@ -80,6 +82,16 @@ export function ContactSection({
                 </span>
               </span>
             );
+            if (detail.href && preview) {
+              return (
+                <span
+                  key={detail.kind}
+                  className="rounded-[1.55rem]"
+                >
+                  {card}
+                </span>
+              );
+            }
             return detail.href ? (
               <a
                 key={detail.kind}
@@ -112,7 +124,7 @@ export function ContactSection({
             </div>
           ) : (
             <form
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={preview ? (event) => event.preventDefault() : form.handleSubmit(onSubmit)}
               noValidate
               className="space-y-5"
             >

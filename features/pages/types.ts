@@ -2,6 +2,7 @@ import type { Locale } from "@/lib/locales";
 import type { Page, PageRevision, PageSection } from "@/db/schema";
 import type { Dictionary } from "@/lib/dictionaries";
 import type { LegalDocument } from "@/content/legal/policies";
+import type { SectionContentMap } from "./content-adapter";
 
 export type PageSlug = "" | "about" | "contact" | "join-us" | "policies";
 export type CmsLocale = Locale;
@@ -20,9 +21,23 @@ export type SectionKey =
   | "service_benefits" | "join_application" | "faq_support"
   | "vision_mission" | "contact" | "partner_registration" | "policies";
 
-export type ContentSection = {
-  key: SectionKey;
-  type: SectionKey;
-  sortOrder: number;
-  content: unknown;
+export type SectionContent = {
+  [K in SectionKey]: { key: K; type: K; sortOrder: number; content: SectionContentMap[K] }
+}[SectionKey];
+
+export type ContentSection = SectionContent;
+
+/** Serialized editor DTO; safe to cross a Server Component/action boundary. */
+export type EditorDocument = {
+  pageId: string;
+  locale: CmsLocale;
+  slug: PageSlug;
+  revisionId: string;
+  revisionToken: string;
+  status: "draft" | "published";
+  title: string;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  updatedAt: string;
+  sections: ContentSection[];
 };
