@@ -4,7 +4,7 @@ import { and, asc, eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { pageRevisionPointers, pageRevisions, pageSections, pages, settings } from "@/db/schema";
 import type { Locale } from "@/lib/locales";
-import { adaptPageContent, adaptSections } from "./content-adapter";
+import { adaptPageContent, adaptEditorSections } from "./content-adapter";
 import { getPublishedFormById } from "@/features/forms/queries";
 import { pageDefinition } from "./page-map";
 import type { EditorDocument } from "./types";
@@ -43,30 +43,27 @@ export async function getPage(locale: Locale, slug: string, revision: "published
   // never render a copied/stale form configuration.
   for (const section of sections) {
     const expected = formSections.includes(section.sectionKey as typeof formSections[number]) ? section.sectionKey : null;
-    if (expected && section.formId == null) {
-      throw new Error(`Built-in form reference is missing on ${locale}:${slug || "home"}:${section.sectionKey}`);
-    }
+    // Historical rows without formId use the isolated adapter fallback below.
     if (!expected && section.formId != null) {
       throw new Error(`Invalid form reference on ${locale}:${slug || "home"}`);
     }
   }
 
-  const adapted = adaptPageContent(rows[0], sections, slug);
-  const adaptedSectionMap = adapted.sections as unknown as Record<string, unknown>;
+  const resolvedForms = new Map<string, { rendererKey: "contact" | "join_application" | "partner_registration" | "generic"; config: unknown }>();
   for (const section of sections) {
     const expected = formSections.includes(section.sectionKey as typeof formSections[number]) ? section.sectionKey : null;
     if (!expected) continue;
     // The validation above guarantees this is present; keep the guard local
     // so this remains safe if the database row type changes in the future.
-    if (section.formId == null) throw new Error(`Built-in form reference is missing on ${locale}:${slug || "home"}:${section.sectionKey}`);
+    if (section.formId == null) continue;
     const resolved = await getPublishedFormById(section.formId.toString(), locale);
     const compatible = resolved && (resolved.form.rendererKey === "generic" || (resolved.form.rendererKey === expected && resolved.form.formKey === expected));
     if (!compatible) {
       throw new Error(`Published form reference is missing or incompatible on ${locale}:${slug || "home"}:${section.sectionKey}`);
     }
-    adaptedSectionMap[section.sectionKey] = resolved.config;
+    resolvedForms.set(section.id.toString(), { rendererKey: resolved.form.rendererKey, config: resolved.config });
   }
-  return adapted;
+  return adaptPageContent(rows[0], sections, slug, resolvedForms);
 }
 
 /**
@@ -109,7 +106,7 @@ export async function getEditorDocument(pageId: string, locale: Locale, options?
   const rows = await db.select().from(pageSections).where(eq(pageSections.revisionId, revision.id)).orderBy(asc(pageSections.sortOrder));
   const definition = pageDefinition(page.slug);
   if (!definition) throw new Error(`Unknown CMS page slug: ${page.slug}`);
-  const adaptedSections = adaptSections(page.slug, rows);
+  const adaptedSections = adaptEditorSections(page.slug, rows);
   return {
     pageId: page.id.toString(), locale: page.locale, slug: page.slug as EditorDocument["slug"],
     revisionId: revision.id.toString(), revisionToken: revision.id.toString(), status: revision.status,

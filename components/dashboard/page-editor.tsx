@@ -19,7 +19,7 @@ import {
   type EditorDocumentInput,
   type PageActionResult,
 } from "@/features/pages/actions";
-import { parseSectionContent } from "@/features/pages/content-schemas";
+import { parseSectionContent, parseStrictSectionOwnedFormContent } from "@/features/pages/content-schemas";
 import type { EditorDocument, SectionKey } from "@/features/pages/types";
 
 const sectionNames: Record<SectionKey, string> = {
@@ -160,7 +160,8 @@ export function PageEditor({
 
     document.sections.forEach((section) => {
       try {
-        parseSectionContent(section.key, section.content);
+        if (section.key === "contact" || section.key === "join_application" || section.key === "partner_registration") parseStrictSectionOwnedFormContent(section.key, section.content);
+        else parseSectionContent(section.key as keyof typeof import("@/features/pages/content-schemas").sectionContentSchemas, section.content);
       } catch {
         validationIssues.push(
           `${sectionNames[section.key]} has invalid or incomplete fields.`,
@@ -551,37 +552,7 @@ function SectionForm({
     case "contact":
       body = (
         <div className="space-y-4">
-          <Nested
-            data={data}
-            name="validation"
-            keys={["fullNameMin", "fullNameMax", "phone", "messageMin", "messageMax"]}
-            update={update}
-          />
-          {fields(
-            [
-              "eyebrow",
-              "headingStart",
-              "headingHighlight",
-              "description",
-              "countryCode",
-              "countryLabel",
-              "submit",
-              "success",
-            ],
-            ["description"],
-          )}
-          <Nested
-            data={data}
-            name="fields"
-            keys={["fullName", "phone", "message"]}
-            update={update}
-          />
-          <Nested
-            data={data}
-            name="placeholders"
-            keys={["fullName", "phone", "message"]}
-            update={update}
-          />
+          {fields(["eyebrow", "headingStart", "headingHighlight", "description", "countryCode", "countryLabel"], ["description"])}
           <Details data={data} update={update} />
         </div>
       );
@@ -589,83 +560,14 @@ function SectionForm({
     case "partner_registration":
       body = (
         <div className="space-y-4">
-          <Nested
-            data={data}
-            name="validation"
-            keys={["company", "phone", "email", "city"]}
-            update={update}
-          />
-          {fields(
-            [
-              "eyebrow",
-              "headingStart",
-              "headingHighlight",
-              "description",
-              "countryCode",
-              "countryLabel",
-              "submit",
-              "success",
-            ],
-            ["description"],
-          )}
-          <Nested
-            data={data}
-            name="fields"
-            keys={["company", "phone", "email", "city"]}
-            update={update}
-          />
-          <Nested
-            data={data}
-            name="placeholders"
-            keys={["company", "phone", "email", "city"]}
-            update={update}
-          />
-          <Strings data={data} update={update} name="cityOptions" count={6} />
+          {fields(["eyebrow", "headingStart", "headingHighlight", "description", "countryCode", "countryLabel"], ["description"])}
         </div>
       );
       break;
     case "join_application":
       body = (
         <div className="space-y-4">
-          <Nested
-            data={data}
-            name="validation"
-            keys={["fullNameMin", "fullNameMax", "phone", "email", "city", "experience", "transport", "nationalId", "drivingLicense", "fileSize", "fileType"]}
-            update={update}
-          />
-          {fields(
-            [
-              "heading",
-              "description",
-              "countryCode",
-              "countryLabel",
-              "fileHint",
-              "submit",
-              "note",
-              "success",
-            ],
-            ["description", "note"],
-          )}
-          <Nested
-            data={data}
-            name="fields"
-            keys={["fullName", "phone", "email", "city", "experienceYears", "transportType", "nationalId", "drivingLicense"]}
-            update={update}
-          />
-          <Nested
-            data={data}
-            name="placeholders"
-            keys={["fullName", "phone", "email", "city"]}
-            update={update}
-          />
-          <Nested
-            data={data}
-            name="selectPlaceholders"
-            keys={["experienceYears", "transportType"]}
-            update={update}
-          />
-          <Strings data={data} update={update} name="experienceOptions" count={4} />
-          <Strings data={data} update={update} name="transportOptions" count={3} />
+          {fields(["heading", "description", "countryCode", "countryLabel", "fileHint", "note"], ["description", "note"])}
           <Strings data={data} update={update} name="benefits" count={3} />
         </div>
       );

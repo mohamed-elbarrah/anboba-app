@@ -7,7 +7,7 @@ import { getDb } from "@/db";
 import { forms, pageRevisionPointers, pageRevisions, pageSections, pages } from "@/db/schema";
 import { isLocale } from "@/lib/locales";
 import { pageDefinition } from "./page-map";
-import { parseSectionContent } from "./content-schemas";
+import { parseSectionContent, parseSectionOwnedFormContent, parseStrictSectionOwnedFormContent } from "./content-schemas";
 import { sectionKeys } from "@/db/schema";
 
 /** Authentication is deferred; production CMS mutations fail closed. */
@@ -84,7 +84,10 @@ async function validateSections(tx: Parameters<Parameters<ReturnType<typeof getD
   for (const [index, section] of document.sections.entries()) {
     const key = expected[index];
     if (section.key !== key || section.type !== key || section.sortOrder !== index) return false;
-    try { parseSectionContent(key, section.content); } catch { return false; }
+    try {
+      if (key === "contact" || key === "join_application" || key === "partner_registration") parseStrictSectionOwnedFormContent(key, section.content);
+      else parseSectionContent(key, section.content);
+    } catch { return false; }
     const expectedForm = builtInFormForSection[key as keyof typeof builtInFormForSection];
     // The three executable built-in sections must always point at their stable
     // seeded form identity. Never fall back to copied section content.
@@ -216,7 +219,7 @@ export async function discardDraft(pageId: string, locale: string, revisionToken
       const published = (await tx.select().from(pageRevisions).where(and(eq(pageRevisions.id, target.pointer.publishedRevisionId), eq(pageRevisions.pageId, target.page.id), eq(pageRevisions.status, "published"))).limit(1))[0];
       if (!published) return failures.notFound;
       const sections = await tx.select().from(pageSections).where(eq(pageSections.revisionId, published.id)).orderBy(asc(pageSections.sortOrder));
-      const document: ValidDocument = { pageId, locale, revisionToken, title: published.title, metaTitle: published.metaTitle, metaDescription: published.metaDescription, sections: sections.map((section) => ({ key: section.sectionKey, type: section.sectionType, sortOrder: section.sortOrder, formId: section.formId === null ? null : section.formId.toString(), content: section.contentJson })) };
+      const document: ValidDocument = { pageId, locale, revisionToken, title: published.title, metaTitle: published.metaTitle, metaDescription: published.metaDescription, sections: sections.map((section) => ({ key: section.sectionKey, type: section.sectionType, sortOrder: section.sortOrder, formId: section.formId === null ? null : section.formId.toString(), content: section.formId !== null && (section.sectionKey === "contact" || section.sectionKey === "join_application" || section.sectionKey === "partner_registration") ? parseSectionOwnedFormContent(section.sectionKey, section.contentJson) : section.contentJson })) };
       if (!(await validateSections(tx, document, target.page.slug))) return invalidDocument();
       await tx.update(pageRevisions).set({ status: "archived" }).where(eq(pageRevisions.id, target.draft.id));
       const draftId = await insertRevision(tx, document, target.page.id, "draft", await nextRevisionNumber(tx, target.page.id));

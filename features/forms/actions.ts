@@ -1,9 +1,10 @@
 'use server';
 
+import { revalidatePath } from "next/cache";
 import { and, eq, max } from "drizzle-orm";
 import { z } from "zod";
 import { getDb } from "@/db";
-import { formRevisionPointers, formRevisions, forms, pageSections } from "@/db/schema";
+import { formRevisionPointers, formRevisions, forms, pageRevisions, pageSections, pages } from "@/db/schema";
 import { isLocale } from "@/lib/locales";
 import { formRevisionSchema, bilingualGenericCreateConfigSchema } from "./schema";
 import { isBuiltInFormKey, parseFormConfig } from "./registry";
@@ -164,10 +165,21 @@ export async function saveFormDraft(input: unknown): Promise<Result> {
     return { ok: true, revisionToken: id.toString(), status: "draft" };
   }); } catch (error) { console.error("[forms:save-draft]", error); return { ok: false, code: "INTERNAL_ERROR", message: "Unable to save form" }; }
 }
+async function revalidateReferencingPages(formId: bigint) {
+  const refs = await getDb().select({ locale: pages.locale, slug: pages.slug }).from(pageSections)
+    .innerJoin(pageRevisions, eq(pageSections.revisionId, pageRevisions.id)).innerJoin(pages, eq(pageRevisions.pageId, pages.id))
+    .where(eq(pageSections.formId, formId));
+  for (const ref of refs) {
+    try { revalidatePath(`/${ref.locale}${ref.slug ? `/${ref.slug}` : ""}`); }
+    catch (error) { console.error("[forms:revalidate] failed", error); }
+  }
+}
+
 export async function publishForm(input: unknown): Promise<Result> {
   if (!mutationsAllowed()) return authRequired;
   const value = parseInput(input); if (!value) return invalid;
-  try { return await getDb().transaction(async (tx) => {
+  try {
+    const result: Result = await getDb().transaction(async (tx) => {
     const found = await target(tx, value); if (found === "stale") return stale; if (!found) return notFound;
     let submitted: ReturnType<typeof submittedConfig>; try { submitted = submittedConfig(found.form.rendererKey, value); } catch { return { ok: false, code: "INVALID_CONFIG", message: "Invalid form configuration" }; }
     if (found.form.rendererKey === "generic") {
@@ -183,7 +195,10 @@ export async function publishForm(input: unknown): Promise<Result> {
     }
     await tx.update(formRevisionPointers).set({ publishedRevisionId: published, draftRevisionId: draft }).where(and(eq(formRevisionPointers.formId, found.form.id), eq(formRevisionPointers.locale, value.locale)));
     return { ok: true, revisionToken: draft.toString(), status: "published" };
-  }); } catch (error) { console.error("[forms:publish]", error); return { ok: false, code: "INTERNAL_ERROR", message: "Unable to publish form" }; }
+    });
+    if (result.ok) await revalidateReferencingPages(BigInt(value.formId));
+    return result;
+  } catch (error) { console.error("[forms:publish]", error); return { ok: false, code: "INTERNAL_ERROR", message: "Unable to publish form" }; }
 }
 export async function discardFormDraft(formId: string, locale: string, revisionToken: string): Promise<Result> {
   if (!mutationsAllowed()) return authRequired;
