@@ -3,6 +3,7 @@ import type { Locale } from "@/lib/locales";
 import { getDownloadAppHref } from "@/lib/navigation";
 import { PublicCtaLink } from "@/components/public/public-cta-link";
 import { HeroAppShowcase } from "@/components/public/sections/hero-app-showcase";
+import { MotionReveal } from "@/components/public/motion";
 
 type HeroContent = Dictionary["hero"];
 
@@ -30,6 +31,7 @@ export function HeroSection({
       />
       <div className="mx-auto flex max-w-[1440px] flex-col items-center text-center">
         <div className="flex max-w-7xl flex-col items-center">
+          <MotionReveal y={22}>
           <h1
             id="hero-heading"
             className="text-balance text-4xl font-extrabold leading-[1.3] tracking-tight text-foreground sm:text-5xl sm:leading-[1.25] lg:text-6xl"
@@ -39,18 +41,25 @@ export function HeroSection({
             {content.headingMiddle}
             <span className="text-primary">{content.headingHighlightHome}</span>
           </h1>
+          </MotionReveal>
+          <MotionReveal y={20} delay={0.2}>
           <p className="mx-auto mt-6 max-w-xl text-lg leading-loose text-muted-foreground sm:mt-7 sm:text-xl">
             {content.description}
           </p>
+          </MotionReveal>
+          <MotionReveal y={20} delay={0.4}>
           <PublicCtaLink
             href={getDownloadAppHref(locale)}
             className="mt-8 min-h-12 px-8 text-base"
           >
             {content.cta}
           </PublicCtaLink>
+          </MotionReveal>
         </div>
         {content.showcase ? (
-          <HeroAppShowcase content={content.showcase} locale={locale} media={showcaseMedia} />
+          <MotionReveal y={34} delay={0.6}>
+            <HeroAppShowcase content={content.showcase} locale={locale} media={showcaseMedia} />
+          </MotionReveal>
         ) : null}
       </div>
     </section>

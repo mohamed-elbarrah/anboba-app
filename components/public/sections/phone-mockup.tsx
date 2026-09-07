@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 
 // External HTTPS sources are rendered natively because their hosts are not
 // known at build time and are intentionally not added to next.config.ts.
@@ -13,9 +16,20 @@ type PhoneVariant = keyof typeof phoneVariants;
 
 export function PhoneMockup({ variant, alt, src }: { variant: PhoneVariant; alt: string; src?: string | null }) {
   const phone = phoneVariants[variant];
+  const prefersReducedMotion = useReducedMotion();
+  const startY = variant === "left" ? 180 : -180;
 
   return (
-    <span className="phone-mockup-frame block shrink-0">
+    <motion.span
+      className="phone-mockup-frame block shrink-0"
+      initial={prefersReducedMotion ? false : { y: startY, opacity: 0 }}
+      animate={prefersReducedMotion ? undefined : { y: 0, opacity: 1 }}
+      transition={{
+        duration: 1.45,
+        delay: variant === "left" ? 0.12 : 0.28,
+        ease: [0.16, 1, 0.3, 1],
+      }}
+    >
       {isExternalSource(src || phone.src) ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img src={src || phone.src} alt={alt} width={phone.width} height={phone.height} data-variant={variant} className="phone-mockup block size-full max-w-full object-fill" />
@@ -30,6 +44,6 @@ export function PhoneMockup({ variant, alt, src }: { variant: PhoneVariant; alt:
           className="phone-mockup block size-full max-w-full object-fill"
         />
       )}
-    </span>
+    </motion.span>
   );
 }

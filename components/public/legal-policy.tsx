@@ -7,6 +7,7 @@ import {
 } from "@/content/legal/policies";
 import type { Locale } from "@/lib/locales";
 import { getLocaleDirection } from "@/lib/locales";
+import { MotionReveal } from "@/components/public/motion";
 
 const documentLinks: Record<Locale, Record<string, string>> = {
   ar: { privacy: "الخصوصية", terms: "الشروط والأحكام", refunds: "الاسترداد" },
@@ -56,8 +57,11 @@ export function LegalPolicyOverview({
   const documents = content.documents;
   return (
     <main dir={getLocaleDirection(locale)} className="flex-1 bg-background text-foreground">
-      <PageTitleSection content={content.hero} locale={locale} asSection compact />
+      <MotionReveal>
+        <PageTitleSection content={content.hero} locale={locale} asSection compact />
+      </MotionReveal>
       <section className="px-5 py-12 sm:px-8 sm:py-16" aria-labelledby="policies-overview-title">
+        <MotionReveal y={16}>
         <div className="mx-auto w-full max-w-5xl">
           <header className="max-w-3xl">
             <h2 id="policies-overview-title" className="text-2xl font-bold sm:text-3xl">
@@ -68,7 +72,8 @@ export function LegalPolicyOverview({
             </p>
           </header>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {documents.map((document) => (
+            {documents.map((document, index) => (
+              <MotionReveal key={document.slug} y={24} delay={index * 0.2}>
               <article key={document.slug} className="flex h-full flex-col rounded-3xl border border-border bg-card p-6 shadow-sm">
                 <h2 className="text-xl font-bold">{document.title}</h2>
                 <p className="mt-3 flex-1 text-base leading-8 text-muted-foreground">{document.summary}</p>
@@ -77,9 +82,11 @@ export function LegalPolicyOverview({
                   className="mt-6 inline-flex min-h-11 items-center font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                 >{copy.read} <span aria-hidden="true" className="ms-2">{copy.arrow}</span></Link>
               </article>
+              </MotionReveal>
             ))}
           </div>
         </div>
+        </MotionReveal>
       </section>
     </main>
   );
@@ -88,20 +95,24 @@ export function LegalPolicyOverview({
 export function LegalPolicyDocument({ document, locale, documents }: { document: LegalDocument; locale: Locale; documents?: readonly LegalDocument[] }) {
   return (
     <main dir={getLocaleDirection(locale)} className="flex-1 bg-background text-foreground">
-      <PageTitleSection
-        content={{
-          eyebrow: locale === "ar" ? "تطبيق أنبوبة" : "ANBOBA app",
-          heading: document.title,
-          description: document.summary,
-        }}
-        locale={locale}
-        asSection
-        compact
-      />
-      <article className="mx-auto w-full max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
+      <MotionReveal>
+        <PageTitleSection
+          content={{
+            eyebrow: locale === "ar" ? "تطبيق أنبوبة" : "ANBOBA app",
+            heading: document.title,
+            description: document.summary,
+          }}
+          locale={locale}
+          asSection
+          compact
+        />
+      </MotionReveal>
+      <MotionReveal>
+        <article className="mx-auto w-full max-w-4xl px-5 py-12 sm:px-8 sm:py-16">
         <div className="divide-y divide-border">
-          {document.sections.map((section) => (
-            <section key={section.heading} className="py-8 first:pt-10">
+          {document.sections.map((section, index) => (
+            <MotionReveal key={section.heading} y={18} delay={Math.min(index * 0.2, 0.8)}>
+            <section className="py-8 first:pt-10">
               <h2 className="text-xl font-bold sm:text-2xl">{section.heading}</h2>
               {section.paragraphs?.map((paragraph) => (
                 <p key={paragraph} className="mt-4 text-base leading-8 text-muted-foreground sm:text-lg">{paragraph}</p>
@@ -112,12 +123,14 @@ export function LegalPolicyDocument({ document, locale, documents }: { document:
                 </ul>
               ) : null}
             </section>
+            </MotionReveal>
           ))}
         </div>
         <div className="border-t border-border pt-8">
           <LegalPolicyNavigation current={document.slug} locale={locale} documents={documents ?? [document]} />
         </div>
-      </article>
+        </article>
+      </MotionReveal>
     </main>
   );
 }

@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/lib/dictionaries";
+import { AnimatedCounter, MotionReveal } from "@/components/public/motion";
 
 type StatisticsContent = Dictionary["statistics"];
 
@@ -21,7 +22,8 @@ export function StatisticsSection({ content, locale = "ar" }: { content: Statist
         {content.heading}
       </h2>
       <dl className="mx-auto grid w-full max-w-[1440px] grid-cols-2 gap-y-8 sm:grid-cols-4 sm:gap-y-0">
-        {content.items.map((item) => (
+        {content.items.map((item, index) => (
+          <MotionReveal key={item.label} y={24} delay={index * 0.2}>
           <div
             key={item.label}
             className="flex flex-col items-center justify-center px-2 text-center sm:min-h-24"
@@ -30,9 +32,10 @@ export function StatisticsSection({ content, locale = "ar" }: { content: Statist
               {item.label}
             </dt>
             <dd className="order-1 text-3xl font-extrabold leading-none tracking-tight sm:text-4xl lg:text-[4.25rem]">
-              {item.value}
+              <AnimatedCounter value={item.value} />
             </dd>
           </div>
+          </MotionReveal>
         ))}
       </dl>
     </section>

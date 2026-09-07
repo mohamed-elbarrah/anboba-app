@@ -30,6 +30,7 @@ import {
 import { getLocaleDirection } from "@/lib/locales";
 import { cn } from "@/lib/utils";
 import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
+import { MotionReveal } from "@/components/public/motion";
 
 type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en" };
 
@@ -84,10 +85,8 @@ export function JoinApplicationSection({
         )}
         dir="ltr"
       >
-        <div
-          className={isArabic ? "order-2 lg:order-1" : "order-2 lg:order-2"}
-          dir={direction}
-        >
+        <MotionReveal className={isArabic ? "order-2 lg:order-1" : "order-2 lg:order-2"} x={isArabic ? -38 : 38}>
+        <div dir={direction}>
           {submitted ? (
             <div
               role="status"
@@ -215,12 +214,11 @@ export function JoinApplicationSection({
           </form>
           )}
         </div>
+        </MotionReveal>
 
+        <MotionReveal className={isArabic ? "order-1 lg:order-2" : "order-1 lg:order-1"} x={isArabic ? 38 : -38} delay={0.2}>
         <aside
-          className={cn(
-            "order-1 rounded-[2rem] bg-brand-navy px-7 py-9 text-start text-white shadow-xl lg:flex lg:flex-col lg:justify-center",
-            isArabic ? "lg:order-2" : "lg:order-1",
-          )}
+          className="rounded-[2rem] bg-brand-navy px-7 py-9 text-start text-white shadow-xl lg:flex lg:flex-col lg:justify-center"
           dir={direction}
         >
           <h2
@@ -255,6 +253,7 @@ export function JoinApplicationSection({
             {content.note}
           </div>
         </aside>
+        </MotionReveal>
       </div>
     </section>
   );

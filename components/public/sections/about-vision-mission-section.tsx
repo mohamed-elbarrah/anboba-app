@@ -1,5 +1,6 @@
 import { Eye, Rocket } from "lucide-react";
 import type { Dictionary } from "@/lib/dictionaries";
+import { MotionReveal } from "@/components/public/motion";
 
 type AboutVisionMissionContent = Dictionary["aboutVisionMission"];
 
@@ -24,6 +25,7 @@ export function AboutVisionMissionSection({
         </h2>
 
         <div className="grid gap-5 lg:grid-cols-2 lg:gap-7">
+          <MotionReveal x={-42}>
           <article className="rounded-[2rem] bg-primary px-7 py-8 text-start text-primary-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Eye
               aria-hidden="true"
@@ -37,7 +39,9 @@ export function AboutVisionMissionSection({
               {content.vision.description}
             </p>
           </article>
+          </MotionReveal>
 
+          <MotionReveal x={42} delay={0.2}>
           <article className="rounded-[2rem] border border-border/70 bg-card px-7 py-8 text-start text-card-foreground shadow-sm sm:px-10 sm:py-9 lg:min-h-[260px]">
             <Rocket
               aria-hidden="true"
@@ -51,6 +55,7 @@ export function AboutVisionMissionSection({
               {content.mission.description}
             </p>
           </article>
+          </MotionReveal>
         </div>
       </div>
     </section>

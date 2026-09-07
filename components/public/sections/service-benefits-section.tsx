@@ -6,6 +6,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { Dictionary, ServiceBenefitIcon } from "@/lib/dictionaries";
+import { MotionListItem, MotionReveal } from "@/components/public/motion";
 
 type ServiceBenefitsContent = Dictionary["serviceBenefits"];
 
@@ -31,9 +32,12 @@ export function ServiceBenefitsSection({
     >
       <div className="mx-auto max-w-[1440px]">
         <header className="mx-auto max-w-2xl text-center">
+          <MotionReveal y={14}>
           <p className="mx-auto inline-flex rounded-full bg-primary/10 px-5 py-2 text-sm font-extrabold text-primary sm:text-base">
             {content.eyebrow}
           </p>
+          </MotionReveal>
+          <MotionReveal y={18} delay={0.2}>
           <h2
             id="service-benefits-heading"
             className="mt-4 text-3xl font-extrabold leading-tight tracking-tight text-foreground sm:text-4xl lg:text-[2.9rem]"
@@ -41,9 +45,12 @@ export function ServiceBenefitsSection({
             <span className="text-primary">{content.headingHighlight}</span>
             {content.headingRest}
           </h2>
+          </MotionReveal>
+          <MotionReveal y={18} delay={0.4}>
           <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-base lg:text-[1.35rem] lg:leading-relaxed">
             {content.subtitle}
           </p>
+          </MotionReveal>
         </header>
 
         <ul
@@ -55,8 +62,10 @@ export function ServiceBenefitsSection({
             const isHighlighted = index === 0;
 
             return (
-              <li
+              <MotionListItem
                 key={item.title}
+                y={32}
+                delay={0.2 + index * 0.22}
                 className={`flex min-h-[240px] flex-col items-start rounded-3xl border px-7 py-8 text-start shadow-sm transition-shadow hover:shadow-md lg:min-h-[250px] lg:px-8 lg:py-9 ${
                   isHighlighted
                     ? "border-primary bg-primary text-primary-foreground"
@@ -83,7 +92,7 @@ export function ServiceBenefitsSection({
                 >
                   {item.description}
                 </p>
-              </li>
+              </MotionListItem>
             );
           })}
         </ul>

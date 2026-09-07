@@ -9,5 +9,13 @@ export async function generateMetadata() {
 
 export default async function Page() {
   const page = await getPublishedPublicPage("ar", "join-us");
-  return isFlexibleForm(page.sections.partner_registration) ? <main dir="rtl" className="public-hero-surface px-5 py-20 sm:px-8"><div className="mx-auto max-w-[900px] rounded-[2rem] border border-white bg-white/35 p-6 shadow-xl sm:p-8"><FlexibleFormRenderer definition={page.sections.partner_registration} locale="ar" /></div></main> : <PartnerRegistrationSection content={page.sections.partner_registration} locale="ar" />;
+  return isFlexibleForm(page.sections.partner_registration) ? (
+    <main dir="rtl" className="public-hero-surface px-5 py-20 sm:px-8">
+      <div className="mx-auto max-w-[900px] rounded-[2rem] border border-white bg-white/35 p-6 shadow-xl sm:p-8">
+        <FlexibleFormRenderer definition={page.sections.partner_registration} locale="ar" />
+      </div>
+    </main>
+  ) : (
+    <PartnerRegistrationSection content={page.sections.partner_registration} locale="ar" />
+  );
 }

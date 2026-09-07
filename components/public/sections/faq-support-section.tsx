@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { PublicCtaLink } from "@/components/public/public-cta-link";
 import type { Dictionary } from "@/lib/dictionaries";
+import { MotionReveal } from "@/components/public/motion";
 
 type FaqSupportContent = Dictionary["faqSupport"];
 
@@ -32,8 +33,13 @@ export function FaqSupportSection({
       <div
         className={`mx-auto grid max-w-[1326px] grid-cols-1 gap-5 [direction:ltr] lg:gap-10 ${locale === "ar" ? "lg:grid-cols-[minmax(0,1fr)_minmax(0,2.05fr)]" : "lg:grid-cols-[minmax(0,2.05fr)_minmax(0,1fr)]"}`}
       >
+        <MotionReveal
+          className={`lg:row-start-1 ${locale === "ar" ? "lg:col-start-2" : "lg:col-start-1"}`}
+          x={locale === "ar" ? 48 : -48}
+          delay={0.2}
+        >
         <article
-          className={`relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-white/90 bg-white/50 px-7 py-8 shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-10 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-8 lg:py-12 ${locale === "ar" ? "text-right lg:col-start-2" : "text-left lg:col-start-1"} lg:row-start-1`}
+          className={`relative isolate flex min-h-[340px] min-w-0 flex-col overflow-hidden rounded-3xl border border-white/90 bg-white/50 px-7 py-8 shadow-[0_5px_8px_rgb(111_78_58_/_10%)] sm:px-10 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-8 lg:py-12 ${locale === "ar" ? "text-right" : "text-left"}`}
         >
           <span
             aria-hidden="true"
@@ -62,9 +68,15 @@ export function FaqSupportSection({
             </PublicCtaLink>
           </div>
         </article>
+        </MotionReveal>
 
+        <MotionReveal
+          className={`lg:row-start-1 ${locale === "ar" ? "lg:col-start-1" : "lg:col-start-2"}`}
+          x={locale === "ar" ? -48 : 48}
+          delay={0.4}
+        >
         <article
-          className={`flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-10 lg:py-[4.25rem] ${locale === "ar" ? "text-right lg:col-start-1" : "text-left lg:col-start-2"} lg:row-start-1`}
+          className={`flex min-h-[340px] min-w-0 flex-col rounded-3xl border border-primary/20 bg-primary px-7 py-8 text-primary-foreground shadow-sm sm:px-8 sm:py-10 lg:min-h-[420px] lg:rounded-[2rem] lg:px-10 lg:py-[4.25rem] ${locale === "ar" ? "text-right" : "text-left"}`}
         >
           <div
             className={`flex h-full flex-col items-start ${locale === "ar" ? "text-right" : "text-left"}`}
@@ -89,6 +101,7 @@ export function FaqSupportSection({
             </Link>
           </div>
         </article>
+        </MotionReveal>
       </div>
     </section>
   );

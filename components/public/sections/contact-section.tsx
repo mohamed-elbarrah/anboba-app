@@ -12,6 +12,7 @@ import {
   type ContactFormValues,
 } from "@/features/contact/schema";
 import { cn } from "@/lib/utils";
+import { MotionReveal } from "@/components/public/motion";
 import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
 
 const detailIcons = {
@@ -56,22 +57,29 @@ export function ContactSection({
       className="bg-background px-5 pb-20 pt-16 sm:px-8 sm:pb-28 sm:pt-20"
     >
       <header className="mx-auto max-w-[1440px] text-center">
+        <MotionReveal y={16}>
         <p className="mx-auto inline-flex rounded-full border border-primary/10 bg-primary/10 px-6 py-2 text-sm font-bold text-primary shadow-sm">
           {content.eyebrow}
         </p>
+        </MotionReveal>
+        <MotionReveal y={18} delay={0.2}>
         <h1 className="mt-5 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
           {content.headingStart}{" "}
           <span className="text-primary">{content.headingHighlight}</span>
         </h1>
+        </MotionReveal>
+        <MotionReveal y={18} delay={0.4}>
         <p className="mx-auto mt-4 max-w-[780px] text-base leading-8 text-muted-foreground sm:text-lg lg:text-[1.2rem] lg:leading-relaxed">
           {content.description}
         </p>
+        </MotionReveal>
       </header>
 
       <div className="mx-auto mt-14 grid max-w-[1440px] grid-cols-1 items-stretch gap-5 [direction:ltr] lg:grid-cols-[minmax(0,458fr)_minmax(0,558fr)] lg:gap-6">
+        <MotionReveal className="order-2 lg:order-1" x={-38}>
         <aside
           aria-label={content.eyebrow}
-          className={`order-2 flex flex-col gap-4 ${contentDirection} lg:order-1`}
+          className={`flex flex-col gap-4 ${contentDirection}`}
         >
           {content.details.map((detail) => {
             const Icon = detailIcons[detail.kind];
@@ -101,9 +109,11 @@ export function ContactSection({
             );
           })}
         </aside>
+        </MotionReveal>
 
+        <MotionReveal className="order-1 lg:order-2" x={38} delay={0.6}>
         <div
-          className={`order-1 rounded-[2rem] border border-white/90 bg-white/35 px-6 py-7 shadow-[0_5px_7px_color-mix(in_srgb,var(--foreground)_5%,transparent)] ${contentDirection} sm:px-8 sm:py-8 lg:order-2`}
+          className={`rounded-[2rem] border border-white/90 bg-white/35 px-6 py-7 shadow-[0_5px_7px_color-mix(in_srgb,var(--foreground)_5%,transparent)] ${contentDirection} sm:px-8 sm:py-8 lg:order-2`}
         >
           {submitted ? (
             <div
@@ -212,6 +222,7 @@ export function ContactSection({
             </form>
           )}
         </div>
+        </MotionReveal>
       </div>
     </main>
   );
