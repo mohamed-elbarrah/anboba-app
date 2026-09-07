@@ -1,7 +1,13 @@
 "use client";
 
 import { ImageIcon } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { MediaPicker } from "@/components/dashboard/media-picker";
 import type { MediaItem } from "@/features/media/types";
@@ -13,33 +19,1031 @@ type HomeSection = { key: SectionKey; formId: string | null; content: unknown };
 type Locale = "ar" | "en";
 const copy = {
   ar: {
-    hero: ["القسم الرئيسي", "النص الظاهر في مقدمة الصفحة مع عرض التطبيق."], overview: ["نظرة عامة على الخدمة", "مقدمة الخدمة والصورة المستخدمة في هذا القسم."], statistics: ["الإحصائيات", "أربع إحصائيات ثابتة تظهر بترتيب الصفحة العام."], why: ["لماذا تختارنا", "قسم الأسباب والصورة التعريفية في الصفحة الرئيسية."], benefitsSection: ["مزايا الخدمة", "أربع مزايا ثابتة تظهر في هذا القسم."], join: ["طلب الانضمام", "محتوى دعوة الانضمام والمزايا الثلاث الثابتة."], faqSection: ["الأسئلة الشائعة والدعم", "بطاقتا الأسئلة الشائعة والدعم كما تظهران في نهاية الصفحة."],
-    content: "المحتوى", description: "الوصف", image: "الصورة", imageAlt: "النص البديل للصورة", heading: "العنوان", highlightedHeading: "العنوان التمهيدي المميز", primaryHeadingStart: "بداية العنوان الرئيسي", primaryHeadingHighlight: "الكلمة/الجملة الملونة من العنوان الرئيسي", eyebrow: "النص التمهيدي", subtitle: "العنوان الفرعي", cardHeading: "عنوان البطاقة", cardParagraph: "نص البطاقة", featuresHeading: "عنوان المزايا", feature: "الميزة", value: "قيمة الإحصائية", label: "وصف الإحصائية", item: "الإحصائية", title: "العنوان", icon: "الرمز", chooseIcon: "اختر رمز الميزة", phone: "صورة شاشة التطبيق", showcase: "عرض التطبيق", guarantee: "بطاقات الضمان", guaranteeLabel: "التسمية المشتركة لبطاقات الضمان", guaranteeText: "عنوان بطاقة الضمان", selectImage: "اختر صورة من مكتبة الوسائط أو استخدم رابطاً", fileHint: "إعدادات الملف في منشئ النموذج", note: "الملاحظة", benefit: "ميزة الخدمة", faq: "بطاقة الأسئلة الشائعة", support: "بطاقة الدعم", cta: "نص الزر", href: "الرابط"
+    hero: ["القسم الرئيسي", "النص الظاهر في مقدمة الصفحة مع عرض التطبيق."],
+    overview: [
+      "نظرة عامة على الخدمة",
+      "مقدمة الخدمة والصورة المستخدمة في هذا القسم.",
+    ],
+    statistics: ["الإحصائيات", "أربع إحصائيات ثابتة تظهر بترتيب الصفحة العام."],
+    why: ["لماذا تختارنا", "قسم الأسباب والصورة التعريفية في الصفحة الرئيسية."],
+    benefitsSection: ["مزايا الخدمة", "أربع مزايا ثابتة تظهر في هذا القسم."],
+    join: ["طلب الانضمام", "محتوى دعوة الانضمام والمزايا الثلاث الثابتة."],
+    faqSection: [
+      "الأسئلة الشائعة والدعم",
+      "بطاقتا الأسئلة الشائعة والدعم كما تظهران في نهاية الصفحة.",
+    ],
+    content: "المحتوى",
+    description: "الوصف",
+    image: "الصورة",
+    imageAlt: "النص البديل للصورة",
+    heading: "العنوان",
+    highlightedHeading: "العنوان التمهيدي المميز",
+    primaryHeadingStart: "بداية العنوان الرئيسي",
+    primaryHeadingHighlight: "الكلمة/الجملة الملونة من العنوان الرئيسي",
+    eyebrow: "النص التمهيدي",
+    subtitle: "العنوان الفرعي",
+    cardHeading: "عنوان البطاقة",
+    cardParagraph: "نص البطاقة",
+    featuresHeading: "عنوان المزايا",
+    feature: "الميزة",
+    value: "قيمة الإحصائية",
+    label: "وصف الإحصائية",
+    item: "الإحصائية",
+    title: "العنوان",
+    icon: "الرمز",
+    chooseIcon: "اختر رمز الميزة",
+    phone: "صورة شاشة التطبيق",
+    showcase: "عرض التطبيق",
+    guarantee: "بطاقات الضمان",
+    guaranteeLabel: "التسمية المشتركة لبطاقات الضمان",
+    guaranteeText: "عنوان بطاقة الضمان",
+    selectImage: "اختر صورة من مكتبة الوسائط أو استخدم رابطاً",
+    fileHint: "إعدادات الملف في منشئ النموذج",
+    note: "الملاحظة",
+    benefit: "ميزة الخدمة",
+    faq: "بطاقة الأسئلة الشائعة",
+    support: "بطاقة الدعم",
+    cta: "نص الزر",
+    href: "الرابط",
   },
   en: {
-    hero: ["Hero", "The introductory copy and app showcase shown at the top of the home page."], overview: ["Service overview", "The service introduction and image used in this banner."], statistics: ["Statistics", "Four fixed cards shown in the public page order."], why: ["Why choose us", "The reasons section and its supporting image."], benefitsSection: ["Service benefits", "Four fixed benefits with a clear icon choice for each one."], join: ["Join application", "The join invitation copy and its three fixed benefits."], faqSection: ["FAQ and support", "The FAQ and support groups shown at the end of the page."],
-    content: "Content", description: "Description", image: "Image", imageAlt: "Image alt text", heading: "Heading", highlightedHeading: "Highlighted introductory line", primaryHeadingStart: "Primary heading start", primaryHeadingHighlight: "Colored word/phrase in primary heading", eyebrow: "Eyebrow text", subtitle: "Subtitle", cardHeading: "Card heading", cardParagraph: "Card paragraph", featuresHeading: "Features heading", feature: "Feature", value: "Statistic value", label: "Statistic label", item: "Statistic", title: "Title", icon: "Icon", chooseIcon: "Choose benefit icon", phone: "App screen image", showcase: "App showcase", guarantee: "Guarantee cards", guaranteeLabel: "Shared guarantee-card label", guaranteeText: "Guarantee card title", selectImage: "Select from the media library or use a URL", fileHint: "File settings are managed in the form builder", note: "Note", benefit: "Service benefit", faq: "FAQ card", support: "Support card", cta: "Button label", href: "Link"
+    hero: [
+      "Hero",
+      "The introductory copy and app showcase shown at the top of the home page.",
+    ],
+    overview: [
+      "Service overview",
+      "The service introduction and image used in this banner.",
+    ],
+    statistics: [
+      "Statistics",
+      "Four fixed cards shown in the public page order.",
+    ],
+    why: ["Why choose us", "The reasons section and its supporting image."],
+    benefitsSection: [
+      "Service benefits",
+      "Four fixed benefits with a clear icon choice for each one.",
+    ],
+    join: [
+      "Join application",
+      "The join invitation copy and its three fixed benefits.",
+    ],
+    faqSection: [
+      "FAQ and support",
+      "The FAQ and support groups shown at the end of the page.",
+    ],
+    content: "Content",
+    description: "Description",
+    image: "Image",
+    imageAlt: "Image alt text",
+    heading: "Heading",
+    highlightedHeading: "Highlighted introductory line",
+    primaryHeadingStart: "Primary heading start",
+    primaryHeadingHighlight: "Colored word/phrase in primary heading",
+    eyebrow: "Eyebrow text",
+    subtitle: "Subtitle",
+    cardHeading: "Card heading",
+    cardParagraph: "Card paragraph",
+    featuresHeading: "Features heading",
+    feature: "Feature",
+    value: "Statistic value",
+    label: "Statistic label",
+    item: "Statistic",
+    title: "Title",
+    icon: "Icon",
+    chooseIcon: "Choose benefit icon",
+    phone: "App screen image",
+    showcase: "App showcase",
+    guarantee: "Guarantee cards",
+    guaranteeLabel: "Shared guarantee-card label",
+    guaranteeText: "Guarantee card title",
+    selectImage: "Select from the media library or use a URL",
+    fileHint: "File settings are managed in the form builder",
+    note: "Note",
+    benefit: "Service benefit",
+    faq: "FAQ card",
+    support: "Support card",
+    cta: "Button label",
+    href: "Link",
   },
 } as const;
-function text(data: Data, key: string) { return String(data[key] ?? ""); }
-function Field({ label, value, onChange, multiline = false, wide = false }: { label: string; value: string; onChange: (value: string) => void; multiline?: boolean; wide?: boolean }) { return <label className={`block space-y-1.5 text-sm font-medium${wide ? " md:col-span-2" : ""}`}>{label}{multiline ? <textarea className="min-h-24 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm" value={value} onChange={(e) => onChange(e.target.value)} /> : <Input value={value} onChange={(e) => onChange(e.target.value)} />}</label>; }
-function Group({ title, description, children }: { title: string; description?: string; children: React.ReactNode }) { return <Card><CardHeader><CardTitle>{title}</CardTitle>{description && <CardDescription>{description}</CardDescription>}</CardHeader><CardContent className="space-y-4">{children}</CardContent></Card>; }
-function Fields({ data, names, labels, update, multiline = [] }: { data: Data; names: string[]; labels: Record<string, string>; update: (data: Data) => void; multiline?: string[] }) { return <div className="grid gap-4 md:grid-cols-2">{names.map((name) => <Field key={name} label={labels[name]} value={text(data, name)} multiline={multiline.includes(name)} wide={multiline.includes(name)} onChange={(value) => update({ ...data, [name]: value })} />)}</div>; }
-function StringCards({ data, name, count, label, update }: { data: Data; name: string; count: number; label: string; update: (data: Data) => void }) { const values = Array.isArray(data[name]) ? data[name] as unknown[] : []; return <div className="grid gap-3 md:grid-cols-2">{Array.from({ length: count }, (_, index) => <div key={index} className="rounded-lg border bg-muted/20 p-4"><Field label={`${label} ${index + 1}`} value={String(values[index] ?? "")} onChange={(value) => { const next = [...values]; next[index] = value; update({ ...data, [name]: next }); }} /></div>)}</div>; }
-function ObjectCards({ data, name, count, labels, update }: { data: Data; name: string; count: number; labels: Record<string, string>; update: (data: Data) => void }) { const values = Array.isArray(data[name]) ? data[name] as Data[] : []; return <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">{Array.from({ length: count }, (_, index) => <div key={index} className="rounded-lg border bg-muted/20 p-4"><p className="mb-3 text-sm font-semibold">{labels.item} {index + 1}</p><div className="space-y-3">{Object.keys(labels).filter((key) => key !== "item").map((key) => <Field key={key} label={labels[key]} value={text(values[index] ?? {}, key)} multiline={key === "description"} onChange={(value) => { const next = [...values]; next[index] = { ...(next[index] ?? {}), [key]: value }; update({ ...data, [name]: next }); }} />)}</div></div>)}</div>; }
-function Nested({ data, name, title, labels, update }: { data: Data; name: string; title: string; labels: Record<string, string>; update: (data: Data) => void }) { const nested = (data[name] ?? {}) as Data; return <div className="rounded-lg border bg-muted/20 p-4"><h3 className="mb-3 font-semibold">{title}</h3><Fields data={nested} names={["heading", "description", "cta"]} labels={labels} update={(next) => update({ ...data, [name]: next })} multiline={["description"]} /></div>; }
-function ImageGroup({ data, update, media, labels, locale }: { data: Data; update: (data: Data) => void; media: readonly MediaItem[]; labels: typeof copy.ar; locale: Locale }) { return <Group title={labels.image} description={labels.selectImage}><MediaPicker items={media} selectedId={text(data, "imageMediaId") || null} externalUrl={text(data, "imageUrl") || null} fallbackUrl="/images/anboba-img.png" label={labels.image} locale={locale} onChange={(selection) => update({ ...data, imageMediaId: selection.mediaId ?? "", imageUrl: selection.externalUrl ?? "" })} /><Field label={labels.imageAlt} value={text(data, "imageAlt")} onChange={(value) => update({ ...data, imageAlt: value })} /></Group>; }
+function text(data: Data, key: string) {
+  return String(data[key] ?? "");
+}
+function Field({
+  label,
+  value,
+  onChange,
+  multiline = false,
+  wide = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+  multiline?: boolean;
+  wide?: boolean;
+}) {
+  return (
+    <label
+      className={`block space-y-1.5 text-sm font-medium${wide ? " md:col-span-2" : ""}`}
+    >
+      {label}
+      {multiline ? (
+        <textarea
+          className="min-h-24 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        />
+      ) : (
+        <Input value={value} onChange={(e) => onChange(e.target.value)} />
+      )}
+    </label>
+  );
+}
+function Group({
+  title,
+  description,
+  children,
+}: {
+  title: string;
+  description?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        {description && <CardDescription>{description}</CardDescription>}
+      </CardHeader>
+      <CardContent className="space-y-4">{children}</CardContent>
+    </Card>
+  );
+}
+function Fields({
+  data,
+  names,
+  labels,
+  update,
+  multiline = [],
+}: {
+  data: Data;
+  names: string[];
+  labels: Record<string, string>;
+  update: (data: Data) => void;
+  multiline?: string[];
+}) {
+  return (
+    <div className="grid gap-4 md:grid-cols-2">
+      {names.map((name) => (
+        <Field
+          key={name}
+          label={labels[name]}
+          value={text(data, name)}
+          multiline={multiline.includes(name)}
+          wide={multiline.includes(name)}
+          onChange={(value) => update({ ...data, [name]: value })}
+        />
+      ))}
+    </div>
+  );
+}
+function ContactDetails({
+  data,
+  update,
+  locale,
+}: {
+  data: Data;
+  update: (data: Data) => void;
+  locale: Locale;
+}) {
+  const values = Array.isArray(data.details) ? (data.details as Data[]) : [];
+  const kinds =
+    locale === "ar"
+      ? ["الهاتف", "البريد الإلكتروني", "الموقع", "ساعات الدعم"]
+      : ["Phone", "Email", "Location", "Support hours"];
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      {Array.from({ length: 4 }, (_, index) => {
+        const item = values[index] ?? {};
+        return (
+          <div key={index} className="rounded-lg border bg-muted/20 p-4">
+            <p className="mb-3 font-semibold">{kinds[index]}</p>
+            <div className="space-y-3">
+              <Field
+                label={locale === "ar" ? "النص الظاهر" : "Displayed text"}
+                value={text(item, "value")}
+                onChange={(value) => {
+                  const next = [...values];
+                  next[index] = { ...item, value };
+                  update({ ...data, details: next });
+                }}
+              />
+              <Field
+                label={locale === "ar" ? "الرابط الاختياري" : "Optional link"}
+                value={text(item, "href")}
+                onChange={(href) => {
+                  const next = [...values];
+                  next[index] = { ...item, href: href || undefined };
+                  update({ ...data, details: next });
+                }}
+              />
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+function StringCards({
+  data,
+  name,
+  count,
+  label,
+  update,
+}: {
+  data: Data;
+  name: string;
+  count: number;
+  label: string;
+  update: (data: Data) => void;
+}) {
+  const values = Array.isArray(data[name]) ? (data[name] as unknown[]) : [];
+  return (
+    <div className="grid gap-3 md:grid-cols-2">
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className="rounded-lg border bg-muted/20 p-4">
+          <Field
+            label={`${label} ${index + 1}`}
+            value={String(values[index] ?? "")}
+            onChange={(value) => {
+              const next = [...values];
+              next[index] = value;
+              update({ ...data, [name]: next });
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+function ObjectCards({
+  data,
+  name,
+  count,
+  labels,
+  update,
+}: {
+  data: Data;
+  name: string;
+  count: number;
+  labels: Record<string, string>;
+  update: (data: Data) => void;
+}) {
+  const values = Array.isArray(data[name]) ? (data[name] as Data[]) : [];
+  return (
+    <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
+      {Array.from({ length: count }, (_, index) => (
+        <div key={index} className="rounded-lg border bg-muted/20 p-4">
+          <p className="mb-3 text-sm font-semibold">
+            {labels.item} {index + 1}
+          </p>
+          <div className="space-y-3">
+            {Object.keys(labels)
+              .filter((key) => key !== "item")
+              .map((key) => (
+                <Field
+                  key={key}
+                  label={labels[key]}
+                  value={text(values[index] ?? {}, key)}
+                  multiline={key === "description"}
+                  onChange={(value) => {
+                    const next = [...values];
+                    next[index] = { ...(next[index] ?? {}), [key]: value };
+                    update({ ...data, [name]: next });
+                  }}
+                />
+              ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+function Nested({
+  data,
+  name,
+  title,
+  labels,
+  update,
+  fields = ["heading", "description", "cta"],
+}: {
+  data: Data;
+  name: string;
+  title: string;
+  labels: Record<string, string>;
+  update: (data: Data) => void;
+  fields?: string[];
+}) {
+  const nested = (data[name] ?? {}) as Data;
+  return (
+    <div className="rounded-lg border bg-muted/20 p-4">
+      <h3 className="mb-3 font-semibold">{title}</h3>
+      <Fields
+        data={nested}
+        names={fields}
+        labels={labels}
+        update={(next) => update({ ...data, [name]: next })}
+        multiline={["description"]}
+      />
+    </div>
+  );
+}
+function ImageGroup({
+  data,
+  update,
+  media,
+  labels,
+  locale,
+}: {
+  data: Data;
+  update: (data: Data) => void;
+  media: readonly MediaItem[];
+  labels: typeof copy.ar;
+  locale: Locale;
+}) {
+  return (
+    <Group title={labels.image} description={labels.selectImage}>
+      <MediaPicker
+        items={media}
+        selectedId={text(data, "imageMediaId") || null}
+        externalUrl={text(data, "imageUrl") || null}
+        fallbackUrl="/images/anboba-img.png"
+        label={labels.image}
+        locale={locale}
+        onChange={(selection) =>
+          update({
+            ...data,
+            imageMediaId: selection.mediaId ?? "",
+            imageUrl: selection.externalUrl ?? "",
+          })
+        }
+      />
+      <Field
+        label={labels.imageAlt}
+        value={text(data, "imageAlt")}
+        onChange={(value) => update({ ...data, imageAlt: value })}
+      />
+    </Group>
+  );
+}
 
-export function HomeSectionEditor({ section, media, forms, locale = "ar", onFormChange, update }: { section: HomeSection; media: readonly MediaItem[]; forms: readonly DashboardFormOption[]; locale?: Locale; onFormChange: (formId: string | null) => void; update: (content: unknown) => void }) {
-  const t = copy[locale] as typeof copy.ar; const data = (section.content ?? {}) as Data; const set = (next: Data) => update(next);
+function FormReference({
+  section,
+  forms,
+  locale,
+  onFormChange,
+}: {
+  section: HomeSection;
+  forms: readonly DashboardFormOption[];
+  locale: Locale;
+  onFormChange: (formId: string | null) => void;
+}) {
+  const allowed =
+    section.key === "contact"
+      ? ["contact", "generic"]
+      : ["partner_registration", "generic"];
+  return (
+    <div className="rounded-lg border border-dashed bg-muted/20 p-4">
+      <p className="font-semibold">
+        {locale === "ar" ? "النموذج المرتبط" : "Linked form"}
+      </p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        {locale === "ar"
+          ? "حقول النموذج والإعدادات تتم من منشئ النماذج."
+          : "Form fields and settings are managed in the form builder."}
+      </p>
+      <label className="mt-3 block space-y-1.5 text-sm font-medium">
+        {locale === "ar" ? "اختر النموذج" : "Select form"}
+        <select
+          className="h-10 w-full rounded-lg border border-input bg-transparent px-3"
+          value={section.formId ?? ""}
+          onChange={(event) => onFormChange(event.target.value || null)}
+        >
+          <option value="">
+            {locale === "ar"
+              ? "اختر النموذج المرتبط"
+              : "Select the linked form"}
+          </option>
+          {forms
+            .filter((form) => allowed.includes(form.rendererKey))
+            .map((form) => (
+              <option key={form.id} value={form.id}>
+                {form.formKey} ·{" "}
+                {form.kind === "system"
+                  ? locale === "ar"
+                    ? "مدمج"
+                    : "Built-in"
+                  : locale === "ar"
+                    ? "مخصص"
+                    : "Custom"}
+              </option>
+            ))}
+        </select>
+      </label>
+    </div>
+  );
+}
+
+export function HomeSectionEditor({
+  section,
+  media,
+  forms,
+  locale = "ar",
+  onFormChange,
+  update,
+}: {
+  section: HomeSection;
+  media: readonly MediaItem[];
+  forms: readonly DashboardFormOption[];
+  locale?: Locale;
+  onFormChange: (formId: string | null) => void;
+  update: (content: unknown) => void;
+}) {
+  const t = copy[locale] as typeof copy.ar;
+  const data = (section.content ?? {}) as Data;
+  const set = (next: Data) => update(next);
   switch (section.key) {
-    case "hero": { const showcase = (data.showcase ?? {}) as Data; const setShowcase = (next: Data) => set({ ...data, showcase: next }); const guarantees = Array.isArray(showcase.guarantees) ? showcase.guarantees : []; return <div className="space-y-4"><Group title={t.hero[0]} description={t.hero[1]}><Fields data={data} names={["headingStart", "headingHighlightGas", "headingMiddle", "headingHighlightHome", "description", "cta"]} labels={{ headingStart: locale === "ar" ? "بداية العنوان الرئيسي" : "Primary heading start", headingHighlightGas: locale === "ar" ? "الكلمة/الجملة الملونة: الغاز" : "Colored word/phrase: gas", headingMiddle: locale === "ar" ? "الجزء الأوسط من العنوان الرئيسي" : "Primary heading middle", headingHighlightHome: locale === "ar" ? "الكلمة/الجملة الملونة: المنزل" : "Colored word/phrase: home", description: t.description, cta: t.cta }} update={set} multiline={["description"]} /></Group><Group title={t.showcase} description={locale === "ar" ? "تسمية مشتركة وأربع بطاقات ضمان وصورتا هاتف قابلتان للتخصيص." : "One shared label, four guarantee cards, and two customizable phone images."}><Fields data={showcase} names={["heading", "guaranteeLabel"]} labels={{ heading: t.heading, guaranteeLabel: t.guaranteeLabel }} update={setShowcase} /> <div className="grid gap-4 xl:grid-cols-2">{[{ id: "phoneLeftMediaId", url: "phoneLeftImageUrl", alt: "phoneLeftAlt", start: 0, title: locale === "ar" ? "العرض الأيسر" : "Left showcase" }, { id: "phoneRightMediaId", url: "phoneRightImageUrl", alt: "phoneRightAlt", start: 2, title: locale === "ar" ? "العرض الأيمن" : "Right showcase" }].map((slot) => <div key={slot.id} className="rounded-lg border p-4 space-y-4"><h3 className="font-semibold flex gap-2"><ImageIcon className="size-4" />{slot.title}</h3><MediaPicker items={media} selectedId={text(showcase, slot.id) || null} externalUrl={text(showcase, slot.url) || null} fallbackUrl={slot.start === 0 ? "/images/hero/left-phone.png" : "/images/hero/right-phone.png"} label={t.phone} locale={locale} onChange={(selection) => setShowcase({ ...showcase, [slot.id]: selection.mediaId ?? "", [slot.url]: selection.externalUrl ?? "" })} /><Field label={t.imageAlt} value={text(showcase, slot.alt)} onChange={(value) => setShowcase({ ...showcase, [slot.alt]: value })} /><div className="space-y-3">{[0, 1].map((offset) => <Field key={offset} label={`${t.guaranteeText} ${slot.start + offset + 1}`} value={String(guarantees[slot.start + offset] ?? "")} onChange={(value) => { const next = [...guarantees]; next[slot.start + offset] = value; setShowcase({ ...showcase, guarantees: next }); }} />)}</div></div>)}</div></Group></div>; }
-    case "service_overview": return <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.85fr)]"><Group title={t.overview[0]} description={t.overview[1]}><Field label={t.highlightedHeading} value={text(data, "highlightedHeading")} onChange={(value) => set({ ...data, highlightedHeading: value })} /><div className="grid gap-4 md:grid-cols-2"><Field label={t.primaryHeadingStart} value={text(data, "primaryHeadingStart")} onChange={(value) => set({ ...data, primaryHeadingStart: value })} /><Field label={t.primaryHeadingHighlight} value={text(data, "primaryHeadingHighlight")} onChange={(value) => set({ ...data, primaryHeadingHighlight: value })} /></div><Field label={t.description} value={text(data, "description")} multiline onChange={(value) => set({ ...data, description: value })} /></Group><ImageGroup data={data} update={set} media={media} labels={t} locale={locale} /></div>;
-    case "statistics": return <Group title={t.statistics[0]} description={t.statistics[1]}><Field label={t.heading} value={text(data, "heading")} onChange={(value) => set({ ...data, heading: value })} /><ObjectCards data={data} name="items" count={4} labels={{ item: t.item, value: t.value, label: t.label }} update={set} /></Group>;
-    case "why_choose_us": return <div className="grid gap-4 lg:grid-cols-[minmax(260px,0.85fr)_minmax(0,1.15fr)]"><ImageGroup data={data} update={set} media={media} labels={t} locale={locale} /><div className="space-y-4"><Group title={t.why[0]} description={t.why[1]}><Field label={t.eyebrow} value={text(data, "eyebrow")} onChange={(value) => set({ ...data, eyebrow: value })} /><div className="grid gap-4 md:grid-cols-2"><Field label={locale === "ar" ? "بداية العنوان" : "Heading start"} value={text(data, "headingStart")} onChange={(value) => set({ ...data, headingStart: value })} /><Field label={locale === "ar" ? "العنوان المميز" : "Heading highlight"} value={text(data, "headingHighlight")} onChange={(value) => set({ ...data, headingHighlight: value })} /></div><Field label={t.subtitle} value={text(data, "subtitle")} multiline onChange={(value) => set({ ...data, subtitle: value })} /></Group><Group title={t.content}><Field label={t.cardHeading} value={text(data, "cardHeading")} onChange={(value) => set({ ...data, cardHeading: value })} /><Field label={t.cardParagraph} value={text(data, "cardParagraph")} multiline onChange={(value) => set({ ...data, cardParagraph: value })} /><Field label={t.featuresHeading} value={text(data, "featuresHeading")} onChange={(value) => set({ ...data, featuresHeading: value })} /><StringCards data={data} name="features" count={4} label={t.feature} update={set} /></Group></div></div>;
-    case "service_benefits": return <Group title={t.benefitsSection[0]} description={t.benefitsSection[1]}><Field label={t.eyebrow} value={text(data, "eyebrow")} onChange={(value) => set({ ...data, eyebrow: value })} /><div className="grid gap-4 md:grid-cols-2"><Field label={locale === "ar" ? "العنوان المميز" : "Heading highlight"} value={text(data, "headingHighlight")} onChange={(value) => set({ ...data, headingHighlight: value })} /><Field label={locale === "ar" ? "بقية العنوان" : "Heading remainder"} value={text(data, "headingRest")} onChange={(value) => set({ ...data, headingRest: value })} /></div><Field label={t.subtitle} value={text(data, "subtitle")} multiline onChange={(value) => set({ ...data, subtitle: value })} /><div className="grid gap-3 md:grid-cols-2">{Array.from({ length: 4 }, (_, index) => { const items = Array.isArray(data.items) ? data.items as Data[] : []; const item = items[index] ?? {}; return <div key={index} className="rounded-lg border bg-muted/20 p-4"><p className="mb-3 font-semibold">{t.item} {index + 1}</p><div className="space-y-3"><Field label={t.title} value={text(item, "title")} onChange={(value) => { const next = [...items]; next[index] = { ...item, title: value }; set({ ...data, items: next }); }} /><Field label={t.description} value={text(item, "description")} multiline onChange={(value) => { const next = [...items]; next[index] = { ...item, description: value }; set({ ...data, items: next }); }} /></div></div>; })}</div></Group>;
-    case "join_application": return <Group title={t.join[0]} description={t.join[1]}><Field label={t.heading} value={text(data, "heading")} onChange={(value) => set({ ...data, heading: value })} /><Field label={t.description} value={text(data, "description")} multiline onChange={(value) => set({ ...data, description: value })} /><StringCards data={data} name="benefits" count={3} label={t.benefit} update={set} /><Field label={t.note} value={text(data, "note")} multiline onChange={(value) => set({ ...data, note: value })} /><div className="rounded-lg border border-dashed bg-muted/20 p-4"><p className="text-sm font-semibold">{locale === "ar" ? "النموذج المستخدم" : "Form used by this section"}</p><p className="mt-1 text-xs text-muted-foreground">{locale === "ar" ? "اختر النموذج من منشئ النماذج. إعدادات الحقول والملفات تتم داخله." : "Choose a form built in the form builder. Fields and file settings are managed there."}</p><label className="mt-3 block space-y-1.5 text-sm font-medium">{locale === "ar" ? "النموذج" : "Form"}<select className="h-10 w-full rounded-lg border border-input bg-background px-3" value={section.formId ?? ""} onChange={(event) => onFormChange(event.target.value || null)}><option value="">{locale === "ar" ? "اختر نموذجاً" : "Select a form"}</option>{forms.filter((form) => form.rendererKey === "generic" || form.rendererKey === "join_application").map((form) => <option key={form.id} value={form.id}>{form.formKey} · {form.kind === "system" ? (locale === "ar" ? "مدمج" : "Built-in") : (locale === "ar" ? "مخصص" : "Custom")}</option>)}</select></label></div></Group>;
-    case "faq_support": return <Group title={t.faqSection[0]} description={t.faqSection[1]}><div className="grid gap-4 md:grid-cols-2"><Nested data={data} name="faq" title={t.faq} labels={{ heading: t.heading, description: t.description, cta: t.cta, href: t.href }} update={set} /><Nested data={data} name="support" title={t.support} labels={{ heading: t.heading, description: t.description, cta: t.cta, href: t.href }} update={set} /></div></Group>;
-    default: return null;
+    case "hero": {
+      const showcase = (data.showcase ?? {}) as Data;
+      const setShowcase = (next: Data) => set({ ...data, showcase: next });
+      const guarantees = Array.isArray(showcase.guarantees)
+        ? showcase.guarantees
+        : [];
+      return (
+        <div className="space-y-4">
+          <Group title={t.hero[0]} description={t.hero[1]}>
+            <Fields
+              data={data}
+              names={[
+                "headingStart",
+                "headingHighlightGas",
+                "headingMiddle",
+                "headingHighlightHome",
+                "description",
+                "cta",
+              ]}
+              labels={{
+                headingStart:
+                  locale === "ar"
+                    ? "بداية العنوان الرئيسي"
+                    : "Primary heading start",
+                headingHighlightGas:
+                  locale === "ar"
+                    ? "الكلمة/الجملة الملونة: الغاز"
+                    : "Colored word/phrase: gas",
+                headingMiddle:
+                  locale === "ar"
+                    ? "الجزء الأوسط من العنوان الرئيسي"
+                    : "Primary heading middle",
+                headingHighlightHome:
+                  locale === "ar"
+                    ? "الكلمة/الجملة الملونة: المنزل"
+                    : "Colored word/phrase: home",
+                description: t.description,
+                cta: t.cta,
+              }}
+              update={set}
+              multiline={["description"]}
+            />
+          </Group>
+          <Group
+            title={t.showcase}
+            description={
+              locale === "ar"
+                ? "تسمية مشتركة وأربع بطاقات ضمان وصورتا هاتف قابلتان للتخصيص."
+                : "One shared label, four guarantee cards, and two customizable phone images."
+            }
+          >
+            <Fields
+              data={showcase}
+              names={["heading", "guaranteeLabel"]}
+              labels={{ heading: t.heading, guaranteeLabel: t.guaranteeLabel }}
+              update={setShowcase}
+            />{" "}
+            <div className="grid gap-4 xl:grid-cols-2">
+              {[
+                {
+                  id: "phoneLeftMediaId",
+                  url: "phoneLeftImageUrl",
+                  alt: "phoneLeftAlt",
+                  start: 0,
+                  title: locale === "ar" ? "العرض الأيسر" : "Left showcase",
+                },
+                {
+                  id: "phoneRightMediaId",
+                  url: "phoneRightImageUrl",
+                  alt: "phoneRightAlt",
+                  start: 2,
+                  title: locale === "ar" ? "العرض الأيمن" : "Right showcase",
+                },
+              ].map((slot) => (
+                <div key={slot.id} className="rounded-lg border p-4 space-y-4">
+                  <h3 className="font-semibold flex gap-2">
+                    <ImageIcon className="size-4" />
+                    {slot.title}
+                  </h3>
+                  <MediaPicker
+                    items={media}
+                    selectedId={text(showcase, slot.id) || null}
+                    externalUrl={text(showcase, slot.url) || null}
+                    fallbackUrl={
+                      slot.start === 0
+                        ? "/images/hero/left-phone.png"
+                        : "/images/hero/right-phone.png"
+                    }
+                    label={t.phone}
+                    locale={locale}
+                    onChange={(selection) =>
+                      setShowcase({
+                        ...showcase,
+                        [slot.id]: selection.mediaId ?? "",
+                        [slot.url]: selection.externalUrl ?? "",
+                      })
+                    }
+                  />
+                  <Field
+                    label={t.imageAlt}
+                    value={text(showcase, slot.alt)}
+                    onChange={(value) =>
+                      setShowcase({ ...showcase, [slot.alt]: value })
+                    }
+                  />
+                  <div className="space-y-3">
+                    {[0, 1].map((offset) => (
+                      <Field
+                        key={offset}
+                        label={`${t.guaranteeText} ${slot.start + offset + 1}`}
+                        value={String(guarantees[slot.start + offset] ?? "")}
+                        onChange={(value) => {
+                          const next = [...guarantees];
+                          next[slot.start + offset] = value;
+                          setShowcase({ ...showcase, guarantees: next });
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Group>
+        </div>
+      );
+    }
+    case "service_overview":
+      return (
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(260px,0.85fr)]">
+          <Group title={t.overview[0]} description={t.overview[1]}>
+            <Field
+              label={t.highlightedHeading}
+              value={text(data, "highlightedHeading")}
+              onChange={(value) => set({ ...data, highlightedHeading: value })}
+            />
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field
+                label={t.primaryHeadingStart}
+                value={text(data, "primaryHeadingStart")}
+                onChange={(value) =>
+                  set({ ...data, primaryHeadingStart: value })
+                }
+              />
+              <Field
+                label={t.primaryHeadingHighlight}
+                value={text(data, "primaryHeadingHighlight")}
+                onChange={(value) =>
+                  set({ ...data, primaryHeadingHighlight: value })
+                }
+              />
+            </div>
+            <Field
+              label={t.description}
+              value={text(data, "description")}
+              multiline
+              onChange={(value) => set({ ...data, description: value })}
+            />
+          </Group>
+          <ImageGroup
+            data={data}
+            update={set}
+            media={media}
+            labels={t}
+            locale={locale}
+          />
+        </div>
+      );
+    case "statistics":
+      return (
+        <Group title={t.statistics[0]} description={t.statistics[1]}>
+          <Field
+            label={t.heading}
+            value={text(data, "heading")}
+            onChange={(value) => set({ ...data, heading: value })}
+          />
+          <ObjectCards
+            data={data}
+            name="items"
+            count={4}
+            labels={{ item: t.item, value: t.value, label: t.label }}
+            update={set}
+          />
+        </Group>
+      );
+    case "why_choose_us":
+      return (
+        <div className="grid gap-4 lg:grid-cols-[minmax(260px,0.85fr)_minmax(0,1.15fr)]">
+          <ImageGroup
+            data={data}
+            update={set}
+            media={media}
+            labels={t}
+            locale={locale}
+          />
+          <div className="space-y-4">
+            <Group title={t.why[0]} description={t.why[1]}>
+              <Field
+                label={t.eyebrow}
+                value={text(data, "eyebrow")}
+                onChange={(value) => set({ ...data, eyebrow: value })}
+              />
+              <div className="grid gap-4 md:grid-cols-2">
+                <Field
+                  label={locale === "ar" ? "بداية العنوان" : "Heading start"}
+                  value={text(data, "headingStart")}
+                  onChange={(value) => set({ ...data, headingStart: value })}
+                />
+                <Field
+                  label={
+                    locale === "ar" ? "العنوان المميز" : "Heading highlight"
+                  }
+                  value={text(data, "headingHighlight")}
+                  onChange={(value) =>
+                    set({ ...data, headingHighlight: value })
+                  }
+                />
+              </div>
+              <Field
+                label={t.subtitle}
+                value={text(data, "subtitle")}
+                multiline
+                onChange={(value) => set({ ...data, subtitle: value })}
+              />
+            </Group>
+            <Group title={t.content}>
+              <Field
+                label={t.cardHeading}
+                value={text(data, "cardHeading")}
+                onChange={(value) => set({ ...data, cardHeading: value })}
+              />
+              <Field
+                label={t.cardParagraph}
+                value={text(data, "cardParagraph")}
+                multiline
+                onChange={(value) => set({ ...data, cardParagraph: value })}
+              />
+              <Field
+                label={t.featuresHeading}
+                value={text(data, "featuresHeading")}
+                onChange={(value) => set({ ...data, featuresHeading: value })}
+              />
+              <StringCards
+                data={data}
+                name="features"
+                count={4}
+                label={t.feature}
+                update={set}
+              />
+            </Group>
+          </div>
+        </div>
+      );
+    case "service_benefits":
+      return (
+        <Group title={t.benefitsSection[0]} description={t.benefitsSection[1]}>
+          <Field
+            label={t.eyebrow}
+            value={text(data, "eyebrow")}
+            onChange={(value) => set({ ...data, eyebrow: value })}
+          />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={locale === "ar" ? "العنوان المميز" : "Heading highlight"}
+              value={text(data, "headingHighlight")}
+              onChange={(value) => set({ ...data, headingHighlight: value })}
+            />
+            <Field
+              label={locale === "ar" ? "بقية العنوان" : "Heading remainder"}
+              value={text(data, "headingRest")}
+              onChange={(value) => set({ ...data, headingRest: value })}
+            />
+          </div>
+          <Field
+            label={t.subtitle}
+            value={text(data, "subtitle")}
+            multiline
+            onChange={(value) => set({ ...data, subtitle: value })}
+          />
+          <div className="grid gap-3 md:grid-cols-2">
+            {Array.from({ length: 4 }, (_, index) => {
+              const items = Array.isArray(data.items)
+                ? (data.items as Data[])
+                : [];
+              const item = items[index] ?? {};
+              return (
+                <div key={index} className="rounded-lg border bg-muted/20 p-4">
+                  <p className="mb-3 font-semibold">
+                    {t.item} {index + 1}
+                  </p>
+                  <div className="space-y-3">
+                    <Field
+                      label={t.title}
+                      value={text(item, "title")}
+                      onChange={(value) => {
+                        const next = [...items];
+                        next[index] = { ...item, title: value };
+                        set({ ...data, items: next });
+                      }}
+                    />
+                    <Field
+                      label={t.description}
+                      value={text(item, "description")}
+                      multiline
+                      onChange={(value) => {
+                        const next = [...items];
+                        next[index] = { ...item, description: value };
+                        set({ ...data, items: next });
+                      }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Group>
+      );
+    case "join_application":
+      return (
+        <Group title={t.join[0]} description={t.join[1]}>
+          <Field
+            label={t.heading}
+            value={text(data, "heading")}
+            onChange={(value) => set({ ...data, heading: value })}
+          />
+          <Field
+            label={t.description}
+            value={text(data, "description")}
+            multiline
+            onChange={(value) => set({ ...data, description: value })}
+          />
+          <StringCards
+            data={data}
+            name="benefits"
+            count={3}
+            label={t.benefit}
+            update={set}
+          />
+          <Field
+            label={t.note}
+            value={text(data, "note")}
+            multiline
+            onChange={(value) => set({ ...data, note: value })}
+          />
+          <div className="rounded-lg border border-dashed bg-muted/20 p-4">
+            <p className="text-sm font-semibold">
+              {locale === "ar"
+                ? "النموذج المستخدم"
+                : "Form used by this section"}
+            </p>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {locale === "ar"
+                ? "اختر النموذج من منشئ النماذج. إعدادات الحقول والملفات تتم داخله."
+                : "Choose a form built in the form builder. Fields and file settings are managed there."}
+            </p>
+            <label className="mt-3 block space-y-1.5 text-sm font-medium">
+              {locale === "ar" ? "النموذج" : "Form"}
+              <select
+                className="h-10 w-full rounded-lg border border-input bg-transparent px-3"
+                value={section.formId ?? ""}
+                onChange={(event) => onFormChange(event.target.value || null)}
+              >
+                <option value="">
+                  {locale === "ar" ? "اختر نموذجاً" : "Select a form"}
+                </option>
+                {forms
+                  .filter(
+                    (form) =>
+                      form.rendererKey === "generic" ||
+                      form.rendererKey === "join_application",
+                  )
+                  .map((form) => (
+                    <option key={form.id} value={form.id}>
+                      {form.formKey} ·{" "}
+                      {form.kind === "system"
+                        ? locale === "ar"
+                          ? "مدمج"
+                          : "Built-in"
+                        : locale === "ar"
+                          ? "مخصص"
+                          : "Custom"}
+                    </option>
+                  ))}
+              </select>
+            </label>
+          </div>
+        </Group>
+      );
+    case "faq_support":
+      return (
+        <Group title={t.faqSection[0]} description={t.faqSection[1]}>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Nested
+              data={data}
+              name="faq"
+              title={t.faq}
+              labels={{
+                heading: t.heading,
+                description: t.description,
+                cta: t.cta,
+                href: t.href,
+              }}
+              update={set}
+            />
+            <Nested
+              data={data}
+              name="support"
+              title={t.support}
+              labels={{
+                heading: t.heading,
+                description: t.description,
+                cta: t.cta,
+                href: t.href,
+              }}
+              update={set}
+            />
+          </div>
+        </Group>
+      );
+    case "vision_mission":
+      return (
+        <div className="grid gap-4 md:grid-cols-2">
+          <Group title={locale === "ar" ? "الرؤية" : "Vision"}>
+            <Nested
+              data={data}
+              name="vision"
+              title={locale === "ar" ? "محتوى الرؤية" : "Vision content"}
+              labels={{ heading: t.heading, description: t.description }}
+              fields={["heading", "description"]}
+              update={set}
+            />
+          </Group>
+          <Group title={locale === "ar" ? "الرسالة" : "Mission"}>
+            <Nested
+              data={data}
+              name="mission"
+              title={locale === "ar" ? "محتوى الرسالة" : "Mission content"}
+              labels={{ heading: t.heading, description: t.description }}
+              fields={["heading", "description"]}
+              update={set}
+            />
+          </Group>
+        </div>
+      );
+    case "contact":
+      return (
+        <Group
+          title={locale === "ar" ? "محتوى التواصل" : "Contact content"}
+          description={
+            locale === "ar"
+              ? "ترتيب الحقول يطابق بطاقة التواصل العامة."
+              : "The field order follows the public contact card."
+          }
+        >
+          <Field
+            label={t.eyebrow}
+            value={text(data, "eyebrow")}
+            onChange={(value) => set({ ...data, eyebrow: value })}
+          />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={
+                locale === "ar"
+                  ? "بداية العنوان الرئيسي"
+                  : "Primary heading start"
+              }
+              value={text(data, "headingStart")}
+              onChange={(value) => set({ ...data, headingStart: value })}
+            />
+            <Field
+              label={
+                locale === "ar"
+                  ? "الكلمة/الجملة الملونة"
+                  : "Colored word/phrase"
+              }
+              value={text(data, "headingHighlight")}
+              onChange={(value) => set({ ...data, headingHighlight: value })}
+            />
+          </div>
+          <Field
+            label={t.description}
+            value={text(data, "description")}
+            multiline
+            onChange={(value) => set({ ...data, description: value })}
+          />
+          <ContactDetails data={data} update={set} locale={locale} />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={locale === "ar" ? "رمز الدولة" : "Country code"}
+              value={text(data, "countryCode")}
+              onChange={(value) => set({ ...data, countryCode: value })}
+            />
+            <Field
+              label={locale === "ar" ? "اسم الدولة" : "Country label"}
+              value={text(data, "countryLabel")}
+              onChange={(value) => set({ ...data, countryLabel: value })}
+            />
+          </div>
+          <FormReference
+            section={section}
+            forms={forms}
+            locale={locale}
+            onFormChange={onFormChange}
+          />
+        </Group>
+      );
+    case "partner_registration":
+      return (
+        <Group
+          title={
+            locale === "ar"
+              ? "محتوى طلب الشراكة"
+              : "Partner registration content"
+          }
+          description={
+            locale === "ar"
+              ? "ترتيب العنوان والنموذج يطابق صفحة انضم إلينا."
+              : "The heading and form order follows the public Join Us page."
+          }
+        >
+          <Field
+            label={t.eyebrow}
+            value={text(data, "eyebrow")}
+            onChange={(value) => set({ ...data, eyebrow: value })}
+          />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={
+                locale === "ar"
+                  ? "بداية العنوان الرئيسي"
+                  : "Primary heading start"
+              }
+              value={text(data, "headingStart")}
+              onChange={(value) => set({ ...data, headingStart: value })}
+            />
+            <Field
+              label={
+                locale === "ar"
+                  ? "الكلمة/الجملة الملونة"
+                  : "Colored word/phrase"
+              }
+              value={text(data, "headingHighlight")}
+              onChange={(value) => set({ ...data, headingHighlight: value })}
+            />
+          </div>
+          <Field
+            label={t.description}
+            value={text(data, "description")}
+            multiline
+            onChange={(value) => set({ ...data, description: value })}
+          />
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field
+              label={locale === "ar" ? "رمز الدولة" : "Country code"}
+              value={text(data, "countryCode")}
+              onChange={(value) => set({ ...data, countryCode: value })}
+            />
+            <Field
+              label={locale === "ar" ? "اسم الدولة" : "Country label"}
+              value={text(data, "countryLabel")}
+              onChange={(value) => set({ ...data, countryLabel: value })}
+            />
+          </div>
+          <FormReference
+            section={section}
+            forms={forms}
+            locale={locale}
+            onFormChange={onFormChange}
+          />
+        </Group>
+      );
+    default:
+      return null;
   }
 }

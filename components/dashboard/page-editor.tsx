@@ -22,7 +22,10 @@ import {
   type EditorDocumentInput,
   type PageActionResult,
 } from "@/features/pages/actions";
-import { parseSectionContent, parseStrictSectionOwnedFormContent } from "@/features/pages/content-schemas";
+import {
+  parseSectionContent,
+  parseStrictSectionOwnedFormContent,
+} from "@/features/pages/content-schemas";
 import type { EditorDocument, SectionKey } from "@/features/pages/types";
 
 type Locale = "ar" | "en";
@@ -41,13 +44,50 @@ const sectionNames: Record<SectionKey, Record<Locale, string>> = {
 };
 
 const fieldLabels: Record<string, string> = {
-  headingStart: "بداية العنوان", headingHighlight: "العنوان المميز", headingHighlightGas: "العنوان المميز للغاز", headingHighlightHome: "العنوان المميز للمنزل", headingMiddle: "وسط العنوان", description: "الوصف", eyebrow: "العنوان التمهيدي", subtitle: "العنوان الفرعي", cardHeading: "عنوان البطاقة", cardParagraph: "نص البطاقة", featuresHeading: "عنوان المزايا", imageAlt: "النص البديل للصورة", cta: "زر الإجراء", countryCode: "رمز الدولة", countryLabel: "اسم الدولة", heading: "العنوان", fileHint: "إرشادات الملف", note: "ملاحظة"
+  headingStart: "بداية العنوان",
+  headingHighlight: "العنوان المميز",
+  headingHighlightGas: "العنوان المميز للغاز",
+  headingHighlightHome: "العنوان المميز للمنزل",
+  headingMiddle: "وسط العنوان",
+  description: "الوصف",
+  eyebrow: "العنوان التمهيدي",
+  subtitle: "العنوان الفرعي",
+  cardHeading: "عنوان البطاقة",
+  cardParagraph: "نص البطاقة",
+  featuresHeading: "عنوان المزايا",
+  imageAlt: "النص البديل للصورة",
+  cta: "زر الإجراء",
+  countryCode: "رمز الدولة",
+  countryLabel: "اسم الدولة",
+  heading: "العنوان",
+  fileHint: "إرشادات الملف",
+  note: "ملاحظة",
 };
-const labelFor = (locale: Locale, key: string) => locale === "ar" ? (fieldLabels[key] ?? key) : key;
+const labelFor = (locale: Locale, key: string) =>
+  locale === "ar" ? (fieldLabels[key] ?? key) : key;
 
 const editorCopy = {
-  en: { workspace: "Content workspace", unsaved: "Unsaved changes", saved: "All changes saved", saveDraft: "Save draft", publish: "Publish", discard: "Discard", preview: "Preview published page", unavailable: "Preview unavailable: this locale has no valid published revision." },
-  ar: { workspace: "مساحة المحتوى", unsaved: "تغييرات غير محفوظة", saved: "تم حفظ جميع التغييرات", saveDraft: "حفظ المسودة", publish: "نشر", discard: "تجاهل", preview: "معاينة الصفحة المنشورة", unavailable: "المعاينة غير متاحة؛ لا توجد نسخة منشورة صالحة لهذه اللغة." },
+  en: {
+    workspace: "Content workspace",
+    unsaved: "Unsaved changes",
+    saved: "All changes saved",
+    saveDraft: "Save draft",
+    publish: "Publish",
+    discard: "Discard",
+    preview: "Preview published page",
+    unavailable:
+      "Preview unavailable: this locale has no valid published revision.",
+  },
+  ar: {
+    workspace: "مساحة المحتوى",
+    unsaved: "تغييرات غير محفوظة",
+    saved: "تم حفظ جميع التغييرات",
+    saveDraft: "حفظ المسودة",
+    publish: "نشر",
+    discard: "تجاهل",
+    preview: "معاينة الصفحة المنشورة",
+    unavailable: "المعاينة غير متاحة؛ لا توجد نسخة منشورة صالحة لهذه اللغة.",
+  },
 } as const;
 type Section = EditorDocument["sections"][number];
 type Data = Record<string, unknown>;
@@ -119,10 +159,12 @@ export function PageEditor({
   initialDocuments,
   initialErrors,
   isHome = false,
+  visualPage,
   media = [],
   forms = [],
 }: {
   isHome?: boolean;
+  visualPage?: string;
   media?: readonly MediaItem[];
   forms?: readonly DashboardFormOption[];
   initialDocuments: Record<Locale, EditorDocument | null>;
@@ -145,7 +187,8 @@ export function PageEditor({
       (["ar", "en"] as Locale[]).some(
         (key) =>
           documents[key] &&
-          JSON.stringify(documents[key]) !== JSON.stringify(savedDocuments[key]),
+          JSON.stringify(documents[key]) !==
+            JSON.stringify(savedDocuments[key]),
       ),
     [documents, savedDocuments],
   );
@@ -167,7 +210,9 @@ export function PageEditor({
   const setSectionForm = (key: SectionKey, formId: string | null) => {
     update((document) => ({
       ...document,
-      sections: document.sections.map((section) => section.key === key ? { ...section, formId } : section),
+      sections: document.sections.map((section) =>
+        section.key === key ? { ...section, formId } : section,
+      ),
     }));
   };
 
@@ -182,12 +227,22 @@ export function PageEditor({
 
   const validate = (document: EditorDocument) => {
     const validationIssues: string[] = [];
-    if (!document.title.trim()) validationIssues.push("Page title is required.");
+    if (!document.title.trim())
+      validationIssues.push("Page title is required.");
 
     document.sections.forEach((section) => {
       try {
-        if (section.key === "contact" || section.key === "join_application" || section.key === "partner_registration") parseStrictSectionOwnedFormContent(section.key, section.content);
-        else parseSectionContent(section.key as keyof typeof import("@/features/pages/content-schemas").sectionContentSchemas, section.content);
+        if (
+          section.key === "contact" ||
+          section.key === "join_application" ||
+          section.key === "partner_registration"
+        )
+          parseStrictSectionOwnedFormContent(section.key, section.content);
+        else
+          parseSectionContent(
+            section.key as keyof typeof import("@/features/pages/content-schemas").sectionContentSchemas,
+            section.content,
+          );
       } catch {
         validationIssues.push(
           `${sectionNames[section.key]} has invalid or incomplete fields.`,
@@ -250,7 +305,6 @@ export function PageEditor({
     }
   }
 
-
   function openPublishedPage() {
     if (!current || !current.hasPublishedRevision) {
       setError(ui.unavailable);
@@ -261,7 +315,11 @@ export function PageEditor({
       "_blank",
     );
     if (!previewWindow) {
-      setError(locale === "ar" ? "تم حظر المعاينة. اسمح بالنوافذ المنبثقة لهذا الموقع ثم حاول مرة أخرى." : "Preview was blocked. Allow pop-ups for this site and try again.");
+      setError(
+        locale === "ar"
+          ? "تم حظر المعاينة. اسمح بالنوافذ المنبثقة لهذا الموقع ثم حاول مرة أخرى."
+          : "Preview was blocked. Allow pop-ups for this site and try again.",
+      );
       return;
     }
     previewWindow.opener = null;
@@ -270,7 +328,9 @@ export function PageEditor({
   async function discard() {
     if (
       !current ||
-      !window.confirm("Discard unsaved changes and restore the published content?")
+      !window.confirm(
+        "Discard unsaved changes and restore the published content?",
+      )
     ) {
       return;
     }
@@ -344,32 +404,46 @@ export function PageEditor({
       </header>
 
       {(initialErrors.ar || initialErrors.en) && (
-        <p role="alert" className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm">
-          {initialErrors.ar && (locale === "ar" ? "تعذر تحميل العربية. " : "Arabic could not be loaded. ")}
-          {initialErrors.en && (locale === "ar" ? "تعذر تحميل الإنجليزية." : "English could not be loaded.")}
+        <p
+          role="alert"
+          className="rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm"
+        >
+          {initialErrors.ar &&
+            (locale === "ar"
+              ? "تعذر تحميل العربية. "
+              : "Arabic could not be loaded. ")}
+          {initialErrors.en &&
+            (locale === "ar"
+              ? "تعذر تحميل الإنجليزية."
+              : "English could not be loaded.")}
         </p>
       )}
 
       <Metadata document={current} locale={locale} update={update} />
       <div className="space-y-4">
-        {current.sections.map((section) => isHome ? (
-          <HomeSectionEditor
-            key={section.key}
-            section={section}
-            locale={locale}
-            media={media}
-            forms={forms}
-            onFormChange={(formId) => setSectionForm(section.key, formId)}
-            update={(content) => setSection(section.key, content)}
-          />
-        ) : (
-          <SectionForm
-            key={section.key}
-            section={section}
-            locale={locale}
-            update={(content) => setSection(section.key, content)}
-          />
-        ))}
+        {current.sections.map((section) =>
+          isHome ||
+          visualPage === "about" ||
+          visualPage === "contact" ||
+          visualPage === "join-us" ? (
+            <HomeSectionEditor
+              key={section.key}
+              section={section}
+              locale={locale}
+              media={media}
+              forms={forms}
+              onFormChange={(formId) => setSectionForm(section.key, formId)}
+              update={(content) => setSection(section.key, content)}
+            />
+          ) : (
+            <SectionForm
+              key={section.key}
+              section={section}
+              locale={locale}
+              update={(content) => setSection(section.key, content)}
+            />
+          ),
+        )}
       </div>
 
       <footer className="sticky bottom-3 z-10 flex flex-wrap gap-2 rounded-xl border bg-background/95 p-3 shadow-lg">
@@ -377,11 +451,19 @@ export function PageEditor({
           <Save className="me-2 size-4" />
           {ui.saveDraft}
         </Button>
-        <Button disabled={busy} variant="secondary" onClick={() => mutate("publish")}>
+        <Button
+          disabled={busy}
+          variant="secondary"
+          onClick={() => mutate("publish")}
+        >
           <Check className="me-2 size-4" />
           {ui.publish}
         </Button>
-        <Button disabled={busy || !currentDirty} variant="outline" onClick={discard}>
+        <Button
+          disabled={busy || !currentDirty}
+          variant="outline"
+          onClick={discard}
+        >
           <Trash2 className="me-2 size-4" />
           {ui.discard}
         </Button>
@@ -399,8 +481,11 @@ export function PageEditor({
           {issue}
         </p>
       ))}
-      {message && <p role="status" className="text-sm text-emerald-600">{message}</p>}
-
+      {message && (
+        <p role="status" className="text-sm text-emerald-600">
+          {message}
+        </p>
+      )}
     </main>
   );
 }
@@ -417,13 +502,36 @@ function Metadata({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{locale === "ar" ? "بيانات الصفحة" : "Page metadata"}</CardTitle>
-        <CardDescription>{locale === "ar" ? "حقول البحث وهوية الصفحة لهذه اللغة." : "Search and page identity fields for this locale."}</CardDescription>
+        <CardTitle>
+          {locale === "ar" ? "بيانات الصفحة" : "Page metadata"}
+        </CardTitle>
+        <CardDescription>
+          {locale === "ar"
+            ? "حقول البحث وهوية الصفحة لهذه اللغة."
+            : "Search and page identity fields for this locale."}
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 md:grid-cols-2">
-        <Field label={locale === "ar" ? "عنوان الصفحة" : "Page title"} value={document.title} onChange={(value) => update((d) => ({ ...d, title: value }))} />
-        <Field label={locale === "ar" ? "عنوان SEO" : "SEO title"} value={document.metaTitle ?? ""} onChange={(value) => update((d) => ({ ...d, metaTitle: value || null }))} />
-        <Field label={locale === "ar" ? "وصف SEO" : "SEO description"} multi value={document.metaDescription ?? ""} onChange={(value) => update((d) => ({ ...d, metaDescription: value || null }))} />
+        <Field
+          label={locale === "ar" ? "عنوان الصفحة" : "Page title"}
+          value={document.title}
+          onChange={(value) => update((d) => ({ ...d, title: value }))}
+        />
+        <Field
+          label={locale === "ar" ? "عنوان SEO" : "SEO title"}
+          value={document.metaTitle ?? ""}
+          onChange={(value) =>
+            update((d) => ({ ...d, metaTitle: value || null }))
+          }
+        />
+        <Field
+          label={locale === "ar" ? "وصف SEO" : "SEO description"}
+          multi
+          value={document.metaDescription ?? ""}
+          onChange={(value) =>
+            update((d) => ({ ...d, metaDescription: value || null }))
+          }
+        />
       </CardContent>
     </Card>
   );
@@ -439,8 +547,7 @@ function SectionForm({
   update: (value: unknown) => void;
 }) {
   const data = section.content as Data;
-  const set = (key: string, value: string) =>
-    update({ ...data, [key]: value });
+  const set = (key: string, value: string) => update({ ...data, [key]: value });
   const fields = (keys: string[], multi: string[] = []) => (
     <div className="grid gap-4 md:grid-cols-2">
       {keys.map((key) => (
@@ -476,7 +583,12 @@ function SectionForm({
               <Nested
                 data={data}
                 name="showcase"
-                keys={["heading", "guaranteeLabel", "phoneLeftAlt", "phoneRightAlt"]}
+                keys={[
+                  "heading",
+                  "guaranteeLabel",
+                  "phoneLeftAlt",
+                  "phoneRightAlt",
+                ]}
                 update={update}
               />
               <Strings
@@ -561,7 +673,10 @@ function SectionForm({
     case "service_benefits":
       body = (
         <>
-          {fields(["eyebrow", "headingHighlight", "headingRest", "subtitle"], ["subtitle"])}
+          {fields(
+            ["eyebrow", "headingHighlight", "headingRest", "subtitle"],
+            ["subtitle"],
+          )}
           <Fixed
             data={data}
             update={update}
@@ -593,7 +708,17 @@ function SectionForm({
     case "contact":
       body = (
         <div className="space-y-4">
-          {fields(["eyebrow", "headingStart", "headingHighlight", "description", "countryCode", "countryLabel"], ["description"])}
+          {fields(
+            [
+              "eyebrow",
+              "headingStart",
+              "headingHighlight",
+              "description",
+              "countryCode",
+              "countryLabel",
+            ],
+            ["description"],
+          )}
           <Details data={data} update={update} />
         </div>
       );
@@ -601,14 +726,34 @@ function SectionForm({
     case "partner_registration":
       body = (
         <div className="space-y-4">
-          {fields(["eyebrow", "headingStart", "headingHighlight", "description", "countryCode", "countryLabel"], ["description"])}
+          {fields(
+            [
+              "eyebrow",
+              "headingStart",
+              "headingHighlight",
+              "description",
+              "countryCode",
+              "countryLabel",
+            ],
+            ["description"],
+          )}
         </div>
       );
       break;
     case "join_application":
       body = (
         <div className="space-y-4">
-          {fields(["heading", "description", "countryCode", "countryLabel", "fileHint", "note"], ["description", "note"])}
+          {fields(
+            [
+              "heading",
+              "description",
+              "countryCode",
+              "countryLabel",
+              "fileHint",
+              "note",
+            ],
+            ["description", "note"],
+          )}
           <Strings data={data} update={update} name="benefits" count={3} />
         </div>
       );
@@ -624,11 +769,15 @@ function SectionForm({
         <CardTitle className="flex justify-between">
           {sectionNames[section.key][locale]}
           <span className="text-xs font-normal text-muted-foreground">
-            {locale === "ar" ? `القسم ${section.sortOrder + 1} · ثابت` : `Section ${section.sortOrder + 1} · fixed`}
+            {locale === "ar"
+              ? `القسم ${section.sortOrder + 1} · ثابت`
+              : `Section ${section.sortOrder + 1} · fixed`}
           </span>
         </CardTitle>
         <CardDescription>
-          {locale === "ar" ? "يمكنك تعديل الحقول المعتمدة فقط. البنية والترتيب ثابتان." : "Edit approved fields only. Structure and order are fixed."}
+          {locale === "ar"
+            ? "يمكنك تعديل الحقول المعتمدة فقط. البنية والترتيب ثابتان."
+            : "Edit approved fields only. Structure and order are fixed."}
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-5">{body}</CardContent>
@@ -841,7 +990,9 @@ function DocumentForm({
           <Field
             label="Paragraphs (one per line)"
             multi
-            value={Array.isArray(part.paragraphs) ? part.paragraphs.join("\n") : ""}
+            value={
+              Array.isArray(part.paragraphs) ? part.paragraphs.join("\n") : ""
+            }
             onChange={(value) => {
               const next = [...parts];
               next[partIndex] = {
