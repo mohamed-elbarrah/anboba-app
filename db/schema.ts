@@ -19,6 +19,8 @@ export const locales = ["ar", "en"] as const;
 export const adminRoles = ["admin"] as const;
 export const revisionStatuses = ["draft", "published", "archived"] as const;
 export const contactMessageStatuses = ["unread", "read", "replied", "archived"] as const;
+export const submissionStatuses = ["new", "in_review", "accepted", "rejected", "archived"] as const;
+export const submissionNotificationStatuses = ["pending", "sent", "failed"] as const;
 export const formRendererKeys = [
   "contact",
   "join_application",
@@ -505,6 +507,46 @@ export const media = mysqlTable(
   ],
 );
 
+export const submissions = mysqlTable(
+  "submissions",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    formId: id("form_id").notNull().references(() => forms.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    revisionId: id("revision_id").notNull().references(() => formRevisions.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    formKey: varchar("form_key", { length: 100 }).notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    payloadJson: json("payload_json").notNull(),
+    status: mysqlEnum("status", submissionStatuses).notNull().default("new"),
+    idempotencyToken: varchar("idempotency_token", { length: 128 }).notNull(),
+    metadataJson: json("metadata_json").notNull(),
+    notificationStatus: mysqlEnum("notification_status", submissionNotificationStatuses).notNull().default("pending"),
+    notificationError: text("notification_error"),
+    notifiedAt: timestamp("notified_at"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("submissions_idempotency_unique").on(table.formId, table.idempotencyToken),
+    index("submissions_form_status_created_idx").on(table.formKey, table.status, table.createdAt),
+    index("submissions_revision_idx").on(table.revisionId),
+  ],
+);
+
+export const submissionAttachments = mysqlTable(
+  "submission_attachments",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    submissionId: id("submission_id").notNull().references(() => submissions.id, { onDelete: "cascade", onUpdate: "cascade" }),
+    fieldKey: varchar("field_key", { length: 100 }).notNull(),
+    storageKey: varchar("storage_key", { length: 255 }).notNull(),
+    originalFilename: varchar("original_filename", { length: 255 }).notNull(),
+    mimeType: varchar("mime_type", { length: 100 }).notNull(),
+    sizeBytes: bigint("size_bytes", { mode: "number", unsigned: true }).notNull(),
+    createdAt: createdAt(),
+  },
+  (table) => [uniqueIndex("submission_attachments_storage_unique").on(table.storageKey), index("submission_attachments_submission_idx").on(table.submissionId)],
+);
+
 export const contactMessages = mysqlTable(
   "contact_messages",
   {
@@ -550,5 +592,7 @@ export type PageSection = typeof pageSections.$inferSelect;
 export type NewPageSection = typeof pageSections.$inferInsert;
 export type Setting = typeof settings.$inferSelect;
 export type ContactMessage = typeof contactMessages.$inferSelect;
+export type Submission = typeof submissions.$inferSelect;
+export type SubmissionAttachment = typeof submissionAttachments.$inferSelect;
 export type Media = typeof media.$inferSelect;
 export type NewMedia = typeof media.$inferInsert;

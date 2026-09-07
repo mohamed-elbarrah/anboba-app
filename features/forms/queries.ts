@@ -138,5 +138,8 @@ export async function getPublicForm(formKey: string, locale: Locale) {
   if (!pointer?.publishedRevisionId) return null;
   const row = (await getDb().select().from(formRevisions).where(and(eq(formRevisions.id, pointer.publishedRevisionId), eq(formRevisions.formId, form.id), eq(formRevisions.locale, locale), eq(formRevisions.status, "published"))).limit(1))[0];
   if (!row) return null;
-  try { return { rendererKey: form.rendererKey, config: await runtimeConfigForRevision(row, form.rendererKey) }; } catch { return null; }
+  try {
+    const normalized = await readNormalizedRevision(row, form.rendererKey);
+    return { formId: form.id, formKey: form.formKey, revisionId: row.id, locale: row.locale, rendererKey: form.rendererKey, config: await runtimeConfigForRevision(row, form.rendererKey), normalized };
+  } catch { return null; }
 }

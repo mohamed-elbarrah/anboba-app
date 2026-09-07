@@ -61,7 +61,10 @@ export async function getPage(locale: Locale, slug: string, revision: "published
     if (!compatible) {
       throw new Error(`Published form reference is missing or incompatible on ${locale}:${slug || "home"}:${section.sectionKey}`);
     }
-    resolvedForms.set(section.id.toString(), { rendererKey: resolved.form.rendererKey, config: resolved.config });
+    const config = resolved.form.rendererKey === "generic" && resolved.config && typeof resolved.config === "object"
+      ? { ...(resolved.config as Record<string, unknown>), formKey: resolved.form.formKey }
+      : resolved.config;
+    resolvedForms.set(section.id.toString(), { rendererKey: resolved.form.rendererKey, config });
   }
   return adaptPageContent(rows[0], sections, slug, resolvedForms);
 }

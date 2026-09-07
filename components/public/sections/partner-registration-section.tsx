@@ -18,12 +18,14 @@ import {
   type PartnerRegistrationFormValues,
 } from "@/features/join-us/partner-registration";
 import { cn } from "@/lib/utils";
+import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
 
 type Props = { content: PartnerRegistrationContent; locale: "ar" | "en" };
 type FieldName = keyof PartnerRegistrationFormValues;
 
 export function PartnerRegistrationSection({ content, locale }: Props) {
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const form = useForm<PartnerRegistrationFormValues>({
     resolver: zodResolver(createPartnerRegistrationSchema(content.validation)),
@@ -31,10 +33,14 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
     defaultValues: { company: "", phone: "", email: "", city: "" },
   });
 
-  function onSubmit() {
-    // Client-only until a registration endpoint is intentionally introduced.
-    setSubmitted(true);
-    form.reset();
+  async function onSubmit(values: PartnerRegistrationFormValues) {
+    setServerError(null);
+    const data = new FormData();
+    for (const key of ["company", "phone", "email", "city"] as const) data.set(key, values[key]);
+    data.set("website", "");
+    const result = await submitPublicForm("partner_registration", locale, data);
+    if (result.ok) { setSubmitted(true); form.reset(); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof PartnerRegistrationFormValues, error), setServerError);
   }
 
   useEffect(() => {
@@ -85,6 +91,8 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
                 dir={locale === "ar" ? "rtl" : "ltr"}
                 className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"
               >
+              {serverError && <p role="alert" className="lg:col-span-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <PartnerField
                 name="company"
                 label={content.fields.company}
@@ -117,6 +125,7 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
                 <Button
                   type="submit"
                   size="lg"
+                  disabled={form.formState.isSubmitting}
                   className="mx-auto block h-14 w-full max-w-[255px] rounded-full cursor-pointer text-base font-extrabold shadow-lg shadow-primary/25"
                 >
                   {content.submit}

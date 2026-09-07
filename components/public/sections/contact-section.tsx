@@ -12,6 +12,7 @@ import {
   type ContactFormValues,
 } from "@/features/contact/schema";
 import { cn } from "@/lib/utils";
+import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
 
 const detailIcons = {
   phone: Phone,
@@ -28,6 +29,7 @@ export function ContactSection({
   locale?: "ar" | "en";
 }) {
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const contentDirection =
     locale === "ar" ? "[direction:rtl]" : "[direction:ltr]";
   const form = useForm<ContactFormValues>({
@@ -36,10 +38,16 @@ export function ContactSection({
     defaultValues: { fullName: "", phone: "", message: "" },
   });
 
-  function onSubmit() {
-    // Client-only presentation for this phase; no network, API, or database call.
-    setSubmitted(true);
-    form.reset();
+  async function onSubmit(values: ContactFormValues) {
+    setServerError(null);
+    const data = new FormData();
+    data.set("fullName", values.fullName);
+    data.set("phone", values.phone);
+    data.set("message", values.message);
+    data.set("website", "");
+    const result = await submitPublicForm("contact", locale, data);
+    if (result.ok) { setSubmitted(true); form.reset(); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof ContactFormValues, error), setServerError);
   }
 
   return (
@@ -116,6 +124,8 @@ export function ContactSection({
               noValidate
               className="space-y-5"
             >
+              {serverError && <p role="alert" className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <TextField
                 name="fullName"
                 label={content.fields.fullName}
@@ -193,6 +203,7 @@ export function ContactSection({
               </div>
               <Button
                 type="submit"
+                disabled={form.formState.isSubmitting}
                 size="lg"
                 className="mx-auto flex h-12 w-full max-w-[200px] rounded-full text-base font-extrabold shadow-lg shadow-primary/25"
               >

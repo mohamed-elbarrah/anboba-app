@@ -29,6 +29,7 @@ import {
 } from "@/features/join-us/schema";
 import { getLocaleDirection } from "@/lib/locales";
 import { cn } from "@/lib/utils";
+import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
 
 type JoinApplicationSectionProps = { content: JoinApplicationContent; locale: "ar" | "en" };
 
@@ -43,6 +44,7 @@ export function JoinApplicationSection({
   const isArabic = locale === "ar";
   const direction = getLocaleDirection(locale);
   const [submitted, setSubmitted] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<JoinApplicationFormValues>({
     resolver: zodResolver(createJoinApplicationSchema(content.validation)),
     mode: "onBlur",
@@ -56,10 +58,15 @@ export function JoinApplicationSection({
     },
   });
 
-  const onSubmit = () => {
-    // Client-only for now. Uploads and API/database persistence come later.
-    setSubmitted(true);
-    form.reset();
+  const onSubmit = async (values: JoinApplicationFormValues) => {
+    setServerError(null);
+    const data = new FormData();
+    for (const key of ["fullName", "phone", "email", "city", "experienceYears", "transportType"] as const) data.set(key, values[key]);
+    for (const key of ["nationalId", "drivingLicense"] as const) if (values[key] instanceof File) data.set(key, values[key]);
+    data.set("website", "");
+    const result = await submitPublicForm("join_application", locale, data);
+    if (result.ok) { setSubmitted(true); form.reset(); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof JoinApplicationFormValues, error), setServerError);
   };
 
   return (
@@ -94,6 +101,8 @@ export function JoinApplicationSection({
               noValidate
               dir={direction}
             >
+              {serverError && <p role="alert" className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
+              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <div
                 className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2"
                 dir="ltr"
@@ -196,6 +205,7 @@ export function JoinApplicationSection({
                 <Button
                   type="submit"
                   size="lg"
+                  disabled={form.formState.isSubmitting}
                   className="mx-auto block h-14 w-full max-w-[255px] rounded-full text-base font-extrabold shadow-lg shadow-primary/20"
                 >
                   {content.submit}
