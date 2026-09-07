@@ -30,6 +30,8 @@ export type Dictionary = {
     primaryHeadingHighlight: string;
     description: string;
     imageAlt: string;
+    imageMediaId?: string;
+    imageUrl?: string;
   };
   statistics: {
     heading: string;
@@ -48,6 +50,8 @@ export type Dictionary = {
     featuresHeading: string;
     features: readonly string[];
     imageAlt: string;
+    imageMediaId?: string;
+    imageUrl?: string;
   };
   aboutVisionMission: {
     vision: {

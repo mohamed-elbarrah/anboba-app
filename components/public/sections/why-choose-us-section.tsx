@@ -3,6 +3,8 @@ import { Check } from "lucide-react";
 import type { Dictionary } from "@/lib/dictionaries";
 import { ANBOBA_IMAGE_DIMENSIONS } from "@/lib/public-images";
 
+const isExternalSource = (src: string) => src.startsWith("https:");
+
 type WhyChooseUsContent = Dictionary["whyChooseUs"];
 type WhyChooseUsVariant = "default" | "about";
 type WhyChooseUsHeadingLevel = "h1" | "h2";
@@ -12,11 +14,13 @@ export function WhyChooseUsSection({
   variant = "default",
   headingLevel = "h2",
   locale = "ar",
+  imageSrc = "/images/anboba-img.png",
 }: {
   content: WhyChooseUsContent;
   variant?: WhyChooseUsVariant;
   headingLevel?: WhyChooseUsHeadingLevel;
   locale?: "ar" | "en";
+  imageSrc?: string;
 }) {
   const isAbout = variant === "about";
   const Heading = headingLevel;
@@ -50,14 +54,12 @@ export function WhyChooseUsSection({
 
         <div className="mt-14 grid items-center gap-12 [direction:ltr] sm:mt-16 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-20">
           <div className="flex justify-center lg:justify-start">
-            <Image
-              src="/images/anboba-img.png"
-              alt={content.imageAlt}
-              width={ANBOBA_IMAGE_DIMENSIONS.width}
-              height={ANBOBA_IMAGE_DIMENSIONS.height}
-              sizes="(max-width: 639px) 260px, (max-width: 1023px) 340px, 430px"
-              className="h-auto w-[min(84vw,360px)] object-contain sm:w-[min(52vw,360px)] lg:w-full lg:max-w-[620px]"
-            />
+            {isExternalSource(imageSrc) ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={imageSrc} alt={content.imageAlt} width={ANBOBA_IMAGE_DIMENSIONS.width} height={ANBOBA_IMAGE_DIMENSIONS.height} className="h-auto w-[min(84vw,360px)] object-contain sm:w-[min(52vw,360px)] lg:w-full lg:max-w-[620px]" />
+            ) : (
+              <Image src={imageSrc} alt={content.imageAlt} width={ANBOBA_IMAGE_DIMENSIONS.width} height={ANBOBA_IMAGE_DIMENSIONS.height} sizes="(max-width: 639px) 260px, (max-width: 1023px) 340px, 430px" className="h-auto w-[min(84vw,360px)] object-contain sm:w-[min(52vw,360px)] lg:w-full lg:max-w-[620px]" />
+            )}
           </div>
 
           <div dir={locale === "ar" ? "rtl" : "ltr"} className="flex flex-col gap-6 text-start">

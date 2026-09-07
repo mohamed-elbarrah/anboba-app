@@ -31,9 +31,9 @@ export default async function EnglishHome() {
   return (
     <main>
       <HeroSection content={page.sections.hero} locale="en" showcaseMedia={page.heroShowcaseMedia} />
-      <ServiceOverviewSection content={page.sections.service_overview} locale="en" />
+      <ServiceOverviewSection content={page.sections.service_overview} locale="en" imageSrc={page.homeImageMedia?.serviceOverview ?? undefined} />
       <StatisticsSection content={page.sections.statistics} locale="en" />
-      <WhyChooseUsSection content={page.sections.why_choose_us} locale="en" />
+      <WhyChooseUsSection content={page.sections.why_choose_us} locale="en" imageSrc={page.homeImageMedia?.whyChooseUs ?? undefined} />
       <ServiceBenefitsSection content={page.sections.service_benefits} locale="en" />
       {isFlexibleForm(page.sections.join_application, "en") ? <section className="bg-background px-5 py-16 sm:px-8 sm:py-24" dir="ltr"><div className="mx-auto max-w-[900px] rounded-[2rem] border border-white/90 bg-white/35 p-6 shadow-xl sm:p-8"><FlexibleFormRenderer definition={page.sections.join_application} locale="en" /></div></section> : <JoinApplicationSection content={page.sections.join_application} locale="en" />}
       <FaqSupportSection

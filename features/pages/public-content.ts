@@ -23,6 +23,7 @@ export async function getPublishedPublicPage(locale: Locale, slug: string): Prom
       return {
         ...page,
         heroShowcaseMedia: await resolveHeroShowcaseMedia(page.sections.hero),
+        homeImageMedia: await resolveHomeImageMedia(page.sections.service_overview, page.sections.why_choose_us),
       };
     }
     if (process.env.NODE_ENV !== "development") {
@@ -73,6 +74,10 @@ async function fallbackPage(locale: Locale, slug: string): Promise<AdaptedPageCo
     revision: fallbackRevision(slug, dictionary),
     sections,
     heroShowcaseMedia: { left: null, right: null },
+    homeImageMedia: {
+      serviceOverview: (dictionary.serviceOverview.imageUrl ?? "/images/anboba-img.png"),
+      whyChooseUs: (dictionary.whyChooseUs.imageUrl ?? "/images/anboba-img.png"),
+    },
   } as AdaptedPageContent;
 }
 
@@ -97,6 +102,20 @@ function fallbackSections(dictionary: Dictionary, locale: Locale, slug: string) 
   };
   const keys = slug === "" ? ["hero", "service_overview", "statistics", "why_choose_us", "service_benefits", "join_application", "faq_support"] : slug === "about" ? ["why_choose_us", "vision_mission"] : slug === "contact" ? ["contact"] : slug === "join-us" ? ["partner_registration"] : ["policies"];
   return Object.fromEntries(keys.map((key) => [key, source[key]])) as AdaptedPageContent["sections"];
+}
+
+async function resolveHomeImageMedia(
+  serviceOverview: Dictionary["serviceOverview"] | undefined,
+  whyChooseUs: Dictionary["whyChooseUs"] | undefined,
+) {
+  const [overview, why] = await Promise.all([
+    resolvePublicImagePath(serviceOverview?.imageMediaId, serviceOverview?.imageUrl),
+    resolvePublicImagePath(whyChooseUs?.imageMediaId, whyChooseUs?.imageUrl),
+  ]);
+  return {
+    serviceOverview: overview ?? "/images/anboba-img.png",
+    whyChooseUs: why ?? "/images/anboba-img.png",
+  };
 }
 
 async function resolveHeroShowcaseMedia(hero: Dictionary["hero"] | undefined): Promise<HeroShowcaseMedia> {

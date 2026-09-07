@@ -88,9 +88,14 @@ async function validateSections(tx: Parameters<Parameters<ReturnType<typeof getD
       else parseSectionContent(key, section.content);
     } catch { return false; }
     const expectedForm = builtInFormForSection[key as keyof typeof builtInFormForSection];
-    // The three executable built-in sections must always point at their stable
-    // seeded form identity. Never fall back to copied section content.
-    if (expectedForm) {
+    if (key === "join_application") {
+      // The home section may use any active form created in the form builder.
+      // Built-in forms retain their renderer contract; custom forms use the
+      // flexible renderer. In both cases the reference is stored as an ID.
+      if (section.formId === null) return false;
+      const form = (await tx.select().from(forms).where(eq(forms.id, BigInt(section.formId))).limit(1))[0];
+      if (!form || form.archived || (form.kind === "system" && form.rendererKey !== "join_application") || (form.kind === "user" && form.rendererKey !== "generic")) return false;
+    } else if (expectedForm) {
       if (section.formId === null) return false;
       const form = (await tx.select().from(forms).where(eq(forms.id, BigInt(section.formId))).limit(1))[0];
       if (!form || form.archived || form.kind !== "system" || form.formKey !== expectedForm || form.rendererKey !== expectedForm) return false;

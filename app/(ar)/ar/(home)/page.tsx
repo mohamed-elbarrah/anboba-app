@@ -26,18 +26,44 @@ export default async function ArabicHome() {
 
   return (
     <main>
-      <HeroSection content={page.sections.hero} locale="ar" showcaseMedia={page.heroShowcaseMedia} />
-      <ServiceOverviewSection content={page.sections.service_overview} locale="ar" />
+      <HeroSection
+        content={page.sections.hero}
+        locale="ar"
+        showcaseMedia={page.heroShowcaseMedia}
+      />
+      <ServiceOverviewSection
+        content={page.sections.service_overview}
+        locale="ar"
+        imageSrc={page.homeImageMedia?.serviceOverview ?? undefined}
+      />
       <StatisticsSection content={page.sections.statistics} locale="ar" />
-      <WhyChooseUsSection content={page.sections.why_choose_us} locale="ar" />
-      <ServiceBenefitsSection content={page.sections.service_benefits} locale="ar" />
+      <WhyChooseUsSection
+        content={page.sections.why_choose_us}
+        locale="ar"
+        imageSrc={page.homeImageMedia?.whyChooseUs ?? undefined}
+      />
+      <ServiceBenefitsSection
+        content={page.sections.service_benefits}
+        locale="ar"
+      />
       {isFlexibleForm(page.sections.join_application) ? (
-        <section className="bg-background px-5 py-16 sm:px-8 sm:py-24" dir="rtl">
+        <section
+          className="bg-background px-5 py-16 sm:px-8 sm:py-24"
+          dir="rtl"
+        >
           <div className="mx-auto max-w-[900px] rounded-[2rem] border border-white/90 bg-white/35 p-6 shadow-xl sm:p-8">
-            <FlexibleFormRenderer definition={page.sections.join_application} locale="ar" />
+            <FlexibleFormRenderer
+              definition={page.sections.join_application}
+              locale="ar"
+            />
           </div>
         </section>
-      ) : <JoinApplicationSection content={page.sections.join_application} locale="ar" />}
+      ) : (
+        <JoinApplicationSection
+          content={page.sections.join_application}
+          locale="ar"
+        />
+      )}
       <FaqSupportSection
         content={page.sections.faq_support}
         faqHref="/ar/faq"

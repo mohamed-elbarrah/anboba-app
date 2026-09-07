@@ -44,15 +44,15 @@ const mediaId = z.string().regex(/^[1-9]\d*$/, "Media ID must be a positive inte
 const imageUrl = z.preprocess((value) => value === "" ? undefined : value, safeUrlSchema.refine((value) => (value.startsWith("/") && !value.startsWith("//")) || value.startsWith("https:"), "Only relative or HTTPS image URLs are allowed").optional());
 
 export const heroSchema = z.object({ headingStart: nonEmpty, headingHighlightGas: nonEmpty, headingMiddle: nonEmpty, headingHighlightHome: nonEmpty, description: nonEmpty, cta: nonEmpty, showcase: z.object({ heading: nonEmpty, guaranteeLabel: nonEmpty, guarantees: fixedArray(nonEmpty, 4), phoneLeftAlt: nonEmpty, phoneRightAlt: nonEmpty, phoneLeftMediaId: mediaId.optional(), phoneRightMediaId: mediaId.optional(), phoneLeftImageUrl: imageUrl, phoneRightImageUrl: imageUrl }).optional() });
-export const serviceOverviewSchema = z.object({ highlightedHeading: nonEmpty, primaryHeadingStart: nonEmpty, primaryHeadingHighlight: nonEmpty, description: nonEmpty, imageAlt: nonEmpty });
+export const serviceOverviewSchema = z.object({ highlightedHeading: nonEmpty, primaryHeadingStart: nonEmpty, primaryHeadingHighlight: nonEmpty, description: nonEmpty, imageAlt: nonEmpty, imageMediaId: mediaId.optional(), imageUrl: imageUrl });
 export const statisticsSchema = z.object({ heading: nonEmpty, items: fixedArray(z.object({ value: nonEmpty, label: nonEmpty }), 4) });
-export const whyChooseUsSchema = z.object({ eyebrow: nonEmpty, headingStart: nonEmpty, headingHighlight: nonEmpty, subtitle: nonEmpty, cardHeading: nonEmpty, cardParagraph: nonEmpty, featuresHeading: nonEmpty, features: fixedArray(nonEmpty, 4), imageAlt: nonEmpty });
+export const whyChooseUsSchema = z.object({ eyebrow: nonEmpty, headingStart: nonEmpty, headingHighlight: nonEmpty, subtitle: nonEmpty, cardHeading: nonEmpty, cardParagraph: nonEmpty, featuresHeading: nonEmpty, features: fixedArray(nonEmpty, 4), imageAlt: nonEmpty, imageMediaId: mediaId.optional(), imageUrl: imageUrl });
 export const visionMissionSchema = z.object({ vision: z.object({ heading: nonEmpty, description: nonEmpty }), mission: z.object({ heading: nonEmpty, description: nonEmpty }) });
 export const serviceBenefitsSchema = z.object({ eyebrow: nonEmpty, headingHighlight: nonEmpty, headingRest: nonEmpty, subtitle: nonEmpty, items: fixedArray(z.object({ title: nonEmpty, description: nonEmpty, icon: z.enum(["clock", "shield", "send", "headset"]) }), 4) });
 export const joinApplicationSchema = z.object({ validation: joinValidation, heading: nonEmpty, description: nonEmpty, placeholders: z.object({ fullName: nonEmpty, phone: nonEmpty, email: nonEmpty, city: nonEmpty }), countryCode: nonEmpty, countryLabel: nonEmpty, fields: z.object({ fullName: nonEmpty, phone: nonEmpty, email: nonEmpty, city: nonEmpty, experienceYears: nonEmpty, transportType: nonEmpty, nationalId: nonEmpty, drivingLicense: nonEmpty }), selectPlaceholders: z.object({ experienceYears: nonEmpty, transportType: nonEmpty }), experienceOptions: fixedArray(nonEmpty, 4), transportOptions: fixedArray(nonEmpty, 3), fileHint: nonEmpty, submit: nonEmpty, benefits: fixedArray(nonEmpty, 3), note: nonEmpty, success: nonEmpty });
 
 /** Section-owned copy is deliberately separate from the reusable form contract. */
-export const joinApplicationSectionSchema = joinApplicationSchema.pick({ heading: true, description: true, countryCode: true, countryLabel: true, fileHint: true, benefits: true, note: true }).strict();
+export const joinApplicationSectionSchema = joinApplicationSchema.pick({ heading: true, description: true, countryCode: true, countryLabel: true, benefits: true, note: true }).strict();
 export const faqSupportSchema = z.object({ faq: z.object({ heading: nonEmpty, description: nonEmpty, cta: nonEmpty, href: internalOrHttpsUrl }), support: z.object({ heading: nonEmpty, description: nonEmpty, cta: nonEmpty, href: internalOrHttpsUrl }) });
 export const contactSchema = z.object({ validation: contactValidation, eyebrow: nonEmpty, headingStart: nonEmpty, headingHighlight: nonEmpty, description: nonEmpty, details, fields: z.object({ fullName: nonEmpty, phone: nonEmpty, message: nonEmpty }), placeholders: z.object({ fullName: nonEmpty, phone: nonEmpty, message: nonEmpty }), countryCode: nonEmpty, countryLabel: nonEmpty, submit: nonEmpty, success: nonEmpty });
 export const contactSectionSchema = contactSchema.pick({ eyebrow: true, headingStart: true, headingHighlight: true, description: true, details: true, countryCode: true, countryLabel: true }).strict();
@@ -70,7 +70,7 @@ export const sectionOwnedFormSchemas = { contact: contactSectionSchema, join_app
 export type SectionOwnedFormKey = keyof typeof sectionOwnedFormSchemas;
 const sectionOwnedKeys: Record<SectionOwnedFormKey, readonly string[]> = {
   contact: ["eyebrow", "headingStart", "headingHighlight", "description", "details", "countryCode", "countryLabel"],
-  join_application: ["heading", "description", "countryCode", "countryLabel", "fileHint", "benefits", "note"],
+  join_application: ["heading", "description", "countryCode", "countryLabel", "benefits", "note"],
   partner_registration: ["eyebrow", "headingStart", "headingHighlight", "description", "countryCode", "countryLabel"],
 };
 /** Runtime projection accepts historical full content_json but only retains section-owned keys. */

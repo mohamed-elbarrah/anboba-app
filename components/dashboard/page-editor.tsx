@@ -6,6 +6,7 @@ import { AlertCircle, Check, Eye, Loader2, Save, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HomeSectionEditor } from "@/components/dashboard/home-section-editor";
 import type { MediaItem } from "@/features/media/types";
+import type { DashboardFormOption } from "@/features/forms/queries";
 import {
   Card,
   CardContent,
@@ -119,9 +120,11 @@ export function PageEditor({
   initialErrors,
   isHome = false,
   media = [],
+  forms = [],
 }: {
   isHome?: boolean;
   media?: readonly MediaItem[];
+  forms?: readonly DashboardFormOption[];
   initialDocuments: Record<Locale, EditorDocument | null>;
   initialErrors: Record<Locale, string | null>;
 }) {
@@ -159,6 +162,13 @@ export function PageEditor({
     }
     setError(null);
     setMessage(null);
+  };
+
+  const setSectionForm = (key: SectionKey, formId: string | null) => {
+    update((document) => ({
+      ...document,
+      sections: document.sections.map((section) => section.key === key ? { ...section, formId } : section),
+    }));
   };
 
   const setSection = (key: SectionKey, content: unknown) => {
@@ -346,7 +356,10 @@ export function PageEditor({
           <HomeSectionEditor
             key={section.key}
             section={section}
+            locale={locale}
             media={media}
+            forms={forms}
+            onFormChange={(formId) => setSectionForm(section.key, formId)}
             update={(content) => setSection(section.key, content)}
           />
         ) : (

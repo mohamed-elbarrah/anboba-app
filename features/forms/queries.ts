@@ -76,7 +76,18 @@ export async function getFormInventory(): Promise<FormInventory[]> {
 }
 
 
-export async function listForms(options?: { includeArchived?: boolean }) {
+export type DashboardFormOption = {
+  id: string;
+  formKey: string;
+  rendererKey: string;
+  kind: "system" | "user";
+  archived: boolean;
+  publicPreviewUrl: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export async function listForms(options?: { includeArchived?: boolean }): Promise<DashboardFormOption[]> {
   const rows = await getDb().select().from(forms).where(options?.includeArchived ? undefined : eq(forms.archived, false)).orderBy(asc(forms.formKey));
   return rows.map((row) => ({ id: row.id.toString(), formKey: row.formKey, rendererKey: row.rendererKey, kind: row.kind, archived: row.archived, publicPreviewUrl: row.rendererKey === "contact" ? "/ar/contact" : row.rendererKey === "join_application" ? "/ar" : row.rendererKey === "partner_registration" ? "/ar/join-us" : null, createdAt: row.createdAt.toISOString(), updatedAt: row.updatedAt.toISOString() }));
 }

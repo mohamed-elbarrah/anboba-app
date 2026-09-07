@@ -26,11 +26,13 @@ export type AdaptedSections<K extends SectionKey = SectionKey> = {
   [P in K]: SectionContentMap[P];
 };
 export type HeroShowcaseMedia = { left: string | null; right: string | null };
+export type HomeImageMedia = { serviceOverview: string | null; whyChooseUs: string | null };
 export type AdaptedPageContent = {
   revision: PageRevision;
   sections: AdaptedSections;
   /** Resolved on the server; absent for callers that only adapt CMS sections. */
   heroShowcaseMedia?: HeroShowcaseMedia;
+  homeImageMedia?: HomeImageMedia;
 };
 
 function expectedDefinition(slug: string) {
