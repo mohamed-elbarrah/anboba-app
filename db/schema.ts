@@ -434,6 +434,8 @@ export const authLoginAttempts = mysqlTable(
 );
 
 export const mediaKinds = ["image", "video"] as const;
+export const navigationPlacements = ["header", "footer"] as const;
+export const navigationTargets = ["_self", "_blank"] as const;
 
 export const policyDocuments = mysqlTable(
   "policy_documents",
@@ -504,6 +506,355 @@ export const media = mysqlTable(
     uniqueIndex("media_storage_key_unique").on(table.storageKey),
     index("media_kind_created_idx").on(table.kind, table.createdAt),
     index("media_uploaded_by_idx").on(table.uploadedBy),
+  ],
+);
+
+/** Stable site-wide branding identity; revisions publish branding and navigation atomically. */
+export const siteBranding = mysqlTable(
+  "site_branding",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    brandingKey: varchar("branding_key", { length: 50 }).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [uniqueIndex("site_branding_key_unique").on(table.brandingKey)],
+);
+
+/** Immutable, admin-authored site shell revisions. */
+export const brandingRevisions = mysqlTable(
+  "branding_revisions",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    brandingId: id("branding_id")
+      .notNull()
+      .references(() => siteBranding.id, { onDelete: "restrict", onUpdate: "cascade" }),
+    revisionNumber: int("revision_number", { unsigned: true }).notNull(),
+    status: mysqlEnum("status", revisionStatuses).notNull().default("draft"),
+    logoMediaId: id("logo_media_id").references(() => media.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+    darkLogoMediaId: id("dark_logo_media_id").references(() => media.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+    faviconMediaId: id("favicon_media_id").references(() => media.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+    createdBy: id("created_by").notNull().references(() => admins.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_revisions_branding_number_unique").on(
+      table.brandingId,
+      table.revisionNumber,
+    ),
+    // Required parent key for ownership-enforcing pointer and item foreign keys.
+    uniqueIndex("branding_revisions_branding_id_id_unique").on(table.brandingId, table.id),
+    index("branding_revisions_branding_status_idx").on(table.brandingId, table.status),
+  ],
+);
+
+export const brandingRevisionLocalizations = mysqlTable(
+  "branding_revision_localizations",
+  {
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    siteName: varchar("site_name", { length: 255 }).notNull(),
+    tagline: varchar("tagline", { length: 500 }),
+    footerText: text("footer_text"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.revisionId, table.locale] }),
+    foreignKey({
+      name: "branding_revision_localizations_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [brandingRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+export const brandingRevisionPointers = mysqlTable(
+  "branding_revision_pointers",
+  {
+    brandingId: id("branding_id").primaryKey(),
+    draftRevisionId: id("draft_revision_id"),
+    publishedRevisionId: id("published_revision_id"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    foreignKey({
+      name: "branding_revision_pointers_branding_fk",
+      columns: [table.brandingId],
+      foreignColumns: [siteBranding.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+    foreignKey({
+      name: "branding_revision_pointers_draft_fk",
+      columns: [table.brandingId, table.draftRevisionId],
+      foreignColumns: [brandingRevisions.brandingId, brandingRevisions.id],
+    }).onDelete("restrict").onUpdate("restrict"),
+    foreignKey({
+      name: "branding_revision_pointers_published_fk",
+      columns: [table.brandingId, table.publishedRevisionId],
+      foreignColumns: [brandingRevisions.brandingId, brandingRevisions.id],
+    }).onDelete("restrict").onUpdate("restrict"),
+  ],
+);
+
+/** Localized, revision-scoped header/footer navigation tree. */
+export const brandingNavigationItems = mysqlTable(
+  "branding_navigation_items",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    placement: mysqlEnum("placement", navigationPlacements).notNull(),
+    itemKey: varchar("item_key", { length: 100 }).notNull(),
+    parentId: id("parent_id"),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    href: varchar("href", { length: 500 }).notNull(),
+    openInNewTab: boolean("open_in_new_tab").notNull().default(false),
+    iconMediaId: id("icon_media_id").references(() => media.id, {
+      onDelete: "restrict",
+      onUpdate: "cascade",
+    }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_navigation_items_revision_key_unique").on(
+      table.revisionId,
+      table.locale,
+      table.placement,
+      table.itemKey,
+    ),
+    uniqueIndex("branding_navigation_items_revision_id_unique").on(
+      table.revisionId,
+      table.locale,
+      table.placement,
+      table.id,
+    ),
+    index("branding_navigation_items_revision_placement_idx").on(
+      table.revisionId,
+      table.locale,
+      table.placement,
+      table.sortOrder,
+    ),
+    foreignKey({
+      name: "branding_navigation_items_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [brandingRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+    foreignKey({
+      name: "branding_navigation_items_parent_fk",
+      columns: [table.revisionId, table.locale, table.placement, table.parentId],
+      foreignColumns: [
+        table.revisionId,
+        table.locale,
+        table.placement,
+        table.id,
+      ],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Named, revision-scoped menus are the canonical navigation sources. */
+export const brandingRevisionMenus = mysqlTable(
+  "branding_revision_menus",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    menuKey: varchar("menu_key", { length: 100 }).notNull(),
+    name: varchar("name", { length: 255 }).notNull(),
+    placement: mysqlEnum("placement", navigationPlacements).notNull(),
+    assignmentKey: varchar("assignment_key", { length: 100 }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_revision_menus_revision_key_unique").on(table.revisionId, table.locale, table.menuKey),
+    uniqueIndex("branding_revision_menus_revision_id_unique").on(table.revisionId, table.locale, table.id),
+    index("branding_revision_menus_revision_placement_idx").on(table.revisionId, table.locale, table.placement),
+    index("branding_revision_menus_assignment_idx").on(table.revisionId, table.locale, table.assignmentKey),
+    foreignKey({
+      name: "branding_revision_menus_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [brandingRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+export const brandingRevisionMenuItems = mysqlTable(
+  "branding_revision_menu_items",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    menuId: id("menu_id").notNull(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    itemKey: varchar("item_key", { length: 100 }).notNull(),
+    parentId: id("parent_id"),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    label: varchar("label", { length: 255 }).notNull(),
+    href: varchar("href", { length: 500 }).notNull(),
+    visible: boolean("visible").notNull().default(true),
+    target: mysqlEnum("target", navigationTargets).notNull().default("_self"),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_revision_menu_items_menu_key_unique").on(table.menuId, table.itemKey),
+    uniqueIndex("branding_revision_menu_items_menu_order_unique").on(table.menuId, table.sortOrder),
+    uniqueIndex("branding_revision_menu_items_menu_id_unique").on(table.menuId, table.id),
+    index("branding_revision_menu_items_revision_locale_idx").on(table.revisionId, table.locale),
+    foreignKey({
+      name: "branding_revision_menu_items_menu_fk",
+      columns: [table.revisionId, table.locale, table.menuId],
+      foreignColumns: [brandingRevisionMenus.revisionId, brandingRevisionMenus.locale, brandingRevisionMenus.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+    foreignKey({
+      name: "branding_revision_menu_items_parent_fk",
+      columns: [table.menuId, table.parentId],
+      foreignColumns: [table.menuId, table.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+
+export const footerBlockTypes = [
+  "link_group",
+  "text",
+  "contact",
+  "social_links",
+] as const;
+
+/** One localized footer layout per branding revision and locale. */
+export const brandingFooterLayouts = mysqlTable(
+  "branding_footer_layouts",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_footer_layouts_revision_locale_unique").on(table.revisionId, table.locale),
+    uniqueIndex("branding_footer_layouts_revision_locale_id_unique").on(
+      table.revisionId,
+      table.locale,
+      table.id,
+    ),
+    foreignKey({
+      name: "branding_footer_layouts_revision_fk",
+      columns: [table.revisionId],
+      foreignColumns: [brandingRevisions.id],
+    }).onDelete("cascade").onUpdate("cascade"),
+  ],
+);
+
+/** Localized columns keep presentation order and headings separate from block content. */
+export const brandingFooterColumns = mysqlTable(
+  "branding_footer_columns",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    layoutId: id("layout_id").notNull(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    columnKey: varchar("column_key", { length: 100 }).notNull(),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    heading: varchar("heading", { length: 255 }),
+    /** Optional canonical menu assignment; legacy footer blocks remain readable. */
+    assignedMenuKey: varchar("assigned_menu_key", { length: 100 }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_footer_columns_layout_key_unique").on(
+      table.layoutId,
+      table.columnKey,
+    ),
+    uniqueIndex("branding_footer_columns_layout_order_unique").on(
+      table.layoutId,
+      table.sortOrder,
+    ),
+    uniqueIndex("branding_footer_columns_layout_revision_locale_id_unique").on(
+      table.layoutId,
+      table.revisionId,
+      table.locale,
+      table.id,
+    ),
+    index("branding_footer_columns_revision_locale_idx").on(table.revisionId, table.locale),
+    foreignKey({
+      name: "branding_footer_columns_layout_fk",
+      columns: [table.revisionId, table.locale, table.layoutId],
+      foreignColumns: [
+        brandingFooterLayouts.revisionId,
+        brandingFooterLayouts.locale,
+        brandingFooterLayouts.id,
+      ],
+    }).onDelete("cascade").onUpdate("cascade"),
+    foreignKey({
+      name: "branding_footer_columns_menu_fk",
+      columns: [table.revisionId, table.locale, table.assignedMenuKey],
+      foreignColumns: [brandingRevisionMenus.revisionId, brandingRevisionMenus.locale, brandingRevisionMenus.menuKey],
+    }).onDelete("restrict").onUpdate("cascade"),
+  ],
+);
+
+/** Allowlisted, localized footer blocks. contentJson is structured data, never executable HTML. */
+export const brandingFooterBlocks = mysqlTable(
+  "branding_footer_blocks",
+  {
+    id: id("id").autoincrement().primaryKey(),
+    columnId: id("column_id").notNull(),
+    layoutId: id("layout_id").notNull(),
+    revisionId: id("revision_id").notNull(),
+    locale: mysqlEnum("locale", locales).notNull(),
+    blockKey: varchar("block_key", { length: 100 }).notNull(),
+    blockType: mysqlEnum("block_type", footerBlockTypes).notNull(),
+    sortOrder: int("sort_order", { unsigned: true }).notNull(),
+    contentJson: json("content_json").notNull(),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (table) => [
+    uniqueIndex("branding_footer_blocks_column_key_unique").on(table.columnId, table.blockKey),
+    uniqueIndex("branding_footer_blocks_column_order_unique").on(table.columnId, table.sortOrder),
+    index("branding_footer_blocks_revision_locale_type_idx").on(
+      table.revisionId,
+      table.locale,
+      table.blockType,
+    ),
+    // Keep the layout-leading access path explicit for footer reads and the
+    // composite ownership foreign key; the column-leading unique indexes do
+    // not provide this path.
+    index("branding_footer_blocks_layout_revision_locale_idx").on(
+      table.layoutId,
+      table.revisionId,
+      table.locale,
+      table.columnId,
+    ),
+    foreignKey({
+      name: "branding_footer_blocks_column_fk",
+      columns: [table.layoutId, table.revisionId, table.locale, table.columnId],
+      foreignColumns: [
+        brandingFooterColumns.layoutId,
+        brandingFooterColumns.revisionId,
+        brandingFooterColumns.locale,
+        brandingFooterColumns.id,
+      ],
+    }).onDelete("cascade").onUpdate("cascade"),
   ],
 );
 
@@ -596,3 +947,23 @@ export type Submission = typeof submissions.$inferSelect;
 export type SubmissionAttachment = typeof submissionAttachments.$inferSelect;
 export type Media = typeof media.$inferSelect;
 export type NewMedia = typeof media.$inferInsert;
+export type SiteBranding = typeof siteBranding.$inferSelect;
+export type NewSiteBranding = typeof siteBranding.$inferInsert;
+export type BrandingRevision = typeof brandingRevisions.$inferSelect;
+export type NewBrandingRevision = typeof brandingRevisions.$inferInsert;
+export type BrandingRevisionLocalization = typeof brandingRevisionLocalizations.$inferSelect;
+export type NewBrandingRevisionLocalization = typeof brandingRevisionLocalizations.$inferInsert;
+export type BrandingRevisionPointers = typeof brandingRevisionPointers.$inferSelect;
+export type NewBrandingRevisionPointers = typeof brandingRevisionPointers.$inferInsert;
+export type BrandingNavigationItem = typeof brandingNavigationItems.$inferSelect;
+export type NewBrandingNavigationItem = typeof brandingNavigationItems.$inferInsert;
+export type BrandingRevisionMenu = typeof brandingRevisionMenus.$inferSelect;
+export type NewBrandingRevisionMenu = typeof brandingRevisionMenus.$inferInsert;
+export type BrandingRevisionMenuItem = typeof brandingRevisionMenuItems.$inferSelect;
+export type NewBrandingRevisionMenuItem = typeof brandingRevisionMenuItems.$inferInsert;
+export type BrandingFooterLayout = typeof brandingFooterLayouts.$inferSelect;
+export type NewBrandingFooterLayout = typeof brandingFooterLayouts.$inferInsert;
+export type BrandingFooterColumn = typeof brandingFooterColumns.$inferSelect;
+export type NewBrandingFooterColumn = typeof brandingFooterColumns.$inferInsert;
+export type BrandingFooterBlock = typeof brandingFooterBlocks.$inferSelect;
+export type NewBrandingFooterBlock = typeof brandingFooterBlocks.$inferInsert;

@@ -28,13 +28,52 @@ let pool: mysql.Pool | undefined;
 let database: MySql2Database<typeof schema> | undefined;
 
 /**
+ * Opt-in timing diagnostics. Deliberately logs only the operation name and
+ * elapsed time; SQL text, bind values, credentials, and result payloads are
+ * never included.
+ */
+function instrumentPool(activePool: mysql.Pool) {
+  if (process.env.DB_QUERY_TIMING !== "1") {
+    return activePool;
+  }
+
+  return new Proxy(activePool, {
+    get(target, property, receiver) {
+      const value = Reflect.get(target, property, receiver);
+      if (property !== "query" && property !== "execute" && property !== "getConnection") {
+        return value;
+      }
+
+      return (...args: unknown[]) => {
+        const startedAt = performance.now();
+        const report = () => {
+          console.debug(`[db] ${String(property)} completed in ${(performance.now() - startedAt).toFixed(1)}ms`);
+        };
+
+        try {
+          const result = Reflect.apply(value as (...callArgs: unknown[]) => unknown, target, args);
+          if (result && typeof (result as Promise<unknown>).finally === "function") {
+            return (result as Promise<unknown>).finally(report);
+          }
+          report();
+          return result;
+        } catch (error) {
+          report();
+          throw error;
+        }
+      };
+    },
+  }) as mysql.Pool;
+}
+
+/**
  * CLI/server-only connection primitive. Keep this module out of UI imports:
  * database credentials must never be part of a browser module graph.
  * The pool and Drizzle client are created only when first used.
  */
 export function getPool() {
   if (!pool) {
-    pool = mysql.createPool({
+    pool = instrumentPool(mysql.createPool({
       host: requiredEnv("DB_HOST"),
       port: databasePort(),
       database: requiredEnv("DB_NAME"),
@@ -43,7 +82,7 @@ export function getPool() {
       waitForConnections: true,
       connectionLimit: 10,
       enableKeepAlive: true,
-    });
+    }));
   }
 
   return pool;

@@ -1,0 +1,1 @@
+CREATE INDEX `branding_footer_blocks_layout_revision_locale_idx` ON `branding_footer_blocks` (`layout_id`,`revision_id`,`locale`,`column_id`);

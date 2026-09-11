@@ -131,8 +131,8 @@ export type Dictionary = {
     phone: string;
     emailLabel: string;
     email: string;
-    locationLabel: string;
-    location: string;
+    addressLabel: string;
+    address: string;
     googlePlay: string;
     appStore: string;
     comingSoon: string;

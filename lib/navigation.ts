@@ -13,9 +13,11 @@ export function getDownloadAppHref(locale: Locale) {
 }
 
 export type NavigationItem = {
-  key: "home" | "about" | "contact" | "joinUs";
+  /** CMS item keys are extensible; the built-in keys retain active-link semantics. */
+  key: string;
   label: string;
   href: string;
+  openInNewTab?: boolean;
 };
 
 export type LocaleNavigation = {
@@ -27,8 +29,9 @@ export type LocaleNavigation = {
 export function isNavigationItemActive(pathname: string, item: NavigationItem): boolean {
   const normalizedPathname = pathname.replace(/\/$/, "") || "/";
   const normalizedHref = item.href.replace(/\/$/, "") || "/";
+  const isHome = item.key === "home" || /^\/[^/]+\/?$/.test(normalizedHref);
 
-  return item.key === "home"
+  return isHome
     ? normalizedPathname === normalizedHref
     : normalizedPathname === normalizedHref || normalizedPathname.startsWith(`${normalizedHref}/`);
 }
@@ -40,8 +43,8 @@ export function getLocalizedPathname(pathname: string, locale: Locale, nextLocal
   return segments.join("/") || `/${nextLocale}`;
 }
 
-export function getNavigation(locale: Locale, dictionary: Dictionary): LocaleNavigation {
-  return {
+export function getNavigation(locale: Locale, dictionary: Dictionary, branding?: { headerNavigation: CmsNavigationItem[] } | null): LocaleNavigation {
+  const fallback: LocaleNavigation = {
     items: [
       { key: "home", label: dictionary.pages.home, href: `/${locale}` },
       { key: "about", label: dictionary.pages.about, href: `/${locale}/about` },
@@ -53,4 +56,25 @@ export function getNavigation(locale: Locale, dictionary: Dictionary): LocaleNav
       href: getDownloadAppHref(locale),
     },
   };
+
+  if (!branding?.headerNavigation.length) return fallback;
+  // Public menus are intentionally flat. Treat legacy child rows as roots so
+  // an old parent relationship never hides a published link.
+  const items = branding.headerNavigation.filter((item) => isSafeHref(item.href));
+  if (!items.length) return fallback;
+  const cta = items.find((item) => /^(cta|download[_-]?app)$/i.test(item.itemKey));
+  return {
+    items: items.filter((item) => item !== cta).map(toNavigationItem),
+    cta: cta ? toNavigationItem(cta) : fallback.cta,
+  };
+}
+
+function isSafeHref(href: string) {
+  return !/[\u0000-\u0020\u007f\\]/.test(href) && !href.startsWith("//") && (href.startsWith("/") || /^https:\/\//.test(href));
+}
+
+type CmsNavigationItem = { itemKey: string; label: string; href: string; openInNewTab: boolean; parentId: string | null };
+
+function toNavigationItem(item: CmsNavigationItem): NavigationItem {
+  return { key: item.itemKey, label: item.label, href: item.href, openInNewTab: item.openInNewTab };
 }

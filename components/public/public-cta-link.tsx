@@ -11,5 +11,5 @@ type PublicCtaLinkProps = {
 };
 
 export function PublicCtaLink({ href, children, className }: PublicCtaLinkProps) {
-  return <Link href={href} className={cn(ctaClassName, className)}>{children}</Link>;
+  return <Link href={href} rel={/^https:\/\//i.test(href) ? "noopener noreferrer" : undefined} className={cn(ctaClassName, className)}>{children}</Link>;
 }

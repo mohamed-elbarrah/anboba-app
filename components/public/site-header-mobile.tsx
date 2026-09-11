@@ -58,7 +58,7 @@ export function SiteHeaderMobile({
                   <Drawer.Close
                     key={item.key}
                     nativeButton={false}
-                    render={<Link href={item.href} aria-current={active ? "page" : undefined} />}
+                    render={<Link href={item.href} target={item.openInNewTab ? "_blank" : undefined} rel={item.openInNewTab || /^https:\/\//i.test(item.href) ? "noopener noreferrer" : undefined} aria-current={active ? "page" : undefined} />}
                     className={cn("rounded-xl px-4 py-3 text-base transition-colors hover:bg-primary/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary", active && "bg-primary/10 font-semibold text-primary")}
                   >
                     {item.label}

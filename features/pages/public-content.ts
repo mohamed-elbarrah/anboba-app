@@ -1,5 +1,6 @@
 import "server-only";
 
+import { cache } from "react";
 import { getDictionary, type Dictionary } from "@/lib/dictionaries";
 import { getArabicLegalDocument, getEnglishLegalDocument, type LegalDocument, type LegalDocumentSlug } from "@/content/legal/policies";
 import { getPublishedPolicies, getPublishedPolicy } from "@/features/policies/queries";
@@ -15,7 +16,10 @@ import { resolvePublicImagePath } from "@/features/media/queries";
  * before the reviewed content seed has been run; production failures remain
  * visible and are never replaced with stale source content.
  */
-export async function getPublishedPublicPage(locale: Locale, slug: string): Promise<AdaptedPageContent> {
+// This is intentionally React's request cache, not Next's persistent data
+// cache. CMS publishes therefore become visible on the next request while
+// metadata and the page render share one content read within this request.
+export const getPublishedPublicPage = cache(async function getPublishedPublicPage(locale: Locale, slug: string): Promise<AdaptedPageContent> {
   try {
     const page = await getPage(locale, slug, "published");
     // An empty database is the supported fresh-checkout development state.
@@ -36,7 +40,7 @@ export async function getPublishedPublicPage(locale: Locale, slug: string): Prom
     console.warn(`[cms] Using development fallback because the database is unavailable`, error);
     return await fallbackPage(locale, slug);
   }
-}
+});
 
 /** Only infrastructure/setup failures may use the development content fallback. */
 function isUnavailableDatabaseError(error: unknown) {
@@ -148,16 +152,16 @@ function toLegalDocument(policy: Awaited<ReturnType<typeof getPublishedPolicies>
   return { slug: policy.slug as LegalDocumentSlug, title: policy.title, summary: policy.summary, sections: richTextToSections(policy.content) };
 }
 
-export async function getPublishedLegalDocuments(locale: Locale) {
+export const getPublishedLegalDocuments = cache(async function getPublishedLegalDocuments(locale: Locale) {
   try { return (await getPublishedPolicies(locale)).map(toLegalDocument); }
   catch (error) { if (process.env.NODE_ENV !== "development") throw error; return (await getPublishedPublicPage(locale, "policies")).sections.policies.documents; }
-}
+});
 
-export async function getPublishedLegalDocument(locale: Locale, slug: LegalDocumentSlug) {
+export const getPublishedLegalDocument = cache(async function getPublishedLegalDocument(locale: Locale, slug: LegalDocumentSlug) {
   try { const document = await getPublishedPolicy(locale, slug); if (document) return toLegalDocument(document); }
   catch (error) { if (process.env.NODE_ENV !== "development") throw error; }
   const documents = await getPublishedLegalDocuments(locale);
   const document = documents.find((item) => item.slug === slug);
   if (document) return document;
   throw new Error(`Published CMS legal document is missing: ${locale}:policies:${slug}`);
-}
+});

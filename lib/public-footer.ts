@@ -1,34 +1,29 @@
 import type { Dictionary } from "@/lib/dictionaries";
 import type { Locale } from "@/lib/locales";
+import type { PublicBrandingNavigationItem, PublicFooterLayout } from "@/features/settings/queries";
 
 export type FooterLink = {
-  key: "about" | "terms" | "privacy" | "refunds";
+  key: string;
   label: string;
   href: string;
+  openInNewTab?: boolean;
 };
 
 export type FooterContact = {
-  kind: "phone" | "email" | "location";
+  kind: "phone" | "email" | "address";
   label: string;
   value: string;
   href?: string;
 };
 
-/**
- * App store assets and destinations are intentionally not configured yet.
- * Replace this boundary with supplied badge assets and verified URLs later.
- */
-export type FooterAppStore = {
-  name: "googlePlay" | "appStore";
-  label: string;
-  available: false;
-};
-
 export type PublicFooterData = {
+  brandDescription: string;
+  siteName: string;
+  logoPath: string;
   links: FooterLink[];
   contacts: FooterContact[];
-  appStores: FooterAppStore[];
   whatsappHref: string;
+  layout: PublicFooterLayout | null;
 };
 
 /** Build the WhatsApp destination from the phone number shown in the footer. */
@@ -39,53 +34,54 @@ export function getWhatsAppHref(phone: string) {
 export function getPublicFooterData(
   locale: Locale,
   dictionary: Dictionary,
+  options?: {
+    branding?: { siteName: string; logoPath: string | null; footerText: string | null; footerNavigation: PublicBrandingNavigationItem[] } | null;
+    footerSettings?: Partial<Dictionary["footer"]> | null;
+    layout?: PublicFooterLayout | null;
+  },
 ): PublicFooterData {
+  const footer = { ...dictionary.footer };
+  for (const key of Object.keys(dictionary.footer) as (keyof Dictionary["footer"])[]) {
+    const value = options?.footerSettings?.[key];
+    if (typeof value === "string") footer[key] = value;
+  }
+  const branding = options?.branding;
+  // Public menus are intentionally flat; legacy child rows render as roots.
+  const cmsLinks = branding?.footerNavigation.filter((item) => item.href);
   return {
-    whatsappHref: getWhatsAppHref(dictionary.footer.phone),
+    brandDescription: branding?.footerText || footer.brandDescription,
+    siteName: branding?.siteName || "ANBOBA",
+    logoPath: branding?.logoPath || "/brand/ANBOBA.png",
+    whatsappHref: getWhatsAppHref(footer.phone),
     links: [
-      { key: "about", label: dictionary.pages.about, href: `/${locale}/about` },
-      {
-        key: "terms",
-        label: dictionary.footer.terms,
-        href: `/${locale}/policies/terms`,
-      },
-      {
-        key: "privacy",
-        label: dictionary.footer.privacy,
-        href: `/${locale}/policies/privacy`,
-      },
-      {
-        key: "refunds",
-        label: dictionary.footer.refunds,
-        href: `/${locale}/policies/refunds`,
-      },
+      ...(cmsLinks?.length
+        ? cmsLinks.map((item) => ({ key: item.itemKey, label: item.label, href: item.href, openInNewTab: item.openInNewTab }))
+        : [
+            { key: "about", label: dictionary.pages.about, href: `/${locale}/about` },
+            { key: "terms", label: footer.terms, href: `/${locale}/policies/terms` },
+            { key: "privacy", label: footer.privacy, href: `/${locale}/policies/privacy` },
+            { key: "refunds", label: footer.refunds, href: `/${locale}/policies/refunds` },
+          ]),
     ],
     contacts: [
       {
         kind: "phone",
-        label: dictionary.footer.phoneLabel,
-        value: dictionary.footer.phone,
-        href: "tel:0550500055",
+        label: footer.phoneLabel,
+        value: footer.phone,
+        href: `tel:${footer.phone.replace(/\D/g, "")}`,
       },
       {
         kind: "email",
-        label: dictionary.footer.emailLabel,
-        value: dictionary.footer.email,
-        href: `mailto:${dictionary.footer.email}`,
+        label: footer.emailLabel,
+        value: footer.email,
+        href: `mailto:${footer.email}`,
       },
       {
-        kind: "location",
-        label: dictionary.footer.locationLabel,
-        value: dictionary.footer.location,
+        kind: "address",
+        label: footer.addressLabel,
+        value: footer.address,
       },
     ],
-    appStores: [
-      {
-        name: "googlePlay",
-        label: dictionary.footer.googlePlay,
-        available: false,
-      },
-      { name: "appStore", label: dictionary.footer.appStore, available: false },
-    ],
+    layout: options?.layout ?? null,
   };
 }
