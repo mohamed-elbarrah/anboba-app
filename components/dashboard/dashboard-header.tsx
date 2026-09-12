@@ -12,19 +12,21 @@ const sectionTitles = [
   ["/dashboard/forms", "forms"],
   ["/dashboard/media", "media"],
   ["/dashboard/messages", "messages"],
+  ["/dashboard/policies", "policies"],
   ["/dashboard/appearance/site-identity", "siteIdentity"],
   ["/dashboard/appearance/header", "header"],
   ["/dashboard/appearance/menus", "menus"],
   ["/dashboard/appearance/footer", "footer"],
   ["/dashboard/appearance", "appearance"],
   ["/dashboard/profile", "profile"],
+  ["/dashboard/settings/notifications", "notificationSettings"],
 ] as const;
 
 export function DashboardHeader() {
   const pathname = usePathname();
   const { locale, setLocale, copy } = useDashboardLocale();
   const currentKey = sectionTitles.find(([path]) => pathname === path || pathname.startsWith(`${path}/`))?.[1];
-  const current = currentKey === "pages" ? copy.pages : currentKey === "forms" ? copy.forms : currentKey === "media" ? copy.media : currentKey === "messages" ? copy.messages : currentKey === "siteIdentity" ? copy.siteIdentity : currentKey === "header" ? copy.header : currentKey === "menus" ? copy.menus : currentKey === "footer" ? copy.footer : currentKey === "appearance" ? copy.appearance : currentKey === "profile" ? "Profile" : copy.overview;
+  const current = currentKey === "pages" ? copy.pages : currentKey === "forms" ? copy.forms : currentKey === "media" ? copy.media : currentKey === "messages" ? copy.messages : currentKey === "siteIdentity" ? copy.siteIdentity : currentKey === "header" ? copy.header : currentKey === "menus" ? copy.menus : currentKey === "footer" ? copy.footer : currentKey === "appearance" ? copy.appearance : currentKey === "profile" ? copy.profile : currentKey === "policies" ? copy.policies : currentKey === "notificationSettings" ? copy.notificationSettings : copy.overview;
 
   return <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
     <SidebarTrigger aria-label="Toggle dashboard navigation" />

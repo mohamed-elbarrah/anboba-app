@@ -18,6 +18,11 @@ import {
 } from "@/db/schema";
 import type { Locale } from "@/lib/locales";
 import { footerBlockSchema, footerColumnAllowsMenu, isSafeContactHref } from "./schema";
+import {
+  submissionNotificationRecipientSchema,
+  submissionNotificationTemplateSchema,
+  type SubmissionNotificationTemplates,
+} from "./notification-schema";
 import type { FooterLayout, NamedMenu, MenuItem } from "./types";
 
 const localUploadPath = /^\/uploads\/[A-Za-z0-9][A-Za-z0-9._-]*$/;
@@ -38,6 +43,51 @@ function isSafePublicHref(value: string): boolean {
   } catch {
     return false;
   }
+}
+
+export const defaultSubmissionNotificationTemplates: SubmissionNotificationTemplates = {
+  contact: {
+    subject: "إرسال جديد عبر {{formName}}",
+    body: "لديك إرسال جديد من {{senderName}} عبر {{formName}}.\nيمكنك الاطلاع على التفاصيل من لوحة التحكم.\n\nمعرّف الإرسال: {{submissionId}}\nوقت الإرسال: {{submittedAt}}",
+  },
+  join_application: {
+    subject: "إرسال جديد عبر {{formName}}",
+    body: "لديك إرسال جديد من {{senderName}} عبر {{formName}}.\nيمكنك الاطلاع على التفاصيل من لوحة التحكم.\n\nمعرّف الإرسال: {{submissionId}}\nوقت الإرسال: {{submittedAt}}",
+  },
+  partner_registration: {
+    subject: "إرسال جديد عبر {{formName}}",
+    body: "لديك إرسال جديد من {{senderName}} عبر {{formName}}.\nيمكنك الاطلاع على التفاصيل من لوحة التحكم.\n\nمعرّف الإرسال: {{submissionId}}\nوقت الإرسال: {{submittedAt}}",
+  },
+};
+
+export async function getSubmissionNotificationTemplates(): Promise<SubmissionNotificationTemplates> {
+  const rows = await getDb().select({ value: settings.valueJson }).from(settings)
+    .where(eq(settings.key, "submission_notification_templates")).limit(1);
+  if (!rows[0] || typeof rows[0].value !== "object" || rows[0].value === null || Array.isArray(rows[0].value)) return defaultSubmissionNotificationTemplates;
+  const source = rows[0].value as Record<string, unknown>;
+  const result = { ...defaultSubmissionNotificationTemplates };
+  for (const formKey of ["contact", "join_application", "partner_registration"] as const) {
+    const parsed = submissionNotificationTemplateSchema.safeParse(source[formKey]);
+    if (parsed.success) result[formKey] = parsed.data;
+    else if (source[formKey] !== undefined) console.error(`[settings:notification-templates] Invalid ${formKey} template; using default`);
+  }
+  return result;
+}
+
+export async function getSubmissionNotificationRecipient(): Promise<string | null> {
+  const rows = await getDb()
+    .select({ value: settings.valueJson })
+    .from(settings)
+    .where(eq(settings.key, "submission_notifications"))
+    .limit(1);
+  if (rows[0]) {
+    const parsed = submissionNotificationRecipientSchema.safeParse(rows[0].value);
+    if (parsed.success) return parsed.data.recipientEmail;
+    console.error("[settings:notification-recipient] Invalid persisted recipient setting");
+    return null;
+  }
+  const fallback = submissionNotificationRecipientSchema.safeParse({ recipientEmail: process.env.SUBMISSION_NOTIFICATION_TO ?? "" });
+  return fallback.success ? fallback.data.recipientEmail : null;
 }
 
 export async function getSetting<T = unknown>(

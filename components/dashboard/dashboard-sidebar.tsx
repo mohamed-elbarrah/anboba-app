@@ -17,9 +17,10 @@ export function DashboardSidebar() {
     { label: copy.pages, href: "/dashboard/pages", icon: FileText },
     { label: copy.forms, href: "/dashboard/forms", icon: Braces },
     { label: copy.media, href: "/dashboard/media", icon: Images },
-    { label: "Policies", href: "/dashboard/policies", icon: FileText },
+    { label: copy.policies, href: "/dashboard/policies", icon: FileText },
     { label: copy.messages, href: "/dashboard/messages", icon: Mail },
-    { label: "Profile", href: "/dashboard/profile", icon: UserCircle },
+    { label: copy.profile, href: "/dashboard/profile", icon: UserCircle },
+    { label: copy.notificationSettings, href: "/dashboard/settings/notifications", icon: Mail },
   ] as const;
   const appearanceItems = [
     { label: copy.siteIdentity, href: "/dashboard/appearance/site-identity", icon: Settings },

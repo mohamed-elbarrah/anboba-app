@@ -11,11 +11,14 @@ SMTP_SECURE=true
 SMTP_USER=no-reply@example.com
 SMTP_PASSWORD=change-me
 SMTP_FROM=no-reply@example.com
+# Optional fallback recipient; the authenticated dashboard can override this.
 SUBMISSION_NOTIFICATION_TO=admin@example.com
 SUBMISSION_STORAGE_DIR=/absolute/path/outside/public-web-root/submissions
 ```
 
-`SMTP_FROM` must be a mailbox/domain authorized by Hostinger. Configure SPF, DKIM, and DMARC for the domain. Uploaded identity documents are never sent by email; admins download them through the authenticated dashboard.
+`SMTP_FROM` must be a mailbox/domain authorized by the SMTP provider. For Gmail, use an App Password rather than the normal account password. The admin can set the current recipient at `/dashboard/settings/notifications`; SMTP credentials remain server-only environment variables. If no dashboard recipient is saved, `SUBMISSION_NOTIFICATION_TO` is used as a fallback.
+
+Notification emails contain the configured Arabic template, the sender name/company name requested by the administrator, form label, submission ID, and timestamp. Phone numbers, email addresses, national IDs, licences, uploaded identity documents, and other submitted field values are never sent by email; admins access them through the authenticated dashboard. Templates can be customized at `/dashboard/settings/notifications` using the allowlisted placeholders shown there.
 
 Before production:
 

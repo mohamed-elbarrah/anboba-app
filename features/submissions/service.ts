@@ -7,7 +7,7 @@ import { getPublicForm } from "@/features/forms/queries";
 import { validatePresetValue } from "@/features/forms/validation";
 import { normalizedFromConfig, type NormalizedRevision } from "@/features/forms/normalized";
 import { saveSubmissionFile, removeSubmissionFile } from "./storage";
-import { sendSubmissionNotification } from "./email";
+import { sendSubmissionNotification, submissionNotificationSender } from "./email";
 import { allowSubmission } from "./rate-limit";
 
 export type SubmissionResult = { ok: true; id: string; successMessage: string } | { ok: false; code: string; message: string; fields?: Record<string, string> };
@@ -50,6 +50,7 @@ export async function submitForm(input: { formKey: string; locale: "ar" | "en"; 
   }
   if (errors && Object.keys(errors).length) { await Promise.all(saved.map((file) => removeSubmissionFile(file.storageKey))); return { ok: false, code: "VALIDATION_ERROR", message: messages.invalid, fields: errors }; }
   const db = getDb();
+  const submittedAt = new Date();
   try {
     const existing = (await db.select({ id: submissions.id }).from(submissions).where(and(eq(submissions.formId, form.formId), eq(submissions.idempotencyToken, input.idempotencyToken))).limit(1))[0];
     if (existing) return { ok: true, id: existing.id.toString(), successMessage: config.copy.successMessage ?? "Submitted" };
@@ -61,7 +62,7 @@ export async function submitForm(input: { formKey: string; locale: "ar" | "en"; 
       return id;
     });
     try {
-      await sendSubmissionNotification({ formKey: form.formKey, submissionId: result.toString(), payload, attachments: saved.map((file) => ({ path: file.absolutePath, filename: file.originalFilename, mimeType: file.mimeType })) });
+      await sendSubmissionNotification({ formKey: form.formKey, submissionId: result.toString(), senderName: submissionNotificationSender(form.formKey, payload), submittedAt });
       try { await db.update(submissions).set({ notificationStatus: "sent", notifiedAt: new Date(), notificationError: null }).where(eq(submissions.id, result)); }
       catch (error) { console.error("[submission:notification-status]", error instanceof Error ? error.message : "unknown error"); }
     } catch (error) {

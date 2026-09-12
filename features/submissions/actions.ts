@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { getDb } from "@/db";
 import { submissions } from "@/db/schema";
-import { sendSubmissionNotification } from "./email";
+import { sendSubmissionNotification, submissionNotificationSender } from "./email";
 import { getCurrentAdmin } from "@/features/auth/session";
 
 const statuses = new Set(["new", "in_review", "accepted", "rejected", "archived"]);
@@ -21,7 +21,7 @@ export async function retrySubmissionNotification(id: string) {
   const row = (await getDb().select().from(submissions).where(and(eq(submissions.id, BigInt(id)), eq(submissions.notificationStatus, "failed"))).limit(1))[0];
   if (!row) return { ok: false, code: "NOT_FOUND" } as const;
   try {
-    await sendSubmissionNotification({ formKey: row.formKey, submissionId: row.id.toString(), payload: row.payloadJson as Record<string, unknown> });
+    await sendSubmissionNotification({ formKey: row.formKey, submissionId: row.id.toString(), senderName: submissionNotificationSender(row.formKey, row.payloadJson), submittedAt: row.createdAt });
     await getDb().update(submissions).set({ notificationStatus: "sent", notificationError: null, notifiedAt: new Date() }).where(eq(submissions.id, row.id));
     revalidatePath("/dashboard/messages");
     revalidatePath(`/dashboard/messages/${id}`);
