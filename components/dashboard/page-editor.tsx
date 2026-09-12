@@ -583,19 +583,12 @@ function SectionForm({
               <Nested
                 data={data}
                 name="showcase"
-                keys={[
-                  "heading",
-                  "guaranteeLabel",
-                  "phoneLeftAlt",
-                  "phoneRightAlt",
-                ]}
+                keys={["heading", "phoneLeftAlt", "phoneRightAlt"]}
                 update={update}
               />
-              <Strings
+              <GuaranteeCards
                 data={data.showcase as Data}
                 update={(value) => update({ ...data, showcase: value })}
-                name="guarantees"
-                count={4}
               />
             </>
           )}
@@ -861,6 +854,52 @@ function Fixed({
           ))}
         </div>
       ))}
+    </fieldset>
+  );
+}
+
+function GuaranteeCards({
+  data,
+  update,
+}: {
+  data: Data;
+  update: (value: unknown) => void;
+}) {
+  const legacyLabel = textValue(data, "guaranteeLabel");
+  const values = Array.isArray(data.guarantees)
+    ? data.guarantees.map((card) => typeof card === "string" ? { title: legacyLabel, content: card } : (card as Data))
+    : [];
+
+  return (
+    <fieldset className="grid gap-3 rounded-lg border bg-muted/20 p-4 md:grid-cols-2">
+      <legend className="px-1 text-sm font-semibold">Guarantee cards (4 fixed items)</legend>
+      {Array.from({ length: 4 }, (_, index) => {
+        const card = values[index] ?? {};
+        return (
+          <div key={index} className="space-y-3 rounded-md border bg-background p-3">
+            <p className="text-xs font-semibold text-muted-foreground">Card {index + 1}</p>
+            <Field
+              label="Title"
+              value={textValue(card, "title")}
+              onChange={(value) => {
+                const next = [...values];
+                next[index] = { ...card, title: value };
+                update({ ...data, guarantees: next });
+              }}
+            />
+            <Field
+              label="Content"
+              multi
+              value={textValue(card, "content")}
+              onChange={(value) => {
+                const next = [...values];
+                next[index] = { ...card, content: value };
+                update({ ...data, guarantees: next });
+              }}
+            />
+          </div>
+        );
+      })}
     </fieldset>
   );
 }

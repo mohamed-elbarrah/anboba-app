@@ -55,8 +55,8 @@ const copy = {
     phone: "صورة شاشة التطبيق",
     showcase: "عرض التطبيق",
     guarantee: "بطاقات الضمان",
-    guaranteeLabel: "التسمية المشتركة لبطاقات الضمان",
-    guaranteeText: "عنوان بطاقة الضمان",
+    guaranteeTitle: "عنوان البطاقة",
+    guaranteeContent: "محتوى البطاقة",
     selectImage: "اختر صورة من مكتبة الوسائط أو استخدم رابطاً",
     fileHint: "إعدادات الملف في منشئ النموذج",
     note: "الملاحظة",
@@ -115,8 +115,8 @@ const copy = {
     phone: "App screen image",
     showcase: "App showcase",
     guarantee: "Guarantee cards",
-    guaranteeLabel: "Shared guarantee-card label",
-    guaranteeText: "Guarantee card title",
+    guaranteeTitle: "Card title",
+    guaranteeContent: "Card content",
     selectImage: "Select from the media library or use a URL",
     fileHint: "File settings are managed in the form builder",
     note: "Note",
@@ -476,8 +476,9 @@ export function HomeSectionEditor({
     case "hero": {
       const showcase = (data.showcase ?? {}) as Data;
       const setShowcase = (next: Data) => set({ ...data, showcase: next });
+      const legacyLabel = text(showcase, "guaranteeLabel");
       const guarantees = Array.isArray(showcase.guarantees)
-        ? showcase.guarantees
+        ? showcase.guarantees.map((card) => typeof card === "string" ? { title: legacyLabel, content: card } : (card as Data))
         : [];
       return (
         <div className="space-y-4">
@@ -520,16 +521,15 @@ export function HomeSectionEditor({
             title={t.showcase}
             description={
               locale === "ar"
-                ? "تسمية مشتركة وأربع بطاقات ضمان وصورتا هاتف قابلتان للتخصيص."
-                : "One shared label, four guarantee cards, and two customizable phone images."
+                ? "أربع بطاقات ضمان، لكل بطاقة عنوان ومحتوى وصورة هاتف قابلة للتخصيص."
+                : "Four guarantee cards, each with a title and content, plus two customizable phone images."
             }
           >
-            <Fields
-              data={showcase}
-              names={["heading", "guaranteeLabel"]}
-              labels={{ heading: t.heading, guaranteeLabel: t.guaranteeLabel }}
-              update={setShowcase}
-            />{" "}
+            <Field
+              label={t.heading}
+              value={text(showcase, "heading")}
+              onChange={(value) => setShowcase({ ...showcase, heading: value })}
+            />
             <div className="grid gap-4 xl:grid-cols-2">
               {[
                 {
@@ -579,18 +579,34 @@ export function HomeSectionEditor({
                     }
                   />
                   <div className="space-y-3">
-                    {[0, 1].map((offset) => (
-                      <Field
-                        key={offset}
-                        label={`${t.guaranteeText} ${slot.start + offset + 1}`}
-                        value={String(guarantees[slot.start + offset] ?? "")}
-                        onChange={(value) => {
-                          const next = [...guarantees];
-                          next[slot.start + offset] = value;
-                          setShowcase({ ...showcase, guarantees: next });
-                        }}
-                      />
-                    ))}
+                    {[0, 1].map((offset) => {
+                      const index = slot.start + offset;
+                      const card = (guarantees[index] ?? {}) as Data;
+                      return (
+                        <fieldset key={index} className="space-y-3 rounded-lg border bg-muted/20 p-3">
+                          <legend className="px-1 text-sm font-semibold">{t.guarantee} {index + 1}</legend>
+                          <Field
+                            label={t.guaranteeTitle}
+                            value={text(card, "title")}
+                            onChange={(value) => {
+                              const next = [...guarantees];
+                              next[index] = { ...card, title: value };
+                              setShowcase({ ...showcase, guarantees: next });
+                            }}
+                          />
+                          <Field
+                            label={t.guaranteeContent}
+                            value={text(card, "content")}
+                            multiline
+                            onChange={(value) => {
+                              const next = [...guarantees];
+                              next[index] = { ...card, content: value };
+                              setShowcase({ ...showcase, guarantees: next });
+                            }}
+                          />
+                        </fieldset>
+                      );
+                    })}
                   </div>
                 </div>
               ))}

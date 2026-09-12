@@ -209,12 +209,11 @@
     "cta": "Download the app",
     "showcase": {
       "heading": "ANBOBA service benefits",
-      "guaranteeLabel": "Installation guarantee",
       "guarantees": [
-        "Pre-departure check",
-        "Safe installation",
-        "Verified technician",
-        "Live order tracking"
+        { "title": "Installation guarantee", "content": "Pre-departure check" },
+        { "title": "Installation guarantee", "content": "Safe installation" },
+        { "title": "Installation guarantee", "content": "Verified technician" },
+        { "title": "Installation guarantee", "content": "Live order tracking" }
       ],
       "phoneLeftAlt": "ANBOBA app for ordering gas cylinders",
       "phoneRightAlt": "ANBOBA app for tracking delivery"

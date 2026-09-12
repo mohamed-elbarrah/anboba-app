@@ -110,8 +110,10 @@ export type Dictionary = {
     cta: string;
     showcase?: {
       heading: string;
-      guaranteeLabel: string;
-      guarantees: readonly string[];
+      guarantees: readonly {
+        title: string;
+        content: string;
+      }[];
       phoneLeftAlt: string;
       phoneRightAlt: string;
       phoneLeftMediaId?: string;

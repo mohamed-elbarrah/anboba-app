@@ -7,8 +7,7 @@ type ShowcaseSide = "left" | "right";
 export type HeroSideProps = {
   side: ShowcaseSide;
   phoneVariant: "left" | "right";
-  cards: readonly [string, string];
-  label: string;
+  cards: readonly [{ title: string; content: string }, { title: string; content: string }];
   phoneAlt: string;
   phoneSrc?: string | null;
   locale: Locale;
@@ -16,21 +15,20 @@ export type HeroSideProps = {
 
 type ShowcaseContent = {
   heading: string;
-  guaranteeLabel: string;
-  guarantees: readonly string[];
+  guarantees: readonly { title: string; content: string }[];
   phoneLeftAlt: string;
   phoneRightAlt: string;
 };
 
-export function HeroSide({ side, phoneVariant, cards, label, phoneAlt, phoneSrc, locale }: HeroSideProps) {
+export function HeroSide({ side, phoneVariant, cards, phoneAlt, phoneSrc, locale }: HeroSideProps) {
   return (
     <div className={`hero-side hero-side-${side}`}>
       <div className="hero-side-cards">
-        {cards.map((title, index) => (
+        {cards.map((card, index) => (
           <GuaranteeCard
             key={`${side}-${index}`}
-            label={label}
-            title={title}
+            title={card.title}
+            content={card.content}
             side={side}
             locale={locale}
           />
@@ -42,12 +40,12 @@ export function HeroSide({ side, phoneVariant, cards, label, phoneAlt, phoneSrc,
 }
 
 export function HeroAppShowcase({ content, locale, media }: { content: ShowcaseContent; locale: Locale; media?: { left: string | null; right: string | null } }) {
-  const cards: [string, string, string, string] = [
-    content.guarantees[0] ?? "",
-    content.guarantees[1] ?? "",
-    content.guarantees[2] ?? "",
-    content.guarantees[3] ?? "",
-  ];
+  const cards = [
+    content.guarantees[0] ?? { title: "", content: "" },
+    content.guarantees[1] ?? { title: "", content: "" },
+    content.guarantees[2] ?? { title: "", content: "" },
+    content.guarantees[3] ?? { title: "", content: "" },
+  ] as const;
 
   return (
     <section
@@ -61,7 +59,6 @@ export function HeroAppShowcase({ content, locale, media }: { content: ShowcaseC
         side="left"
         phoneVariant="left"
         cards={[cards[0], cards[1]]}
-        label={content.guaranteeLabel}
         phoneAlt={content.phoneLeftAlt}
         phoneSrc={media?.left}
         locale={locale}
@@ -70,7 +67,6 @@ export function HeroAppShowcase({ content, locale, media }: { content: ShowcaseC
         side="right"
         phoneVariant="right"
         cards={[cards[2], cards[3]]}
-        label={content.guaranteeLabel}
         phoneAlt={content.phoneRightAlt}
         phoneSrc={media?.right}
         locale={locale}
