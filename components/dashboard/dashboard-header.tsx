@@ -28,11 +28,11 @@ export function DashboardHeader() {
   const currentKey = sectionTitles.find(([path]) => pathname === path || pathname.startsWith(`${path}/`))?.[1];
   const current = currentKey === "pages" ? copy.pages : currentKey === "forms" ? copy.forms : currentKey === "media" ? copy.media : currentKey === "messages" ? copy.messages : currentKey === "siteIdentity" ? copy.siteIdentity : currentKey === "header" ? copy.header : currentKey === "menus" ? copy.menus : currentKey === "footer" ? copy.footer : currentKey === "appearance" ? copy.appearance : currentKey === "profile" ? copy.profile : currentKey === "policies" ? copy.policies : currentKey === "notificationSettings" ? copy.notificationSettings : copy.overview;
 
-  return <header className="flex h-16 shrink-0 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur-sm md:px-6">
-    <SidebarTrigger aria-label="Toggle dashboard navigation" />
+  return <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b border-border/70 bg-background/90 px-4 shadow-sm backdrop-blur-md md:px-6">
+    <SidebarTrigger className="shrink-0" aria-label={locale === "ar" ? "فتح أو إغلاق قائمة لوحة التحكم" : "Toggle dashboard navigation"} />
     <Separator orientation="vertical" className="h-5" />
-    <Breadcrumb><BreadcrumbList><BreadcrumbItem><BreadcrumbPage>{current}</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>
-    <div className="ms-auto flex items-center gap-1 rounded-lg border bg-background p-1" aria-label={copy.language}>
+    <Breadcrumb className="min-w-0"><BreadcrumbList><BreadcrumbItem><BreadcrumbPage className="truncate text-sm font-semibold text-foreground md:text-base">{current}</BreadcrumbPage></BreadcrumbItem></BreadcrumbList></Breadcrumb>
+    <div className="ms-auto flex shrink-0 items-center gap-1 rounded-lg border border-border/70 bg-background p-1 shadow-sm" aria-label={copy.language}>
       {(["ar", "en"] as Locale[]).map((value) => <button key={value} type="button" onClick={() => setLocale(value)} aria-pressed={locale === value} className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${locale === value ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-muted"}`}>{value === "ar" ? "العربية" : "English"}</button>)}
     </div>
   </header>;
