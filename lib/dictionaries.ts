@@ -20,6 +20,7 @@ export type Dictionary = {
     contact: string;
     joinUs: string;
     policies: string;
+    faq: string;
     placeholder: string;
     logoLabel: string;
     downloadApp: string;
@@ -86,6 +87,15 @@ export type Dictionary = {
     eyebrow: string;
     heading: string;
     description: string;
+  };
+  faqPage: {
+    eyebrow: string;
+    heading: string;
+    description: string;
+    items: readonly {
+      question: string;
+      answer: string;
+    }[];
   };
   faqSupport: {
     faq: {

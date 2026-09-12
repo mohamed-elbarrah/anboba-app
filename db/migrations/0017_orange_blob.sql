@@ -1,0 +1,2 @@
+ALTER TABLE `page_sections` MODIFY COLUMN `section_key` enum('hero','service_overview','statistics','why_choose_us','service_benefits','join_application','faq_support','faq','vision_mission','contact','partner_registration','policies') NOT NULL;--> statement-breakpoint
+ALTER TABLE `page_sections` MODIFY COLUMN `section_type` enum('hero','service_overview','statistics','why_choose_us','service_benefits','join_application','faq_support','faq','vision_mission','contact','partner_registration','policies') NOT NULL;

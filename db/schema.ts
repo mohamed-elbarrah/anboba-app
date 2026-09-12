@@ -53,6 +53,7 @@ export const sectionKeys = [
   "service_benefits",
   "join_application",
   "faq_support",
+  "faq",
   "vision_mission",
   "contact",
   "partner_registration",

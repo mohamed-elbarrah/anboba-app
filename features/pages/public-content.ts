@@ -100,11 +100,11 @@ function fallbackSections(dictionary: Dictionary, locale: Locale, slug: string) 
     hero: dictionary.hero, service_overview: dictionary.serviceOverview,
     statistics: dictionary.statistics, why_choose_us: dictionary.whyChooseUs,
     service_benefits: dictionary.serviceBenefits, join_application: dictionary.joinApplication,
-    faq_support: dictionary.faqSupport, vision_mission: dictionary.aboutVisionMission,
+    faq_support: dictionary.faqSupport, faq: dictionary.faqPage, vision_mission: dictionary.aboutVisionMission,
     contact: dictionary.contact, partner_registration: dictionary.partnerRegistration,
     policies: { hero: dictionary.pageTitle, documents: legal },
   };
-  const keys = slug === "" ? ["hero", "service_overview", "statistics", "why_choose_us", "service_benefits", "join_application", "faq_support"] : slug === "about" ? ["why_choose_us", "vision_mission"] : slug === "contact" ? ["contact"] : slug === "join-us" ? ["partner_registration"] : ["policies"];
+  const keys = slug === "" ? ["hero", "service_overview", "statistics", "why_choose_us", "service_benefits", "join_application", "faq_support"] : slug === "about" ? ["why_choose_us", "vision_mission"] : slug === "contact" ? ["contact"] : slug === "join-us" ? ["partner_registration"] : slug === "faq" ? ["faq"] : ["policies"];
   return Object.fromEntries(keys.map((key) => [key, source[key]])) as AdaptedPageContent["sections"];
 }
 

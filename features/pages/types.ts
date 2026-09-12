@@ -4,7 +4,7 @@ import type { Dictionary } from "@/lib/dictionaries";
 import type { LegalDocument } from "@/content/legal/policies";
 import type { SectionContentMap } from "./content-adapter";
 
-export type PageSlug = "" | "about" | "contact" | "join-us" | "policies";
+export type PageSlug = "" | "about" | "contact" | "join-us" | "faq" | "policies";
 export type CmsLocale = Locale;
 export type PageContent = Dictionary;
 export type PoliciesContent = {
@@ -18,7 +18,7 @@ export type PageRecord = Page & {
 
 export type SectionKey =
   | "hero" | "service_overview" | "statistics" | "why_choose_us"
-  | "service_benefits" | "join_application" | "faq_support"
+  | "service_benefits" | "join_application" | "faq_support" | "faq"
   | "vision_mission" | "contact" | "partner_registration" | "policies";
 
 export type SectionContent = {

@@ -63,6 +63,8 @@ export const joinApplicationSchema = z.object({ validation: joinValidation, head
 
 /** Section-owned copy is deliberately separate from the reusable form contract. */
 export const joinApplicationSectionSchema = joinApplicationSchema.pick({ heading: true, description: true, countryCode: true, countryLabel: true, benefits: true, note: true }).strict();
+const faqItemSchema = z.object({ question: z.string().trim().min(1).max(255), answer: z.string().trim().min(1).max(5000) });
+export const faqPageSchema = z.object({ eyebrow: nonEmpty, heading: nonEmpty, description: nonEmpty, items: z.array(faqItemSchema).min(1).max(50) });
 export const faqSupportSchema = z.object({ faq: z.object({ heading: nonEmpty, description: nonEmpty, cta: nonEmpty, href: internalOrHttpsUrl }), support: z.object({ heading: nonEmpty, description: nonEmpty, cta: nonEmpty, href: internalOrHttpsUrl }) });
 export const contactSchema = z.object({ validation: contactValidation, eyebrow: nonEmpty, headingStart: nonEmpty, headingHighlight: nonEmpty, description: nonEmpty, details, fields: z.object({ fullName: nonEmpty, phone: nonEmpty, message: nonEmpty }), placeholders: z.object({ fullName: nonEmpty, phone: nonEmpty, message: nonEmpty }), countryCode: nonEmpty, countryLabel: nonEmpty, submit: nonEmpty, success: nonEmpty });
 export const contactSectionSchema = contactSchema.pick({ eyebrow: true, headingStart: true, headingHighlight: true, description: true, details: true, countryCode: true, countryLabel: true }).strict();
@@ -74,7 +76,7 @@ export const policiesSchema = z.object({ hero: z.object({ eyebrow: nonEmpty, hea
   if (new Set(slugs).size !== 3) context.addIssue({ code: "custom", message: "Policies must contain privacy, terms, and refunds exactly once" });
 }) });
 
-export const sectionContentSchemas = { hero: heroSchema, service_overview: serviceOverviewSchema, statistics: statisticsSchema, why_choose_us: whyChooseUsSchema, service_benefits: serviceBenefitsSchema, join_application: joinApplicationSchema, faq_support: faqSupportSchema, vision_mission: visionMissionSchema, contact: contactSchema, partner_registration: partnerRegistrationSchema, policies: policiesSchema } as const;
+export const sectionContentSchemas = { hero: heroSchema, service_overview: serviceOverviewSchema, statistics: statisticsSchema, why_choose_us: whyChooseUsSchema, service_benefits: serviceBenefitsSchema, join_application: joinApplicationSchema, faq_support: faqSupportSchema, faq: faqPageSchema, vision_mission: visionMissionSchema, contact: contactSchema, partner_registration: partnerRegistrationSchema, policies: policiesSchema } as const;
 
 export const sectionOwnedFormSchemas = { contact: contactSectionSchema, join_application: joinApplicationSectionSchema, partner_registration: partnerRegistrationSectionSchema } as const;
 export type SectionOwnedFormKey = keyof typeof sectionOwnedFormSchemas;

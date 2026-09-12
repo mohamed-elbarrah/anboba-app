@@ -12,6 +12,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:check": "drizzle-kit check",
     "db:seed:content": "tsx scripts/seed-content.ts",
+    "db:seed:faq": "tsx scripts/seed-faq.ts",
     "db:seed:admin": "tsx scripts/seed-admin.ts",
     "db:seed:policies": "tsx scripts/seed-policies.ts",
     "db:seed:forms": "tsx scripts/seed-forms.ts",

@@ -9,6 +9,7 @@ export const sectionConfig = {
   service_benefits: { type: "service_benefits", label: "Service benefits" },
   join_application: { type: "join_application", label: "Join application" },
   faq_support: { type: "faq_support", label: "FAQ and support" },
+  faq: { type: "faq", label: "FAQ page" },
   vision_mission: { type: "vision_mission", label: "Vision and mission" },
   contact: { type: "contact", label: "Contact" },
   partner_registration: { type: "partner_registration", label: "Partner registration" },

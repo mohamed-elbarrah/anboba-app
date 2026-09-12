@@ -16,6 +16,7 @@ export type SectionContentMap = {
   service_benefits: Dictionary["serviceBenefits"];
   join_application: Dictionary["joinApplication"];
   faq_support: Dictionary["faqSupport"];
+  faq: Dictionary["faqPage"];
   vision_mission: Dictionary["aboutVisionMission"];
   contact: Dictionary["contact"];
   partner_registration: Dictionary["partnerRegistration"];

@@ -50,6 +50,7 @@ export function getNavigation(locale: Locale, dictionary: Dictionary, branding?:
       { key: "about", label: dictionary.pages.about, href: `/${locale}/about` },
       { key: "contact", label: dictionary.pages.contact, href: `/${locale}/contact` },
       { key: "joinUs", label: dictionary.pages.joinUs, href: `/${locale}/join-us` },
+      { key: "faq", label: dictionary.pages.faq, href: `/${locale}/faq` },
     ],
     cta: {
       label: dictionary.pages.downloadApp,

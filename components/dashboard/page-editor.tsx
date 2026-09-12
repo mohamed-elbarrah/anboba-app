@@ -5,6 +5,7 @@ import { AlertCircle, Check, Eye, Loader2, Save, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { HomeSectionEditor } from "@/components/dashboard/home-section-editor";
+import { FaqSectionEditor } from "@/components/dashboard/faq-section-editor";
 import type { MediaItem } from "@/features/media/types";
 import type { DashboardFormOption } from "@/features/forms/queries";
 import {
@@ -37,6 +38,7 @@ const sectionNames: Record<SectionKey, Record<Locale, string>> = {
   service_benefits: { en: "Service benefits", ar: "مزايا الخدمة" },
   join_application: { en: "Join application", ar: "طلب الانضمام" },
   faq_support: { en: "FAQ and support", ar: "الأسئلة الشائعة والدعم" },
+  faq: { en: "FAQ", ar: "الأسئلة الشائعة" },
   vision_mission: { en: "Vision and mission", ar: "الرؤية والرسالة" },
   contact: { en: "Contact", ar: "اتصل بنا" },
   partner_registration: { en: "Partner registration", ar: "تسجيل الشركاء" },
@@ -433,6 +435,13 @@ export function PageEditor({
               media={media}
               forms={forms}
               onFormChange={(formId) => setSectionForm(section.key, formId)}
+              update={(content) => setSection(section.key, content)}
+            />
+          ) : section.key === "faq" ? (
+            <FaqSectionEditor
+              key={section.key}
+              section={section}
+              locale={locale}
               update={(content) => setSection(section.key, content)}
             />
           ) : (

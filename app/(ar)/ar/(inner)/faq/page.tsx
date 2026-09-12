@@ -1,6 +1,11 @@
-import { LocalePlaceholder } from "@/components/public/locale-placeholder";
+import { FaqPage } from "@/components/public/faq-page";
+import { getPublishedPageMetadata, getPublishedPublicPage } from "@/features/pages/public-content";
 
-// TODO: Replace this placeholder with the FAQ/help-center page when its content is approved.
-export default function ArabicFaqPage() {
-  return <LocalePlaceholder locale="ar" page="placeholder" />;
+export async function generateMetadata() {
+  return getPublishedPageMetadata("ar", "faq", { title: "الأسئلة الشائعة | أنبوبة" });
+}
+
+export default async function ArabicFaqPage() {
+  const page = await getPublishedPublicPage("ar", "faq");
+  return <FaqPage content={page.sections.faq} locale="ar" />;
 }

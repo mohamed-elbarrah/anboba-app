@@ -9,6 +9,7 @@ export const dashboardPageIdentities = [
   { slug: "about", name: "About", description: "Company and mission" },
   { slug: "contact", name: "Contact", description: "Contact information" },
   { slug: "join-us", name: "Join Us", description: "Partner registration" },
+  { slug: "faq", name: "FAQ", description: "Frequently asked questions" },
   { slug: "policies", name: "Policies", description: "Legal documents" },
 ] as const;
 

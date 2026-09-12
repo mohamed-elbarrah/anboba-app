@@ -5,6 +5,7 @@
     "contact": "Contact",
     "joinUs": "Join us",
     "policies": "Policies",
+    "faq": "FAQ",
     "placeholder": "Placeholder page",
     "logoLabel": "ANBOBA home",
     "downloadApp": "Download app"
@@ -185,6 +186,17 @@
       "email": "Please enter a valid email address.",
       "city": "Please enter your city."
     }
+  },
+  "faqPage": {
+    "eyebrow": "Help center",
+    "heading": "Frequently asked questions",
+    "description": "Clear answers about ordering, delivery, installation, and ANBOBA services.",
+    "items": [
+      { "question": "How can I order a gas cylinder?", "answer": "You can order a cylinder easily through the ANBOBA app and follow the request until delivery." },
+      { "question": "Can I track my order?", "answer": "Yes. The app lets you follow your order and see the delivery and installation stages." },
+      { "question": "Is installation available with every order?", "answer": "Installation availability depends on the area and order type. The details will be shown while placing the order." },
+      { "question": "What should I do if there is a problem with my order?", "answer": "Contact our support team through the available contact channels and we will help you as soon as possible." }
+    ]
   },
   "faqSupport": {
     "faq": {

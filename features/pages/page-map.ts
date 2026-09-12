@@ -6,6 +6,7 @@ export const pageMap = {
   about: { slug: "about", sections: ["why_choose_us", "vision_mission"] },
   contact: { slug: "contact", sections: ["contact"] },
   "join-us": { slug: "join-us", sections: ["partner_registration"] },
+  faq: { slug: "faq", sections: ["faq"] },
   policies: { slug: "policies", sections: ["policies"] },
 } as const satisfies Record<Exclude<PageSlug, ""> | "home", PageDefinition>;
 

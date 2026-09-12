@@ -16,7 +16,7 @@ import { and, eq } from "drizzle-orm";
 
 const dictionaries = { ar, en } as const;
 const legal = { ar: arabicLegalDocuments, en: englishLegalDocuments } as const;
-const pageTitles = { home: "home", about: "about", contact: "contact", "join-us": "joinUs", policies: "policies" } as const;
+const pageTitles = { home: "home", about: "about", contact: "contact", "join-us": "joinUs", faq: "faq", policies: "policies" } as const;
 
 type Locale = keyof typeof dictionaries;
 type RevisionStatus = "published" | "draft";
@@ -27,7 +27,7 @@ function contentFor(locale: Locale, slug: string, key: string) {
   if (key === "policies") return { hero: dictionary.pageTitle, documents: legal[locale] };
   const source = key === "why_choose_us" ? "whyChooseUs" :
     key === "service_overview" ? "serviceOverview" : key === "service_benefits" ? "serviceBenefits" :
-    key === "join_application" ? "joinApplication" : key === "faq_support" ? "faqSupport" :
+    key === "join_application" ? "joinApplication" : key === "faq_support" ? "faqSupport" : key === "faq" ? "faqPage" :
     key === "vision_mission" ? "aboutVisionMission" : key === "partner_registration" ? "partnerRegistration" : key;
   return dictionary[source];
 }
@@ -90,7 +90,7 @@ async function seed() {
         const ref = seedRef(locale, definition.slug);
         const titleKey = pageTitles[(definition.slug || "home") as keyof typeof pageTitles];
         const title = definition.slug === "policies" ? dictionary.pageTitle.heading : dictionary.pages[titleKey];
-        const metaDescription = definition.slug === "policies" ? dictionary.pageTitle.description : undefined;
+        const metaDescription = definition.slug === "policies" ? dictionary.pageTitle.description : definition.slug === "faq" ? dictionary.faqPage.description : undefined;
         let page = (await tx.select().from(pages).where(and(eq(pages.locale, locale), eq(pages.slug, definition.slug))).limit(1))[0];
 
         // A page with no identity is the only case where the complete initial seed is created.
@@ -125,7 +125,13 @@ async function seed() {
           if (matches.length !== 1) refuse(`${ref} published revision section ${sectionKey} is missing or duplicated`);
           const section = matches[0];
           const expected = parseSectionContent(sectionKey, contentFor(locale, definition.slug, sectionKey));
-          if (section.sectionType !== sectionKey || section.sortOrder !== sortOrder || !sameJson(section.contentJson, expected)) {
+          let actual: unknown;
+          try {
+            actual = parseSectionContent(sectionKey, section.contentJson);
+          } catch {
+            refuse(`${ref} published section ${sectionKey} is invalid`);
+          }
+          if (section.sectionType !== sectionKey || section.sortOrder !== sortOrder || !sameJson(actual, expected)) {
             refuse(`${ref} published section ${sectionKey} does not exactly match the expected seed`);
           }
         }

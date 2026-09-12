@@ -33,7 +33,7 @@ export function PagesList({ pages }: { pages: DashboardPage[] }) {
       <Table>
         <TableHeader><TableRow><TableHead>{copy.pages}</TableHead><TableHead>{copy.arabic}</TableHead><TableHead>{copy.english}</TableHead><TableHead>{copy.lastUpdated}</TableHead><TableHead><span className="sr-only">Actions</span></TableHead></TableRow></TableHeader>
         <TableBody>{pages.map((page) => <TableRow key={page.slug || "home"}>
-          <TableCell><div className="min-w-40"><p className="font-medium">{page.name}</p><p className="text-xs text-muted-foreground">{page.description}</p></div></TableCell>
+          <TableCell><div className="min-w-40"><p className="font-medium">{page.slug === "faq" ? copy.faq : page.name}</p><p className="text-xs text-muted-foreground">{page.description}</p></div></TableCell>
           <TableCell><Availability value={page.locales.ar.availability} /></TableCell>
           <TableCell><Availability value={page.locales.en.availability} /></TableCell>
           <TableCell><Updated date={[page.locales.ar.updatedAt, page.locales.en.updatedAt].filter(Boolean).sort((a, b) => b!.getTime() - a!.getTime())[0] ?? null} /></TableCell>
