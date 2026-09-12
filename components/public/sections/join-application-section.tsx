@@ -11,8 +11,8 @@ import {
   Truck,
   UserRound,
 } from "lucide-react";
-import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -44,8 +44,6 @@ export function JoinApplicationSection({
 }: JoinApplicationSectionProps) {
   const isArabic = locale === "ar";
   const direction = getLocaleDirection(locale);
-  const [submitted, setSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<JoinApplicationFormValues>({
     resolver: zodResolver(createJoinApplicationSchema(content.validation)),
     mode: "onBlur",
@@ -60,14 +58,13 @@ export function JoinApplicationSection({
   });
 
   const onSubmit = async (values: JoinApplicationFormValues) => {
-    setServerError(null);
     const data = new FormData();
     for (const key of ["fullName", "phone", "email", "city", "experienceYears", "transportType"] as const) data.set(key, values[key]);
     for (const key of ["nationalId", "drivingLicense"] as const) if (values[key] instanceof File) data.set(key, values[key]);
     data.set("website", "");
     const result = await submitPublicForm("join_application", locale, data);
-    if (result.ok) { setSubmitted(true); form.reset(); return; }
-    setSubmissionErrors(result, (name, error) => form.setError(name as keyof JoinApplicationFormValues, error), setServerError);
+    if (result.ok) { form.reset(); toast.success(result.successMessage); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof JoinApplicationFormValues, error), (message) => toast.error(message));
   };
 
   return (
@@ -87,21 +84,12 @@ export function JoinApplicationSection({
       >
         <MotionReveal className={isArabic ? "order-2 lg:order-1" : "order-2 lg:order-2"} x={isArabic ? -38 : 38}>
         <div dir={direction}>
-          {submitted ? (
-            <div
-              role="status"
-              className="rounded-3xl border border-primary/20 bg-primary/10 p-8 text-center text-lg font-bold leading-8 text-foreground"
-            >
-              {content.success}
-            </div>
-          ) : (
-            <form
-              onSubmit={form.handleSubmit(onSubmit)}
-              noValidate
-              dir={direction}
-            >
-              {serverError && <p role="alert" className="mb-4 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
-              <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            noValidate
+            dir={direction}
+          >
+            <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <div
                 className="grid grid-cols-1 gap-x-4 gap-y-5 sm:grid-cols-2"
                 dir="ltr"
@@ -212,7 +200,6 @@ export function JoinApplicationSection({
               </div>
             </div>
           </form>
-          )}
         </div>
         </MotionReveal>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Controller, useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -24,9 +24,6 @@ type Props = { content: PartnerRegistrationContent; locale: "ar" | "en" };
 type FieldName = keyof PartnerRegistrationFormValues;
 
 export function PartnerRegistrationSection({ content, locale }: Props) {
-  const [submitted, setSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
-  const successRef = useRef<HTMLDivElement>(null);
   const form = useForm<PartnerRegistrationFormValues>({
     resolver: zodResolver(createPartnerRegistrationSchema(content.validation)),
     mode: "onBlur",
@@ -34,18 +31,13 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
   });
 
   async function onSubmit(values: PartnerRegistrationFormValues) {
-    setServerError(null);
     const data = new FormData();
     for (const key of ["company", "phone", "email", "city"] as const) data.set(key, values[key]);
     data.set("website", "");
     const result = await submitPublicForm("partner_registration", locale, data);
-    if (result.ok) { setSubmitted(true); form.reset(); return; }
-    setSubmissionErrors(result, (name, error) => form.setError(name as keyof PartnerRegistrationFormValues, error), setServerError);
+    if (result.ok) { form.reset(); toast.success(result.successMessage); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof PartnerRegistrationFormValues, error), (message) => toast.error(message));
   }
-
-  useEffect(() => {
-    if (submitted) successRef.current?.focus();
-  }, [submitted]);
 
   return (
     <main
@@ -73,25 +65,13 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
         </header>
 
         <div className="mt-14 rounded-[2rem] border border-white bg-white/35 p-6 shadow-[0_12px_30px_color-mix(in_srgb,var(--foreground)_8%,transparent)] sm:p-8 lg:mt-16 lg:p-6">
-          {submitted ? (
-            <div
-              ref={successRef}
-              tabIndex={-1}
-              role="status"
-              aria-live="polite"
-              className="flex min-h-56 items-center justify-center rounded-3xl bg-primary/10 p-8 text-center text-lg font-bold leading-8 text-foreground outline-none"
+          <div className="[direction:ltr]">
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              noValidate
+              dir={locale === "ar" ? "rtl" : "ltr"}
+              className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"
             >
-              {content.success}
-            </div>
-          ) : (
-            <div className="[direction:ltr]">
-              <form
-                onSubmit={form.handleSubmit(onSubmit)}
-                noValidate
-                dir={locale === "ar" ? "rtl" : "ltr"}
-                className="grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-2"
-              >
-              {serverError && <p role="alert" className="lg:col-span-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
               <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <PartnerField
                 name="company"
@@ -131,9 +111,8 @@ export function PartnerRegistrationSection({ content, locale }: Props) {
                   {content.submit}
                 </Button>
               </div>
-              </form>
-            </div>
-          )}
+            </form>
+          </div>
         </div>
       </section>
     </main>

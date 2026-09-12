@@ -1,8 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, Headphones, Mail, MapPin, Phone } from "lucide-react";
-import { useState } from "react";
+import { Headphones, Mail, MapPin, Phone } from "lucide-react";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
@@ -14,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { MotionReveal } from "@/components/public/motion";
 import { setSubmissionErrors, submitPublicForm } from "@/lib/public-form-submission";
+import { toast } from "sonner";
 
 const detailIcons = {
   phone: Phone,
@@ -29,8 +29,6 @@ export function ContactSection({
   content: ContactContent;
   locale?: "ar" | "en";
 }) {
-  const [submitted, setSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
   const contentDirection =
     locale === "ar" ? "[direction:rtl]" : "[direction:ltr]";
   const form = useForm<ContactFormValues>({
@@ -40,15 +38,14 @@ export function ContactSection({
   });
 
   async function onSubmit(values: ContactFormValues) {
-    setServerError(null);
     const data = new FormData();
     data.set("fullName", values.fullName);
     data.set("phone", values.phone);
     data.set("message", values.message);
     data.set("website", "");
     const result = await submitPublicForm("contact", locale, data);
-    if (result.ok) { setSubmitted(true); form.reset(); return; }
-    setSubmissionErrors(result, (name, error) => form.setError(name as keyof ContactFormValues, error), setServerError);
+    if (result.ok) { form.reset(); toast.success(result.successMessage); return; }
+    setSubmissionErrors(result, (name, error) => form.setError(name as keyof ContactFormValues, error), (message) => toast.error(message));
   }
 
   return (
@@ -115,26 +112,11 @@ export function ContactSection({
         <div
           className={`rounded-[2rem] border border-white/90 bg-white/35 px-6 py-7 shadow-[0_5px_7px_color-mix(in_srgb,var(--foreground)_5%,transparent)] ${contentDirection} sm:px-8 sm:py-8 lg:order-2`}
         >
-          {submitted ? (
-            <div
-              role="status"
-              className="flex min-h-[330px] flex-col items-center justify-center gap-4 text-center"
-            >
-              <CheckCircle2
-                className="size-12 text-primary"
-                aria-hidden="true"
-              />
-              <p className="text-lg font-bold leading-8 text-foreground">
-                {content.success}
-              </p>
-            </div>
-          ) : (
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               noValidate
               className="space-y-5"
             >
-              {serverError && <p role="alert" className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
               <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
               <TextField
                 name="fullName"
@@ -220,7 +202,6 @@ export function ContactSection({
                 {content.submit}
               </Button>
             </form>
-          )}
         </div>
         </MotionReveal>
       </div>

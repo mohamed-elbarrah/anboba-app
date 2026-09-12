@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { adaptNormalizedForm, type PublicFlexibleForm, type PublicFormField } from "@/features/forms/renderer-adapter";
@@ -26,13 +26,9 @@ export function FlexibleFormRenderer({ definition, locale }: { definition: unkno
 }
 
 function FlexibleForm({ model, locale, formKey }: { model: PublicFlexibleForm; locale: "ar" | "en"; formKey: string }) {
-  const [submitted, setSubmitted] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null);
   const form = useForm<FormValues>({ mode: "onBlur", defaultValues: Object.fromEntries(model.fields.map((field) => [field.key, field.type === "checkbox" ? [] : ""])) });
-  if (submitted) return <div role="status" className="flex min-h-56 items-center justify-center rounded-3xl bg-primary/10 p-8 text-center text-lg font-bold leading-8 text-foreground">{model.successMessage}</div>;
   const direction = locale === "ar" ? "rtl" : "ltr";
   async function onSubmit(values: FormValues) {
-    setServerError(null);
     const data = new FormData();
     for (const field of model.fields) {
       const value = values[field.key];
@@ -42,11 +38,10 @@ function FlexibleForm({ model, locale, formKey }: { model: PublicFlexibleForm; l
     }
     data.set("website", "");
     const result = await submitPublicForm(formKey, locale, data);
-    if (result.ok) { setSubmitted(true); form.reset(); return; }
-    setSubmissionErrors(result, form.setError, setServerError);
+    if (result.ok) { form.reset(); toast.success(result.successMessage); return; }
+    setSubmissionErrors(result, form.setError, (message) => toast.error(message));
   }
   return <form noValidate dir={direction} onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
-    {serverError && <p role="alert" className="sm:col-span-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{serverError}</p>}
     <input name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="hidden" />
     {model.fields.map((field) => <Field key={field.key} field={field} form={form} locale={locale} />)}
     <div className="pt-2 sm:col-span-2"><Button type="submit" size="lg" disabled={form.formState.isSubmitting} className="mx-auto block h-14 w-full max-w-[255px] rounded-full text-base font-extrabold shadow-lg shadow-primary/25">{model.submitLabel}</Button></div>
