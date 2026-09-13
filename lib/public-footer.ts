@@ -19,7 +19,8 @@ export type FooterContact = {
 export type FooterAppStore = {
   name: "googlePlay" | "appStore";
   label: string;
-  href: string | null;
+  iconPath: string;
+  href: string;
 };
 
 export type PublicFooterData = {
@@ -74,12 +75,14 @@ export function getPublicFooterData(
       {
         name: "googlePlay",
         label: footer.googlePlay,
-        href: branding?.googlePlayUrl ?? null,
+        iconPath: "/images/google-play.png",
+        href: branding?.googlePlayUrl ?? "#",
       },
       {
         name: "appStore",
         label: footer.appStore,
-        href: branding?.appStoreUrl ?? null,
+        iconPath: "/images/app-store.png",
+        href: branding?.appStoreUrl ?? "#",
       },
     ],
     contacts: [

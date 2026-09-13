@@ -112,20 +112,38 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
               {footer.brandDescription}
             </p>
             <div
+              dir="ltr"
               className="grid grid-cols-2 gap-2 lg:w-full lg:max-w-[360px]"
               aria-label={dictionary.pages.downloadApp}
             >
               {footer.appStores.map((store) => {
-                const content = <span className="text-sm font-semibold leading-tight text-muted-foreground">{store.label}{!store.href && <span className="block text-[10px] font-normal text-muted-foreground/70">{dictionary.footer.comingSoon}</span>}</span>;
-                const className = "flex min-h-14 min-w-0 items-center justify-center rounded-2xl border border-border bg-background/70 px-4 text-center transition-colors";
-                return store.href ? (
-                  <Link key={store.name} href={store.href} target="_blank" rel="noopener noreferrer" className={`${className} hover:border-primary hover:bg-background`}>
+                const content = (
+                  <>
+                    <Image
+                      src={store.iconPath}
+                      alt=""
+                      width={32}
+                      height={33}
+                      className="h-8 w-auto shrink-0 object-contain"
+                    />
+                    <span className="flex min-w-0 flex-col text-left leading-none text-foreground">
+                      <span className="text-[10px] font-medium sm:text-xs">{dictionary.footer.downloadOn}</span>
+                      <span className="mt-1 truncate text-sm font-semibold sm:text-base">{store.label}</span>
+                    </span>
+                  </>
+                );
+                const className = "flex min-h-[70px] min-w-0 cursor-pointer items-center justify-center gap-3 rounded-full border border-border bg-white px-3 text-center shadow-sm transition-colors hover:border-primary hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:px-4";
+                const isPlaceholder = store.href === "#";
+                return (
+                  <Link
+                    key={store.name}
+                    href={store.href}
+                    target={isPlaceholder ? undefined : "_blank"}
+                    rel={isPlaceholder ? undefined : "noopener noreferrer"}
+                    className={className}
+                  >
                     {content}
                   </Link>
-                ) : (
-                  <div key={store.name} aria-disabled="true" title={dictionary.footer.comingSoon} className={`${className} cursor-not-allowed opacity-65`}>
-                    {content}
-                  </div>
                 );
               })}
             </div>

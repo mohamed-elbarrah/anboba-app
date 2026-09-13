@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { ArrowDown, ArrowUp, ExternalLink, Plus, Save, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -52,8 +53,24 @@ export function SiteSettingsEditor({ initial, media, section = "identity" }: Pro
   const [message, setMessage] = useState<string | null>(null);
   const labels = copy[locale];
   const update = (next: SiteSettingsDocument) => { setValue(next); setMessage(null); };
-  const save = (action: () => Promise<SettingsActionResult>, success: string) => startTransition(async () => { const result = await action(); setMessage(result.ok ? success : result.message); if (result.ok) setValue((current) => ({ ...current, revisionToken: result.revisionToken })); });
-  const payload = () => ({ id: value.id, brandingKey: "default" as const, revisionToken: value.revisionToken, logoMediaId: value.logoMediaId, faviconMediaId: value.faviconMediaId, localizations: (Object.entries(value.locales) as [Locale, typeof value.locales.ar][]).map(([itemLocale, item]) => ({ locale: itemLocale, ...item })), menus: value.menus, navigation: [], footerLayouts: normalizeFooterLayouts(value.footerLayouts) });
+  const save = (action: () => Promise<SettingsActionResult>, success: string) => startTransition(async () => {
+    try {
+      const result = await action();
+      if (result.ok) {
+        setMessage(success);
+        toast.success(success);
+        setValue((current) => ({ ...current, revisionToken: result.revisionToken }));
+      } else {
+        setMessage(result.message);
+        toast.error(result.message);
+      }
+    } catch {
+      const errorMessage = locale === "ar" ? "تعذر حفظ إعدادات الموقع." : "Unable to save site settings.";
+      setMessage(errorMessage);
+      toast.error(errorMessage);
+    }
+  });
+  const payload = () => ({ id: value.id, brandingKey: "default" as const, revisionToken: value.revisionToken, logoMediaId: value.logoMediaId, faviconMediaId: value.faviconMediaId, appStoreUrl: value.appStoreUrl, googlePlayUrl: value.googlePlayUrl, localizations: (Object.entries(value.locales) as [Locale, typeof value.locales.ar][]).map(([itemLocale, item]) => ({ locale: itemLocale, ...item })), menus: value.menus, navigation: [], footerLayouts: normalizeFooterLayouts(value.footerLayouts) });
   const saveCurrent = () => {
     if (section === "identity") return saveSiteIdentityDraft({ id: value.id, revisionToken: value.revisionToken, logoMediaId: value.logoMediaId, faviconMediaId: value.faviconMediaId, localizations: (Object.entries(value.locales) as [Locale, typeof value.locales.ar][]).map(([itemLocale, item]) => ({ locale: itemLocale, ...item })) });
     if (section === "header") return saveSiteHeaderDraft({ id: value.id, revisionToken: value.revisionToken, menuKeys: { ar: value.menus.find((menu) => menu.locale === "ar" && menu.placement === "header" && menu.assignmentKey === "header-primary")?.menuKey ?? value.menus.find((menu) => menu.locale === "ar" && menu.placement === "header")?.menuKey ?? "", en: value.menus.find((menu) => menu.locale === "en" && menu.placement === "header" && menu.assignmentKey === "header-primary")?.menuKey ?? value.menus.find((menu) => menu.locale === "en" && menu.placement === "header")?.menuKey ?? "" } });
@@ -61,7 +78,24 @@ export function SiteSettingsEditor({ initial, media, section = "identity" }: Pro
     return saveSiteFooterDraft({ id: value.id, revisionToken: value.revisionToken, appStoreUrl: value.appStoreUrl, googlePlayUrl: value.googlePlayUrl, footerLayouts: normalizeFooterLayouts(value.footerLayouts) });
   };
   const saveAll = (kind: "draft" | "publish") => kind === "publish" ? save(() => publishSiteBranding(payload()), labels.published) : save(saveCurrent, labels.saved);
-  const discard = () => startTransition(async () => { const result = await discardSiteBrandingDraft(value.id, "default", value.revisionToken); setMessage(result.ok ? (locale === "ar" ? "تم تجاهل المسودة." : "Draft discarded.") : result.message); if (result.ok) window.location.reload(); });
+  const discard = () => startTransition(async () => {
+    try {
+      const result = await discardSiteBrandingDraft(value.id, "default", value.revisionToken);
+      if (result.ok) {
+        const success = locale === "ar" ? "تم تجاهل المسودة." : "Draft discarded.";
+        setMessage(success);
+        toast.success(success);
+        window.location.reload();
+      } else {
+        setMessage(result.message);
+        toast.error(result.message);
+      }
+    } catch {
+      const errorMessage = locale === "ar" ? "تعذر تجاهل المسودة." : "Unable to discard the draft.";
+      setMessage(errorMessage);
+      toast.error(errorMessage);
+    }
+  });
   const title = section === "identity" ? labels.identity : section === "header" ? labels.header : section === "menus" ? labels.menus : labels.footer;
 
   return <main className="mx-auto w-full max-w-6xl space-y-6 p-4 pb-28 md:p-8" dir={locale === "ar" ? "rtl" : "ltr"}>

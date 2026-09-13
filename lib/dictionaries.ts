@@ -147,7 +147,7 @@ export type Dictionary = {
     address: string;
     googlePlay: string;
     appStore: string;
-    comingSoon: string;
+    downloadOn: string;
     languageLabel: string;
     copyright: string;
   };
