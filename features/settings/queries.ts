@@ -45,6 +45,10 @@ function isSafePublicHref(value: string): boolean {
   }
 }
 
+function safeStoreHref(value: string | null): string | null {
+  return value === "#" || (value !== null && isSafePublicHref(value)) ? value : null;
+}
+
 export const defaultSubmissionNotificationTemplates: SubmissionNotificationTemplates = {
   contact: {
     subject: "إرسال جديد عبر {{formName}}",
@@ -565,8 +569,8 @@ export const getPublicBranding = cache(async function getPublicBranding(locale: 
     siteName: localization.siteName,
     tagline: localization.tagline,
     footerText: localization.footerText,
-    appStoreUrl: revision.appStoreUrl && isSafePublicHref(revision.appStoreUrl) ? revision.appStoreUrl : null,
-    googlePlayUrl: revision.googlePlayUrl && isSafePublicHref(revision.googlePlayUrl) ? revision.googlePlayUrl : null,
+    appStoreUrl: safeStoreHref(revision.appStoreUrl),
+    googlePlayUrl: safeStoreHref(revision.googlePlayUrl),
     headerNavigation: navigation("header"),
     footerNavigation: navigation("footer"),
   };

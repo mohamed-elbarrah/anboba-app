@@ -9,9 +9,16 @@ const hrefSchema = z.string().trim().min(1).max(500).refine((value) => {
   if (value.startsWith("/")) return true;
   try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password; } catch { return false; }
 }, "Links must be relative paths or HTTPS URLs");
-const storeUrlSchema = z.preprocess((value) => value === "" ? null : value, z.string().trim().max(500).refine((value) => {
-  try { const url = new URL(value); return url.protocol === "https:" && Boolean(url.hostname) && !url.username && !url.password; } catch { return false; }
-}, "Store links must be HTTPS URLs").nullable().default(null));
+const storeUrlSchema = z.preprocess((value) => {
+  if (typeof value !== "string") return value;
+  const trimmed = value.trim();
+  return trimmed === "" ? null : trimmed;
+}, z.union([
+  z.literal("#"),
+  z.string().max(500).refine((value) => {
+    try { const url = new URL(value); return url.protocol === "https:" && Boolean(url.hostname) && !url.username && !url.password; } catch { return false; }
+  }, "Store links must be HTTPS URLs"),
+]).nullable().default(null));
 
 /** Contact hrefs are tied to the contact kind; generic links remain relative/HTTPS only. */
 export function isSafeContactHref(kind: "phone" | "email" | "address", value: string): boolean {
