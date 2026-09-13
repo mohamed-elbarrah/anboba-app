@@ -9,6 +9,9 @@ const hrefSchema = z.string().trim().min(1).max(500).refine((value) => {
   if (value.startsWith("/")) return true;
   try { const url = new URL(value); return url.protocol === "https:" && !url.username && !url.password; } catch { return false; }
 }, "Links must be relative paths or HTTPS URLs");
+const storeUrlSchema = z.preprocess((value) => value === "" ? null : value, z.string().trim().max(500).refine((value) => {
+  try { const url = new URL(value); return url.protocol === "https:" && Boolean(url.hostname) && !url.username && !url.password; } catch { return false; }
+}, "Store links must be HTTPS URLs").nullable().default(null));
 
 /** Contact hrefs are tied to the contact kind; generic links remain relative/HTTPS only. */
 export function isSafeContactHref(kind: "phone" | "email" | "address", value: string): boolean {
@@ -92,6 +95,8 @@ const MAX_FOOTER_BLOCKS = 1_000;
 const canonicalSiteBrandingInputSchema = z.object({
   id: idSchema.optional(), brandingKey: z.literal("default"), revisionToken: idSchema.optional(),
   logoMediaId: idSchema.nullable(), faviconMediaId: idSchema.nullable(),
+  appStoreUrl: storeUrlSchema,
+  googlePlayUrl: storeUrlSchema,
   localizations: z.array(brandingLocalizationSchema).length(2),
   menus: z.array(menuSchema).max(500).default([]),
   navigation: z.array(brandingNavigationItemSchema).max(500).default([]),

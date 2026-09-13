@@ -544,6 +544,8 @@ export const brandingRevisions = mysqlTable(
       onDelete: "restrict",
       onUpdate: "cascade",
     }),
+    appStoreUrl: varchar("app_store_url", { length: 500 }),
+    googlePlayUrl: varchar("google_play_url", { length: 500 }),
     createdBy: id("created_by").notNull().references(() => admins.id, {
       onDelete: "restrict",
       onUpdate: "cascade",

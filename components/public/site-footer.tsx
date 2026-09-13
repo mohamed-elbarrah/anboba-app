@@ -111,6 +111,24 @@ export default async function SiteFooter({ locale }: { locale: Locale }) {
             <p className="max-w-sm text-base leading-8 text-muted-foreground lg:text-lg">
               {footer.brandDescription}
             </p>
+            <div
+              className="grid grid-cols-2 gap-2 lg:w-full lg:max-w-[360px]"
+              aria-label={dictionary.pages.downloadApp}
+            >
+              {footer.appStores.map((store) => {
+                const content = <span className="text-sm font-semibold leading-tight text-muted-foreground">{store.label}{!store.href && <span className="block text-[10px] font-normal text-muted-foreground/70">{dictionary.footer.comingSoon}</span>}</span>;
+                const className = "flex min-h-14 min-w-0 items-center justify-center rounded-2xl border border-border bg-background/70 px-4 text-center transition-colors";
+                return store.href ? (
+                  <Link key={store.name} href={store.href} target="_blank" rel="noopener noreferrer" className={`${className} hover:border-primary hover:bg-background`}>
+                    {content}
+                  </Link>
+                ) : (
+                  <div key={store.name} aria-disabled="true" title={dictionary.footer.comingSoon} className={`${className} cursor-not-allowed opacity-65`}>
+                    {content}
+                  </div>
+                );
+              })}
+            </div>
           </section>
 
           {footer.layout ? footer.layout.columns.map((column) => (

@@ -16,12 +16,19 @@ export type FooterContact = {
   href?: string;
 };
 
+export type FooterAppStore = {
+  name: "googlePlay" | "appStore";
+  label: string;
+  href: string | null;
+};
+
 export type PublicFooterData = {
   brandDescription: string;
   siteName: string;
   logoPath: string;
   links: FooterLink[];
   contacts: FooterContact[];
+  appStores: FooterAppStore[];
   whatsappHref: string;
   layout: PublicFooterLayout | null;
 };
@@ -35,7 +42,7 @@ export function getPublicFooterData(
   locale: Locale,
   dictionary: Dictionary,
   options?: {
-    branding?: { siteName: string; logoPath: string | null; footerText: string | null; footerNavigation: PublicBrandingNavigationItem[] } | null;
+    branding?: { siteName: string; logoPath: string | null; footerText: string | null; appStoreUrl: string | null; googlePlayUrl: string | null; footerNavigation: PublicBrandingNavigationItem[] } | null;
     footerSettings?: Partial<Dictionary["footer"]> | null;
     layout?: PublicFooterLayout | null;
   },
@@ -62,6 +69,18 @@ export function getPublicFooterData(
             { key: "privacy", label: footer.privacy, href: `/${locale}/policies/privacy` },
             { key: "refunds", label: footer.refunds, href: `/${locale}/policies/refunds` },
           ]),
+    ],
+    appStores: [
+      {
+        name: "googlePlay",
+        label: footer.googlePlay,
+        href: branding?.googlePlayUrl ?? null,
+      },
+      {
+        name: "appStore",
+        label: footer.appStore,
+        href: branding?.appStoreUrl ?? null,
+      },
     ],
     contacts: [
       {

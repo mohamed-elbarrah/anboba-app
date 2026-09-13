@@ -127,6 +127,13 @@
       "when": 1789234775348,
       "tag": "0017_orange_blob",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "5",
+      "when": 1789308409091,
+      "tag": "0018_legal_kree",
+      "breakpoints": true
     }
   ]
 }

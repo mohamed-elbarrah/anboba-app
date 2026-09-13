@@ -105,15 +105,15 @@ export function FaqSectionEditor({ section, locale, update }: { section: { conte
           </div>
           <div className="space-y-4">
             {content.items.map((item, index) => (
-              <fieldset key={index} className="space-y-4 rounded-xl border border-border/70 bg-card p-5 shadow-sm transition-shadow hover:shadow-md">
-                <legend className="px-1 text-sm font-semibold"><span className="rounded-full bg-muted px-2.5 py-1">{t.item} {index + 1}</span></legend>
+              <fieldset key={index} className="space-y-4 rounded-xl border border-border/70 p-5">
+                <legend className="px-1 text-sm font-semibold">{t.item} {index + 1}</legend>
                 <label className="block space-y-1.5 text-sm font-medium">
                   {t.question}
                   <Input value={item.question} onChange={(event) => updateItem(index, { question: event.target.value })} />
                 </label>
                 <label className="block space-y-1.5 text-sm font-medium">
                   {t.answer}
-                  <textarea className="min-h-24 w-full resize-y rounded-lg border border-input bg-background px-3 py-2 text-sm leading-7 transition-colors focus:border-primary focus:ring-3 focus:ring-primary/15" value={item.answer} onChange={(event) => updateItem(index, { answer: event.target.value })} />
+                  <textarea className="min-h-24 w-full resize-y rounded-lg border border-input px-3 py-2 text-sm leading-7 transition-colors focus:border-primary focus:ring-3 focus:ring-primary/15" value={item.answer} onChange={(event) => updateItem(index, { answer: event.target.value })} />
                 </label>
                 <div className="flex flex-wrap justify-end gap-2 border-t border-border/60 pt-3">
                   <Button type="button" variant="outline" size="icon-sm" disabled={index === 0} title={t.moveUp} aria-label={t.moveUp} onClick={() => moveItem(index, -1)}><ArrowUp className="size-4" /></Button>

@@ -118,6 +118,8 @@ export type SiteSettingsDocument = {
   revisionToken: string;
   logoMediaId: string | null;
   faviconMediaId: string | null;
+  appStoreUrl: string | null;
+  googlePlayUrl: string | null;
   locales: Record<Locale, { siteName: string; tagline: string | null; footerText: string | null }>;
   /** Canonical named menus. `navigation` remains a read compatibility projection. */
   menus: NamedMenu[];
@@ -137,6 +139,8 @@ export type PublicBranding = {
   siteName: string;
   tagline: string | null;
   footerText: string | null;
+  appStoreUrl: string | null;
+  googlePlayUrl: string | null;
   headerNavigation: SiteSettingsItem[];
   footerNavigation: SiteSettingsItem[];
 };
@@ -300,6 +304,8 @@ async function read(key: "draft" | "published"): Promise<SiteSettingsDocument | 
     revisionToken: revision.id.toString(),
     logoMediaId: revision.logoMediaId?.toString() ?? null,
     faviconMediaId: revision.faviconMediaId?.toString() ?? null,
+    appStoreUrl: revision.appStoreUrl ?? null,
+    googlePlayUrl: revision.googlePlayUrl ?? null,
     locales: { ar: copy("ar"), en: copy("en") },
     menus: canonicalMenus,
     navigation: {
@@ -559,6 +565,8 @@ export const getPublicBranding = cache(async function getPublicBranding(locale: 
     siteName: localization.siteName,
     tagline: localization.tagline,
     footerText: localization.footerText,
+    appStoreUrl: revision.appStoreUrl && isSafePublicHref(revision.appStoreUrl) ? revision.appStoreUrl : null,
+    googlePlayUrl: revision.googlePlayUrl && isSafePublicHref(revision.googlePlayUrl) ? revision.googlePlayUrl : null,
     headerNavigation: navigation("header"),
     footerNavigation: navigation("footer"),
   };

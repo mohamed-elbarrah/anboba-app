@@ -107,7 +107,7 @@ function idsForBatch(result: InsertResult[], count: number) {
 
 async function insertRevision(tx: Tx, brandingId: bigint, value: ParsedSiteBrandingInput, adminId: bigint, status: "draft" | "published", revisionNumber: number) {
   const started = performance.now();
-  const inserted = await tx.insert(brandingRevisions).values({ brandingId, revisionNumber, status, logoMediaId: value.logoMediaId ? BigInt(value.logoMediaId) : null, faviconMediaId: value.faviconMediaId ? BigInt(value.faviconMediaId) : null, createdBy: adminId });
+  const inserted = await tx.insert(brandingRevisions).values({ brandingId, revisionNumber, status, logoMediaId: value.logoMediaId ? BigInt(value.logoMediaId) : null, faviconMediaId: value.faviconMediaId ? BigInt(value.faviconMediaId) : null, appStoreUrl: value.appStoreUrl, googlePlayUrl: value.googlePlayUrl, createdBy: adminId });
   const revisionId = BigInt(inserted[0].insertId);
   const counts = { localizations: value.localizations.length, menus: value.menus.length, menuItems: value.menus.reduce((sum, menu) => sum + menu.items.length, 0), layouts: value.footerLayouts.length, columns: value.footerLayouts.reduce((sum, layout) => sum + layout.columns.length, 0), blocks: value.footerLayouts.reduce((sum, layout) => sum + layout.columns.reduce((columns, column) => columns + column.blocks.length, 0), 0) };
   const batchStarted = performance.now();
@@ -246,7 +246,7 @@ export async function publishSiteBranding(input: unknown): Promise<SettingsActio
 
 export async function discardSiteBrandingDraft(input: unknown, brandingKeyArg?: string, revisionTokenArg?: string): Promise<SettingsActionResult> {
   const admin = await getCurrentAdmin(); if (!admin) return auth;
-  const parsedInput = typeof input === "string" ? { id: input, brandingKey: brandingKeyArg ?? "default", revisionToken: revisionTokenArg, logoMediaId: null, faviconMediaId: null, localizations: [{ locale: "ar", siteName: "placeholder", tagline: null, footerText: null }, { locale: "en", siteName: "placeholder", tagline: null, footerText: null }], navigation: [] } : input;
+  const parsedInput = typeof input === "string" ? { id: input, brandingKey: brandingKeyArg ?? "default", revisionToken: revisionTokenArg, logoMediaId: null, faviconMediaId: null, appStoreUrl: null, googlePlayUrl: null, localizations: [{ locale: "ar", siteName: "placeholder", tagline: null, footerText: null }, { locale: "en", siteName: "placeholder", tagline: null, footerText: null }], navigation: [] } : input;
   const started = performance.now();
   const operation = "discard";
   const parsed = parse(parsedInput, operation);
@@ -272,7 +272,7 @@ export async function discardSiteBrandingDraft(input: unknown, brandingKeyArg?: 
         const blocks = await tx.select().from(brandingFooterBlocks).where(eq(brandingFooterBlocks.layoutId, layout.id)).orderBy(asc(brandingFooterBlocks.sortOrder));
         footerLayouts.push({ locale: layout.locale, columns: columns.map((column) => ({ columnKey: column.columnKey, sortOrder: column.sortOrder, heading: column.heading, assignedMenuKey: column.assignedMenuKey ?? null, blocks: blocks.filter((block) => block.columnId === column.id).map((block) => ({ blockKey: block.blockKey, blockType: block.blockType, sortOrder: block.sortOrder, ...(typeof block.contentJson === "object" && block.contentJson && !Array.isArray(block.contentJson) ? block.contentJson : {}) })) })) } as ParsedSiteBrandingInput["footerLayouts"][number]);
       }
-      const copy: ParsedSiteBrandingInput = { id, brandingKey, revisionToken, logoMediaId: published.logoMediaId?.toString() ?? null, faviconMediaId: published.faviconMediaId?.toString() ?? null, localizations: localizations.map((item) => ({ locale: item.locale, siteName: item.siteName, tagline: item.tagline, footerText: item.footerText })), menus, navigation: navigation.map((item) => ({ itemKey: item.itemKey, locale: item.locale, placement: item.placement, parentKey: null, sortOrder: item.sortOrder, label: item.label, href: item.href, openInNewTab: item.openInNewTab })), footerLayouts };
+      const copy: ParsedSiteBrandingInput = { id, brandingKey, revisionToken, logoMediaId: published.logoMediaId?.toString() ?? null, faviconMediaId: published.faviconMediaId?.toString() ?? null, appStoreUrl: published.appStoreUrl ?? null, googlePlayUrl: published.googlePlayUrl ?? null, localizations: localizations.map((item) => ({ locale: item.locale, siteName: item.siteName, tagline: item.tagline, footerText: item.footerText })), menus, navigation: navigation.map((item) => ({ itemKey: item.itemKey, locale: item.locale, placement: item.placement, parentKey: null, sortOrder: item.sortOrder, label: item.label, href: item.href, openInNewTab: item.openInNewTab })), footerLayouts };
       const revision = await insertRevision(tx, found.branding.id, copy, admin.id, "draft", await nextNumber(tx, found.branding.id));
       await tx.update(brandingRevisions).set({ status: "archived" }).where(eq(brandingRevisions.id, found.draft.id));
       await tx.update(brandingRevisionPointers).set({ draftRevisionId: revision }).where(eq(brandingRevisionPointers.brandingId, found.branding.id));
@@ -287,12 +287,14 @@ type DraftPatch = { id: string; revisionToken: string };
 export type SaveIdentityInput = DraftPatch & Pick<ParsedSiteBrandingInput, "logoMediaId" | "faviconMediaId" | "localizations">;
 export type SaveHeaderInput = DraftPatch & { menuKeys?: { ar: string; en: string }; items?: { ar: SiteSettingsDocument["navigation"]["ar"]["header"]; en: SiteSettingsDocument["navigation"]["en"]["header"] } };
 export type SaveMenusInput = DraftPatch & { menus?: NamedMenu[]; navigation?: SiteSettingsDocument["navigation"] };
-export type SaveFooterInput = DraftPatch & { footerLayouts: FooterLayoutInput[] };
+export type SaveFooterInput = DraftPatch & Pick<ParsedSiteBrandingInput, "appStoreUrl" | "googlePlayUrl"> & { footerLayouts: FooterLayoutInput[] };
 
 function mergedDraft(current: SiteSettingsDocument, patch: Partial<ParsedSiteBrandingInput>): ParsedSiteBrandingInput {
   return {
     id: current.id, brandingKey: "default", revisionToken: current.revisionToken,
     logoMediaId: patch.logoMediaId ?? current.logoMediaId, faviconMediaId: patch.faviconMediaId ?? current.faviconMediaId,
+    appStoreUrl: patch.appStoreUrl ?? current.appStoreUrl,
+    googlePlayUrl: patch.googlePlayUrl ?? current.googlePlayUrl,
     localizations: patch.localizations ?? Object.entries(current.locales).map(([locale, value]) => ({ locale: locale as "ar" | "en", ...value })),
     menus: patch.menus ?? current.menus,
     navigation: patch.navigation ?? [],
@@ -326,7 +328,7 @@ export async function saveSiteMenusDraft(input: SaveMenusInput): Promise<Setting
   const menus: NamedMenu[] = Object.entries(input.navigation).flatMap(([locale, placements]) => (["header", "footer"] as const).map((placement) => ({ menuKey: placement === "header" ? "header-primary" : "footer-quick-links", name: placement === "header" ? "Primary navigation" : "Quick links", locale: locale as "ar" | "en", placement, assignmentKey: placement === "header" ? "header-primary" : "quick-links", items: placements[placement].map((item) => ({ itemKey: item.itemKey, parentKey: null, sortOrder: item.sortOrder, label: item.label, href: item.href, visible: true, target: item.openInNewTab ? "_blank" as const : "_self" as const })) })));
   return saveArea(input, { menus });
 }
-export async function saveSiteFooterDraft(input: SaveFooterInput): Promise<SettingsActionResult> { return saveArea(input, { footerLayouts: input.footerLayouts }); }
+export async function saveSiteFooterDraft(input: SaveFooterInput): Promise<SettingsActionResult> { return saveArea(input, { appStoreUrl: input.appStoreUrl, googlePlayUrl: input.googlePlayUrl, footerLayouts: input.footerLayouts }); }
 
 // Publish and discard intentionally operate on the shared revision pointer. Area
 // saves above only replace the selected portion of the next draft revision.

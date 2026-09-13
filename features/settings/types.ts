@@ -56,6 +56,8 @@ export type SiteBrandingDocument = {
   status: "draft" | "published";
   logoMediaId: string | null;
   faviconMediaId: string | null;
+  appStoreUrl: string | null;
+  googlePlayUrl: string | null;
   localizations: BrandingLocalization[];
   navigation: BrandingNavigationItem[];
   updatedAt: string;
